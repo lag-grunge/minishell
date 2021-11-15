@@ -5,6 +5,7 @@ from tokens import get_tokens
 from constants import blanks, meta, quote, opers, brs, redirect
 from commands import get_commands, check_brackets, print_out
 from expansions import dollar_expansions
+from filename_expansion import filename_expansions
 
 
 
@@ -41,11 +42,15 @@ if __name__=="__main__":
     # 4. Performs the various shell expansions (see Section 3.5 [Shell Expansions], page 22),
     # breaking the expanded tokens into lists of filenames (see Section 3.5.8 [Filename Ex-
     # pansion], page 33) and commands and arguments.
-            dollar_expansions(command)
+            command = dollar_expansions(command)
+            print(command)
+            command = filename_expansions(command)
+            print(command)
 
-
+    #Write in C
     # 5. Performs any necessary redirections (see Section 3.6 [Redirections], page 35) and re-
     # moves the redirection operators and their operands from the argument list.
+
 
     # 6. Executes the command (see Section 3.7 [Executing Commands], page 39).
 
