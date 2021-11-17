@@ -80,6 +80,16 @@ def write_cmd_args(commands, cmd_num, i):
         commands['cmds'][cmd_num]['args'].append(i)
 
 
+def no_meta(token):
+    any_in = lambda a, b: any(i in b for i in a)
+    if any_in(token, meta):
+        oper = lambda token, opers: [token[:j] for j in range(len(token)) if token[:j] in opers]
+        res = oper(token, opers)
+        if res:
+            print("unexpected token near {}".format(res[0]))
+            exit(1)
+
+
 def get_commands(tokens):
     commands = dict({})
     commands['cmds'] = [reset(dict({}))]
@@ -105,5 +115,6 @@ def get_commands(tokens):
             opers_proc(commands, cmd_num, i, state['pipe'])
             state['pipe'] = i == '|'
         else:
+            no_meta(i)
             write_cmd_args(commands, cmd_num, i)
     return commands

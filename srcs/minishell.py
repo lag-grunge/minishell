@@ -6,6 +6,7 @@ from constants import blanks, meta, quote, opers, brs, redirect
 from commands import get_commands, check_brackets, print_out
 from expansions import dollar_expansions
 from filename_expansion import filename_expansions
+from quote_removal import quote_removal
 
 
 
@@ -46,6 +47,7 @@ if __name__=="__main__":
             print(command)
             command = filename_expansions(command)
             print(command)
+            quote_removal(command)
 
     #Write in C
     # 5. Performs any necessary redirections (see Section 3.6 [Redirections], page 35) and re-
