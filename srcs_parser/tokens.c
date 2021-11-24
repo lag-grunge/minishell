@@ -1,15 +1,5 @@
 #include "minishell.h"
 
-char	*meta(char *read_line)
-{
-	int 	next_token;
-
-	next_token = 0;
-	while (ft_ismeta(read_line[next_token]))
-		next_token++;
-	return (read_line + next_token);
-}
-
 int		ft_ismeta(int c)
 {
 	if (c == '<' || c == '>')
@@ -21,7 +11,19 @@ int		ft_ismeta(int c)
 	return (0);
 }
 
-int		quouting(char *read_line)
+char	*meta(char *read_line, int *nt)
+{
+	int 	next_token;
+
+	next_token = 0;
+	while (read_line[next_token] && ft_ismeta(read_line[next_token]))
+		next_token++;
+	if (nt)
+		*nt = next_token;
+	return (read_line + next_token);
+}
+
+int		quoting(char *read_line)
 {
 	char quote;
 	char *res;
@@ -33,12 +35,13 @@ int		quouting(char *read_line)
 	return (res - read_line + 1);
 }
 
-char	*word(char *read_line)
+char	*word(char *read_line, int *nt)
 {
 	int		next_token;
 
 	next_token = 0;
-	while (!ft_ismeta(read_line[next_token]) && \
+	while (read_line[next_token] && \
+			!ft_ismeta(read_line[next_token]) && \
 			!ft_isspace(read_line[next_token]))
 	{
 		if (read_line[next_token] == '\'' || \
@@ -46,11 +49,13 @@ char	*word(char *read_line)
 			next_token += quoting(read_line + next_token);
 		next_token++;
 	}
+	if (nt)
+		*nt = next_token;
 	return (read_line + next_token);
 }
 
 
-size_t get_number(char *read_line, char **new)
+size_t get_number(char *read_line)
 {
 	int	num;
 
@@ -60,9 +65,9 @@ size_t get_number(char *read_line, char **new)
 		while (ft_isspace(*read_line))
 			read_line++;
 		if (ft_ismeta(*read_line))
-			read_line =	meta(read_line);
+			read_line =	meta(read_line, NULL);
 		else
-			read_line = word(read_line);
+			read_line = word(read_line, NULL);
 		num++;
 	}
 	return (num);
@@ -71,11 +76,17 @@ size_t get_number(char *read_line, char **new)
 char *get_token(char **read_line)
 {
 	char	*line;
+	int 	len;
 
 	line = *read_line;
-	if (*line == )
-
-
+	while (ft_isspace(*line))
+		line++;
+	if (ft_ismeta(*line))
+		line =	meta(line, &len);
+	else
+		line = word(line, &len);
+	*read_line = line;
+	return (ft_substr(*read_line, 0, len));
 }
 
 
