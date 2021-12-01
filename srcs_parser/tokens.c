@@ -11,12 +11,37 @@ int		ft_ismeta(int c)
 	return (0);
 }
 
+int		ft_isoperator(char *s, int len)
+{
+	if (!ft_strncmp(s, LTLT, len))
+		return (ltlt);
+	if (!ft_strncmp(s, GTGT, len))
+		return (gtgt);
+	if (!ft_strncmp(s, LT, len))
+		return (lt);
+	if (!ft_strncmp(s, GT, len))
+		return (gt);
+	if (!ft_strncmp(s, OR, len))
+		return (or);
+	if (!ft_strncmp(s, PIPE, len))
+		return (pip);
+	if (!ft_strncmp(s, AND, len))
+		return (and);
+	if (!ft_strncmp(s, LBR, len))
+		return (lbr);
+	if (!ft_strncmp(s, RBR, len))
+		return (rbr);
+	return (-1);
+}
+
 char	*meta(char *read_line, int *nt)
 {
 	int 	next_token;
 
 	next_token = 0;
-	while (read_line[next_token] && ft_ismeta(read_line[next_token]))
+	while (read_line[next_token] && \
+			ft_ismeta(read_line[next_token]) && \
+			ft_isoperator(read_line, next_token + 1) != -1)
 		next_token++;
 	if (nt)
 		*nt = next_token;
@@ -54,6 +79,14 @@ char	*word(char *read_line, int *nt)
 	return (read_line + next_token);
 }
 
+char	*oper_token(char *read_line, int *len)
+{
+	while (ft_isspace(*read_line))
+		read_line++;
+	if (ft_ismeta(*read_line))
+		return (meta(read_line, len));
+	return (word(read_line, len));
+}
 
 size_t get_number(char *read_line)
 {
@@ -62,12 +95,7 @@ size_t get_number(char *read_line)
 	num = 0;
 	while (*read_line)
 	{
-		while (ft_isspace(*read_line))
-			read_line++;
-		if (ft_ismeta(*read_line))
-			read_line =	meta(read_line, NULL);
-		else
-			read_line = word(read_line, NULL);
+		read_line = oper_token(read_line, NULL);
 		num++;
 	}
 	return (num);
@@ -75,20 +103,11 @@ size_t get_number(char *read_line)
 
 char *get_token(char **read_line)
 {
-	char	*line;
 	int 	len;
 
-	line = *read_line;
-	while (ft_isspace(*line))
-		line++;
-	if (ft_ismeta(*line))
-		line =	meta(line, &len);
-	else
-		line = word(line, &len);
-	*read_line = line;
-	return (ft_substr(*read_line, 0, len));
+	*read_line = oper_token(*read_line, &len);
+	return (ft_substr(*read_line - len, 0, len));
 }
-
 
 char **get_tokens(char *read_line)
 {
@@ -110,17 +129,18 @@ char **get_tokens(char *read_line)
 	return (tokens);
 }
 
-int main(int argc, char *argv[])
-{
+// int main(int argc, char *argv[])
+/*{
 	char **tokens;
 
 	if (argc != 2)
 		return (1);
 	tokens = get_tokens(argv[1]);
-	while (tokens)
+	while (*tokens)
 	{
-		printf("%s\n", *tokens);
+		printf("%p %s\n", tokens, *tokens);
 		tokens++;
 	}
 	return (0);
 }
+*/

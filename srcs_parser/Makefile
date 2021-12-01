@@ -14,8 +14,8 @@ CC = gcc
 
 all : ${NAME}
 
-${NAME} : ${LIBFT}
-	${CC} ${CFLAGS} ${LDFLAGS} tokens.c -o $@ ${LIBRARIES}
+${NAME} : ${OBJS} ${LIBFT}
+	${CC} ${CFLAGS} ${LDFLAGS} $(filter-out ${LIBFT},$^ ) -o $@ ${LIBRARIES}
 
 ${OBJS} : %.o : %.c
 	${CC} ${CFLAGS} -c $< -o $@
