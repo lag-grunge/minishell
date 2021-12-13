@@ -1,12 +1,12 @@
 # include "parser.h"
 
-t_opers *ft_oper_new(void)
+t_stmnt *ft_oper_new(void)
 {
-	t_opers *op1;
+	t_stmnt *op1;
 
-	op1 = malloc(sizeof(t_opers) * 1);
+	op1 = malloc(sizeof(t_stmnt) * 1);
 	if (op1)
-		ft_memset(op1, 0, sizeof(t_opers));
+		ft_memset(op1, 0, sizeof(t_stmnt));
 	return (op1);
 }
 
@@ -20,13 +20,15 @@ t_cmd *ft_cmd_new(void)
 	return (cmd1);
 }
 
-void add_oper(t_opers **opers, int type, char ***tokens)
+t_redir *ft_redir_new(void)
 {
-	t_opers *new_oper;
+	t_redir	*red;
 
-	new_oper = ft_oper_new();
-	new_oper->type = type;
-	new_oper->type1 = (*opers)->type;
-	new_oper->oper1 = (*opers);
-	*opers = new_oper;
+	red = malloc(sizeof(t_cmd) * 1);
+	if (red)
+		ft_memset(red, 0, sizeof(t_redir));
+	return (red);
 }
+
+
+

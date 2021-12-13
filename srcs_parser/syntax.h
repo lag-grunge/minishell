@@ -10,9 +10,8 @@ char **nextsym(char **cur);
 int	 error();
 int accept(t_token t, char ***cur);
 
-int ft_bin(t_cmd *cmd, char ***tokens);
-int ft_args(char ***tokens);
-int ft_redir(t_cmd *cmd, char ***tokens);
+void ft_word(char **args, char ***tokens);
+void ft_redir(t_redir *red, char ***tokens);
 int ft_oper(char ***tokens);
 int ft_pipe(char ***tokens);
 
