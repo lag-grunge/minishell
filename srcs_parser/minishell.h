@@ -12,7 +12,8 @@
 # define AND "&&"
 # define LBR "("
 # define RBR ")"
-typedef enum e_topers {
+
+typedef enum e_ctrls {
 	ltlt,
 	gtgt,
 	lt,
@@ -22,7 +23,7 @@ typedef enum e_topers {
 	and,
 	lbr,
 	rbr
-} t_topers;
+} t_ctrls;
 
 typedef enum e_tstmnt {
 	op_none,
@@ -54,12 +55,13 @@ typedef struct s_cmd {
 }			t_cmd;
 
 typedef struct s_stmnt {
-	t_tstmnt type;
-	t_tstmnt type1; // none, simple, && , || (enum and or)
-	void	*oper1;
-	t_tstmnt type2; //
-	void	*oper2;
-	t_redir	*redir; // common redir for subshell
+	t_tstmnt		type;
+	t_tstmnt		type1; //	none, simple(t_cmd), && , ||, subshell (enum and or)
+	void			*oper1;
+	t_tstmnt		type2; //	operand2, null if not
+	void			*oper2;
+	t_redir			*redir; //	common redir for subshell
+	struct s_stmnt 	*next_stmnt; // pipe
 }			t_stmnt;
 
 #endif

@@ -17,18 +17,6 @@ int count_args(char **tokens)
 	return (count);
 }
 
-int ft_subshell(t_stmnt **stmnt, t_redir *red, char ***tokens)
-{
-	*stmnt = ft_stmnt_new();
-	ft_parser(stmnt, tokens);
-	expect(rb, tokens);
-	while (accept(lg, tokens))
-		ft_redir(red, tokens);
-	(*stmnt)->redir = red;
-
-
-}
-
 void ft_cmd(t_cmd **cmd, t_redir **red, char ***tokens)
 {
 	int		count;
@@ -58,7 +46,7 @@ void add_oper(t_stmnt **stmnt, t_cmd *cmd, char ***tokens)
 	t_stmnt *new_stmnt;
 	char 	*otoken;
 	t_tstmnt stype;
-	t_topers otype;
+	t_ctrls otype;
 
 	otoken = (*tokens)[0];
 	if (accept(lb, tokens))

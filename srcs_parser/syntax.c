@@ -41,7 +41,7 @@ void write_redir(t_redir *red, char **tokens)
 {
 	char		*red_token;
 	char 		*wrd_token;
-	t_topers	red_type;
+	t_ctrls		red_type;
 
 	red_token = tokens[-2];
 	wrd_token = tokens[-1];
