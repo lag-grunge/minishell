@@ -10,7 +10,7 @@ void add_oper(t_stmnt **stmnt, t_cmd *cmd, char ***tokens);
 
 
 void ft_cmd(t_cmd **cmd, t_redir **red, char ***tokens);
-int ft_parser(t_stmnt **stmnt, char ***tokens);
+int ft_parser(t_stmnt **stmnt, char **tokens);
 char **get_tokens(char *read_line);
 
 

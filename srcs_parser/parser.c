@@ -83,16 +83,16 @@ void add_oper(t_stmnt **stmnt, t_cmd *cmd, char ***tokens)
 	}
 }
 
-int ft_parser(t_stmnt **stmnt, char ***tokens)
+int ft_parser(t_stmnt **stmnt, char **tokens)
 {
 	t_cmd	*cmd;
 	t_redir	*red;
 
-	ft_cmd(&cmd, &red, tokens);
+	ft_cmd(&cmd, &red, &tokens);
 	add_oper(stmnt, NULL, NULL);
 	while (cmd || red)
 	{
-		ft_cmd(&cmd, &red, tokens);
+		ft_cmd(&cmd, &red, &tokens);
 		add_oper(stmnt, NULL, NULL);
 	}
 }
