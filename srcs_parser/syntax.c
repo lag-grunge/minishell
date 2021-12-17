@@ -1,28 +1,7 @@
 #include "syntax.h"
 #include "parser.h"
 
-int ft_pattern(t_cmd *cmd, char ***tokens)
-{
-	if (accept(lg, tokens))
-		return (ft_redir(NULL, tokens);
-	else if (accept(wrd, tokens))
-		return (ft_args(tokens);
-	else if (accept(op, tokens))
-		return (ft_oper(tokens);
-	else if (accept(pp, tokens))
-		return (ft_pipe(tokens);
-	else if (accept(lb, tokens))
-		return (error());
-	else if (accept(rb, tokens))
-	{
-//		if (subshell)
-//			return (-1);
-		return (error());
-	}
-
-}
-
-void write_args(char **args, char **tokens)
+static void write_args(char **args, char **tokens)
 {
 	char *args_token;
 
@@ -37,7 +16,7 @@ void ft_word(char **args, char ***tokens)
 }
 
 
-void write_redir(t_redir *red, char **tokens)
+static void write_redir(t_redir *red, char **tokens)
 {
 	char		*red_token;
 	char 		*wrd_token;
@@ -68,7 +47,59 @@ void write_redir(t_redir *red, char **tokens)
 void ft_redir(t_redir *red, char ***tokens)
 {
 	if (!expect(wrd, tokens))
-		return (0);
+		error();
 	if (red)
 		write_redir(red, *tokens);
 }
+
+static int  check_brackets(char **tokens)
+{
+	int	brackets;
+
+	brackets = 1;
+	while (*tokens && brackets >= 0)
+	{
+		if (accept(lb, &tokens))
+			brackets++;
+		else if (accept(rb, &tokens))
+			brackets--;
+		tokens = nextsym(tokens);
+	}
+	if (!*tokens && !brackets)
+		return (1);
+	return (0);
+}
+
+static char **close_bracket(char **tokens)
+{
+	int	brackets;
+
+	brackets = 1;
+	while (brackets)
+	{
+		if (accept(lb, &tokens))
+			brackets++;
+		else if (accept(rb, &tokens))
+			brackets--;
+		tokens = nextsym(tokens);
+	}
+	return (tokens);
+}
+
+void ft_subshell(t_stmnt **stmnt, char ***tokens)
+{
+	char **lim_token;
+
+	if (!check_brackets(*tokens))
+		error();
+	lim_token = close_bracket(*tokens);
+	*stmnt = ft_stmnt_new();
+	(*stmnt)->type = op_sbsh;
+	ft_parser(stmnt, *tokens, lim_token);
+	*tokens = lim_token + 1;
+	while (accept(lg, tokens))
+		ft_redir(stmnt->redir, tokens);
+	if (accept(wrd, tokens))
+		error();
+}
+

@@ -1,6 +1,6 @@
 # include "parser.h"
 
-t_stmnt *ft_oper_new(void)
+t_stmnt *ft_stmnt_new(void)
 {
 	t_stmnt *op1;
 

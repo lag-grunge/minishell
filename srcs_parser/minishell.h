@@ -25,6 +25,15 @@ typedef enum e_ctrls {
 	rbr
 } t_ctrls;
 
+typedef enum e_token {
+	lg,
+	wrd,
+	op,
+	pp,
+	lb,
+	rb
+} t_token;
+
 typedef enum e_tstmnt {
 	op_none,
 	op_smpl,
@@ -51,12 +60,12 @@ typedef struct s_redir {
 typedef struct s_cmd {
 	char 			**args;
 	t_redir 		*redir;
-	struct	s_cmd 	*next_cmd; // if PIPE
+	//struct	s_cmd 	*next_cmd; // if PIPE
 }			t_cmd;
 
 typedef struct s_stmnt {
 	t_tstmnt		type;
-	t_tstmnt		type1; //	none, simple(t_cmd), && , ||, subshell (enum and or)
+	t_tstmnt		type1; //	none, simple(t_cmd), && , ||, subshell
 	void			*oper1;
 	t_tstmnt		type2; //	operand2, null if not
 	void			*oper2;
