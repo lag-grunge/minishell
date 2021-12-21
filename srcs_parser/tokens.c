@@ -14,23 +14,23 @@ int		ft_ismeta(int c)
 int		ft_isoperator(char *s, int len)
 {
 	if (!ft_strncmp(s, LTLT, len))
-		return (ltlt);
+		return (ct_ltlt);
 	if (!ft_strncmp(s, GTGT, len))
-		return (gtgt);
+		return (ct_gtgt);
 	if (!ft_strncmp(s, LT, len))
-		return (lt);
+		return (ct_lt);
 	if (!ft_strncmp(s, GT, len))
-		return (gt);
+		return (ct_gt);
 	if (!ft_strncmp(s, OR, len))
-		return (or);
+		return (ct_or);
 	if (!ft_strncmp(s, PIPE, len))
-		return (pip);
+		return (ct_pip);
 	if (!ft_strncmp(s, AND, len))
-		return (and);
+		return (ct_and);
 	if (!ft_strncmp(s, LBR, len))
-		return (lbr);
+		return (ct_lbr);
 	if (!ft_strncmp(s, RBR, len))
-		return (rbr);
+		return (ct_rbr);
 	return (-1);
 }
 
@@ -72,7 +72,8 @@ char	*word(char *read_line, int *nt)
 		if (read_line[next_token] == '\'' || \
 			read_line[next_token] == '\"')
 			next_token += quoting(read_line + next_token);
-		next_token++;
+		else
+			next_token++;
 	}
 	if (nt)
 		*nt = next_token;
@@ -128,19 +129,3 @@ char **get_tokens(char *read_line)
 	}
 	return (tokens);
 }
-
-// int main(int argc, char *argv[])
-/*{
-	char **tokens;
-
-	if (argc != 2)
-		return (1);
-	tokens = get_tokens(argv[1]);
-	while (*tokens)
-	{
-		printf("%p %s\n", tokens, *tokens);
-		tokens++;
-	}
-	return (0);
-}
-*/

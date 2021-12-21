@@ -5,15 +5,15 @@ t_token	type(char *cur)
 	int ret;
 
 	ret = ft_isoperator(cur, ft_strlen(cur));
-	if (ret >= ltlt && ret <= gt)
+	if (ret >= ct_ltlt && ret <= ct_gt)
 		return (lg);
-	else if (ret == or || ret == and)
+	else if (ret == ct_or || ret == ct_and)
 		return (op);
-	else if (ret == pip)
+	else if (ret == ct_pip)
 		return (pp);
-	else if (ret == lbr)
+	else if (ret == ct_lbr)
 		return (lb);
-	else if (ret == rbr)
+	else if (ret == ct_rbr)
 		return (rb);
 	else
 		return (wrd);
@@ -23,13 +23,13 @@ int expect(t_token t, char ***cur)
 {
 	if (accept(t, cur))
 		return (1);
-	return (error());
+	return (syntax_error(0));
 }
 
-int	error(void)
+int syntax_error(int ret)
 {
-	printf("unexpected t_token\n");
-	return (0);
+	printf("unexpected token\n");
+	return (ret);
 }
 
 char **nextsym(char **cur)

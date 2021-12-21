@@ -3,6 +3,11 @@
 # include "libft.h"
 # include <stdio.h>
 
+typedef enum e_errors {
+	syntax_err = 2,
+	malloc_err = 3
+}				t_returns;
+
 # define LTLT "<<"
 # define GTGT ">>"
 # define LT "<"
@@ -14,15 +19,15 @@
 # define RBR ")"
 
 typedef enum e_ctrls {
-	ltlt,
-	gtgt,
-	lt,
-	gt,
-	or,
-	pip,
-	and,
-	lbr,
-	rbr
+	ct_ltlt,
+	ct_gtgt,
+	ct_lt,
+	ct_gt,
+	ct_or,
+	ct_pip,
+	ct_and,
+	ct_lbr,
+	ct_rbr
 } t_ctrls;
 
 typedef enum e_token {
@@ -60,14 +65,13 @@ typedef struct s_redir {
 typedef struct s_cmd {
 	char 			**args;
 	t_redir 		*redir;
-	//struct	s_cmd 	*next_cmd; // if PIPE
 }			t_cmd;
 
 typedef struct s_stmnt {
-	t_tstmnt		type;
-	t_tstmnt		type1; //	none, simple(t_cmd), && , ||, subshell
+	int 			type;
+	int 			type1; //	none, simple(t_cmd), && , ||, subshell
 	void			*oper1;
-	t_tstmnt		type2; //	operand2, null if not
+	int 			type2; //	operand2, null if not
 	void			*oper2;
 	t_redir			*redir; //	common redir for subshell
 	struct s_stmnt 	*next_stmnt; // pipe
