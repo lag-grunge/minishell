@@ -13,46 +13,56 @@ int ft_word(char **args, char ***tokens)
 {
 	if (args)
 		write_args(args, *tokens);
+	return (0);
 }
 
+t_redir	*add_redir_item(t_redir **red)
+{
+	t_redir	*r;
 
-static void write_redir(t_redir *red, char **tokens)
+	r = *red;
+	if (!r->word)
+		return (r);
+	while (r->next)
+		r = r->next;
+	r->next = ft_redir_new();
+	return (r->next);
+}
+
+static int write_redir(t_redir *redirect, char **tokens)
 {
 	char		*red_token;
 	char 		*wrd_token;
 	t_ctrls		red_type;
+	t_redir		*red;
 
+	red = add_redir_item(&redirect);
+	if (!red)
+		return (malloc_err);
 	red_token = tokens[-2];
 	wrd_token = tokens[-1];
-	red_type = ft_isoperator(red_token, ft_strlen(red_token));
+	red_type = ft_isoperator(red_token, (int)ft_strlen(red_token));
 	if (red_type == ct_ltlt)
-	{
-		red->in = red_rh_doc;
-		red->lim = ft_strdup(wrd_token);
-	}
+		red->type = red_rh_doc;
 	else if (red_type == ct_lt)
-	{
-		red->in = red_rifile;
-		red->infile = ft_strdup(wrd_token);
-	}
-	else if (red_type == ct_gt || red_type == ct_gtgt)
-	{
-		red->outfile = ft_strdup(wrd_token);
-		red->out = red_wofile;
-		if (red_type == ct_gtgt)
-			red->out = red_aofile;
-	}
+		red->type = red_rifile;
+	else if (red_type == ct_gt)
+		red->type = red_wofile;
+	else if (red_type == ct_gtgt)
+		red->type = red_aofile;
+	red->word = ft_strdup(wrd_token);
+	if (!red->word)
+		return (malloc_err);
+	return (0);
 }
 
 int ft_redir(t_redir *red, char ***tokens)
 {
 	if (!expect(wrd, tokens))
-	{
-		syntax_error(0);
-		return (syntax_err);
-	}
+		return (syntax_error(syntax_err));
 	if (red)
-		write_redir(red, *tokens);
+		return (write_redir(red, *tokens));
+	return (0);
 }
 
 static int  check_brackets(char **tokens)
@@ -95,23 +105,16 @@ int ft_subshell(t_stmnt **stmnt, char **tokens)
 	int		ret;
 
 	if (!check_brackets(tokens))
-	{
-		syntax_error(0);
-		return (syntax_err);
-	}
+		return syntax_error(syntax_err);
 	lim_token = close_bracket(tokens);
-	(*stmnt)->type = op_sbsh;
-	ret = ft_parser(&(*stmnt)->oper1, tokens, lim_token - 1);
+	ret = ft_parser(stmnt, tokens, lim_token - 1);
+	if (ret)
+		return (ret);
 	tokens = lim_token + 1;
-	while (ret && accept(lg, &tokens))
-		ft_redir((*stmnt)->redir, &tokens));
-
+	while (!ret && accept(lg, &tokens))
+		ret = ft_redir(&(*stmnt)->redir, &tokens);
 	if (accept(wrd, &tokens))
-	{
-		syntax_error(0);
-		return (syntax_err);
-	}
-	else if
-
+		return (syntax_error(syntax_err));
+	return (0);
 }
 

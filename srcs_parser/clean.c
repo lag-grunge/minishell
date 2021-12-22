@@ -9,12 +9,15 @@ static void free_if_exist(void *s, void (*func)(void *))
 void	clean_redir(void *ptr)
 {
 	t_redir *red;
+	t_redir *tmp;
 
 	red = ptr;
-	free_if_exist(red->infile, free);
-	free_if_exist(red->lim, free);
-	free_if_exist(red->outfile, free);
-	free(red);
+	while (red)
+	{
+		tmp = red;
+		red = red->next;
+		free(tmp);
+	}
 }
 
 void clean_cmd(t_cmd *cmd)

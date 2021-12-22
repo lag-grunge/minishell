@@ -48,6 +48,8 @@ typedef enum e_tstmnt {
 } t_tstmnt;
 
 typedef enum e_tred {
+	red_stdin,
+	red_stdout,
 	red_rifile,
 	red_rh_doc,
 	red_wofile,
@@ -55,11 +57,9 @@ typedef enum e_tred {
 } t_tred;
 
 typedef struct s_redir {
-	t_tred	in;
-	char	*infile;
-	char	*lim;
-	t_tred	out;
-	char	*outfile;
+	t_tred	type;
+	char	*word;
+	struct	s_redir *next;
 }			t_redir;
 
 typedef struct s_cmd {
@@ -69,9 +69,7 @@ typedef struct s_cmd {
 
 typedef struct s_stmnt {
 	int 			type;
-	int 			type1; //	none, simple(t_cmd), && , ||, subshell
 	void			*oper1;
-	int 			type2; //	operand2, null if not
 	void			*oper2;
 	t_redir			*redir; //	common redir for subshell
 	struct s_stmnt 	*next_stmnt; // pipe

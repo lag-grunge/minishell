@@ -15,9 +15,11 @@ int exec_line(char *read_line)
 	tokens = get_tokens(read_line);
 	if (!tokens)
 		return (malloc_err);
-	ft_parser(&stmnt, tokens, tokens + ft_spllen(tokens) - 1);
+	ret = ft_parser(&stmnt, tokens, tokens + ft_spllen(tokens) -1);
+	if (ret)
+		return (ret);
 //	exec_stmnt(stmnt);
-	return (1);
+	return (0);
 }
 
 int main(int argc, char *argv[])

@@ -3,10 +3,10 @@
 
 int count_args(char **tokens)
 {
-	int	count;
+	int		count;
 
 	count = 0;
-	while (1)
+	while (*tokens)
 	{
 		if (accept(lg, &tokens))
 			ft_redir(NULL, &tokens);
@@ -46,40 +46,53 @@ t_cmd	*ft_init_cmd(char **tokens)
 	return (cmd);
 }
 
-int *ft_write_cmd(t_stmnt **stmnt, t_cmd *cmd, char ***tokens)
+int ft_write_cmd(t_cmd *cmd, char ***tokens)
 {
 	int		ret;
+	char	**cur;
+	t_redir	*red;
 
 	ret = 0;
-	while (!ret)
+	cur = cmd->args;
+	red = cmd->redir;
+	while (!ret && **tokens)
 	{
-		if (accept(lg, &tokens))
-			ret = ft_redir(cmd->redir, &tokens);
-		else if (accept(wrd, &tokens))
-			ret = ft_word(cmd->args, &tokens);
+		if (accept(lg, tokens))
+			ret = ft_redir(red, tokens);
+		else if (accept(wrd, tokens))
+		{
+			ret = ft_word(cur, tokens);
+			cur++;
+		}
 		else
 			break ;
 	}
 	if (ret)
 		return (ret);
-	(*stmnt)->oper1 = cmd;
 	return (0);
 }
 
-int ft_cmd(t_stmnt **stmnt, int *t, char **tokens)
+int ft_cmd(t_stmnt **stmnt, char **tokens)
 {
 	t_cmd	*cmd;
+	int		ret;
 
-	if (accept(ct_lbr, tokens))
+	if (accept(lb, &tokens))
 	{
-		*t = op_sbsh;
-		return (ft_subshell(stmnt, tokens));
+		(*stmnt)->type = op_sbsh;
+		return (ft_subshell((t_stmnt **)&(*stmnt)->oper1, tokens));
 	}
-	*t = op_smpl;
+	(*stmnt)->type = op_smpl;
 	cmd = ft_init_cmd(tokens);
 	if (!cmd)
 		return (malloc_err);
-	ft_write_cmd(stmnt, cmd, &tokens);
+	(*stmnt)->oper1 = cmd;
+	ret = ft_write_cmd((*stmnt)->oper1, &tokens);
+	if (ret)
+		return (ret);
+	else if (accept(lb, &tokens) || accept(rb, &tokens))
+		return (syntax_error(syntax_err));
+	return (0);
 }
 
 t_stmnt	*ft_oper(char ***oper, char **tokens, char **lim_token, t_token top)
@@ -97,29 +110,29 @@ t_stmnt	*ft_oper(char ***oper, char **tokens, char **lim_token, t_token top)
 	return (ft_stmnt_new());
 }
 
-int ft_stmnt(t_stmnt **stmnt, int *t, char **tokens, char **lim_token)
+int ft_stmnt(t_stmnt **stmnt, char **tokens, char **lim_token)
 {
 	char	**tpip;
-	int 	ret;
 
 	*stmnt = ft_oper(&tpip, tokens, lim_token, pp);
 	if (!*stmnt)
 		return (malloc_err);
+	(*stmnt)->type = op_none;
 	if (tpip && (tpip - 1 >= tokens) && (tpip + 1 <= lim_token))
 	{
-		ret = ft_cmd(stmnt, t, tokens);
-		ft_stmnt(&(*stmnt)->next_stmnt, NULL, tpip + 1, lim_token);
+		return (ft_cmd(stmnt, tokens) || \
+			ft_stmnt(&(*stmnt)->next_stmnt, tpip + 1, lim_token));
 	}
 	else if (tpip)
 		return (syntax_error(syntax_err));
 	else
 	{
 		(*stmnt)->next_stmnt = NULL;
-		return (ft_cmd(stmnt, NULL, tokens));
+		return (ft_cmd(stmnt, tokens));
 	}
 }
 
-int ft_parser(t_stmnt **stmnt, int *t, char **tokens, char **lim_token)
+int ft_parser(t_stmnt **stmnt, char **tokens, char **lim_token)
 {
 	char	**oper;
 
@@ -128,22 +141,16 @@ int ft_parser(t_stmnt **stmnt, int *t, char **tokens, char **lim_token)
 		return (malloc_err);
 	if (oper && (oper - 1 >= tokens) && (oper + 1 <= lim_token))
 	{
-		if (ft_isoperator(*oper, ft_strlen(*oper) == ct_and))
-			*t = op_and;
-		else
-			*t = op_or;
-		(*stmnt)->type = *t;
+		(*stmnt)->type = (ft_isoperator(*oper, (int)ft_strlen(*oper))\
+						== ct_and + op_or);
 		return (ft_stmnt\
-				(&(*stmnt)->oper1, &(*stmnt)->type1, tokens, oper - 1) || \
-				ft_parser\
-				(&(*stmnt)->oper2, &(*stmnt)->type2, oper + 1, lim_token));
+				((t_stmnt **)&(*stmnt)->oper1, tokens, oper - 1) || \
+                ft_parser\
+				((t_stmnt **)&(*stmnt)->oper2, oper + 1, lim_token));
 	}
 	else if (oper)
 		return (syntax_error(syntax_err));
 	else
-	{
-		(*stmnt)->type = op_none;
 		return (ft_stmnt\
-			(&(*stmnt)->oper1, &(*stmnt)->type1, tokens, oper - 1));
-	}
+			(stmnt, tokens, lim_token));
 }

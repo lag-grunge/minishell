@@ -4,7 +4,7 @@ t_token	type(char *cur)
 {
 	int ret;
 
-	ret = ft_isoperator(cur, ft_strlen(cur));
+	ret = ft_isoperator(cur, (int)ft_strlen(cur));
 	if (ret >= ct_ltlt && ret <= ct_gt)
 		return (lg);
 	else if (ret == ct_or || ret == ct_and)

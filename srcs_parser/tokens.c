@@ -13,23 +13,23 @@ int		ft_ismeta(int c)
 
 int		ft_isoperator(char *s, int len)
 {
-	if (!ft_strncmp(s, LTLT, len))
+	if (!ft_strncmp(s, LTLT, len) && !ft_strncmp(s, LTLT, 2))
 		return (ct_ltlt);
-	if (!ft_strncmp(s, GTGT, len))
+	if (!ft_strncmp(s, GTGT, len) && !ft_strncmp(s, GTGT, 2))
 		return (ct_gtgt);
-	if (!ft_strncmp(s, LT, len))
+	if (!ft_strncmp(s, LT, len) && !ft_strncmp(s, LT, 1))
 		return (ct_lt);
-	if (!ft_strncmp(s, GT, len))
+	if (!ft_strncmp(s, GT, len) && !ft_strncmp(s, GT, 1))
 		return (ct_gt);
-	if (!ft_strncmp(s, OR, len))
+	if (!ft_strncmp(s, OR, len) && !ft_strncmp(s, OR, 2))
 		return (ct_or);
-	if (!ft_strncmp(s, PIPE, len))
+	if (!ft_strncmp(s, PIPE, len) && !ft_strncmp(s, PIPE, 1))
 		return (ct_pip);
-	if (!ft_strncmp(s, AND, len))
+	if (!ft_strncmp(s, AND, len) && !ft_strncmp(s, AND, 2))
 		return (ct_and);
-	if (!ft_strncmp(s, LBR, len))
+	if (!ft_strncmp(s, LBR, len) && !ft_strncmp(s, LBR, 1))
 		return (ct_lbr);
-	if (!ft_strncmp(s, RBR, len))
+	if (!ft_strncmp(s, RBR, len) && !ft_strncmp(s, RBR, 1))
 		return (ct_rbr);
 	return (-1);
 }
