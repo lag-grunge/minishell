@@ -1,21 +1,27 @@
 # include "minishell.h"
 # include "parser.h"
 # include "syntax.h"
-# include "errors.h"
 
 
 int exec_line(char *read_line)
 {
 	char		**tokens;
+	char		**lim_token;
 	t_stmnt 	*stmnt;
 	int			ret;
 
 	stmnt = NULL;
 	tokens = NULL;
-	tokens = get_tokens(read_line);
+	ret = 0;
+	tokens = get_tokens(read_line, &ret);
 	if (!tokens)
-		return (malloc_err);
-	ret = ft_parser(&stmnt, tokens, tokens + ft_spllen(tokens) -1);
+	{
+		if (!ret)
+			return (malloc_err);
+		return (0);
+	}
+	lim_token = tokens + ft_spllen(tokens) - 1;
+	ret = ft_parser(&stmnt, tokens, lim_token);
 	if (ret)
 		return (ret);
 //	exec_stmnt(stmnt);

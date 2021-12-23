@@ -4,7 +4,7 @@ t_token	type(char *cur)
 {
 	int ret;
 
-	ret = ft_isoperator(cur, (int)ft_strlen(cur));
+	ret = ft_isoperator(cur);
 	if (ret >= ct_ltlt && ret <= ct_gt)
 		return (lg);
 	else if (ret == ct_or || ret == ct_and)
@@ -39,7 +39,7 @@ char **nextsym(char **cur)
 
 int accept(t_token t, char ***cur)
 {
-	if (t == type(**cur))
+	if (**cur && t == type(**cur))
 	{
 		*cur = nextsym(*cur);
 		return (1);

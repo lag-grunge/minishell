@@ -17,6 +17,7 @@ typedef enum e_errors {
 # define AND "&&"
 # define LBR "("
 # define RBR ")"
+# define MAX_CTRLS_LEN 2
 
 typedef enum e_ctrls {
 	ct_ltlt,
@@ -40,7 +41,6 @@ typedef enum e_token {
 } t_token;
 
 typedef enum e_tstmnt {
-	op_none,
 	op_smpl,
 	op_or,
 	op_and,
@@ -48,8 +48,6 @@ typedef enum e_tstmnt {
 } t_tstmnt;
 
 typedef enum e_tred {
-	red_stdin,
-	red_stdout,
 	red_rifile,
 	red_rh_doc,
 	red_wofile,
