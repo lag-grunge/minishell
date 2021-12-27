@@ -2,6 +2,7 @@
 # include "parser.h"
 # include "syntax.h"
 
+void print_stmnt(t_stmnt *stmnt, char *pos);
 
 int exec_line(char *read_line)
 {
@@ -24,6 +25,7 @@ int exec_line(char *read_line)
 	ret = ft_parser(&stmnt, tokens, lim_token);
 	if (ret)
 		return (ret);
+	print_stmnt(stmnt, NULL);
 //	exec_stmnt(stmnt);
 	return (0);
 }

@@ -14,50 +14,55 @@ static t_stmnt *ft_stmnt_new(void)
 	return (stmnt);
 }
 
-static t_stmnt	*ft_oper(char ***oper, char **tokens, char **lim_token, t_token top)
+static int ft_oper(char ***oper, char **tokens, char **lim_token, t_token top)
 {
 	char	**cur_token;
 
-	cur_token = lim_token;
-	while (cur_token >= tokens && \
+	cur_token = tokens;
+	while (cur_token <= lim_token && \
 		type(*cur_token) != top)
-		cur_token--;
-	if (cur_token < tokens)
+		cur_token++;
+	if (cur_token > lim_token)
 		*oper = NULL;
+	else if (cur_token == lim_token || cur_token == tokens)
+		return (syntax_error(syntax_err));
 	else
 		*oper = cur_token;
-	return (ft_stmnt_new());
+	return (0);
 }
 
 static int ft_stmnt(t_stmnt **stmnt, char **tokens, char **lim_token)
 {
 	char	**tpip;
+	int		ret;
 
-	*stmnt = ft_oper(&tpip, tokens, lim_token, pp);
+	ret = ft_oper(&tpip, tokens, lim_token, pp);
+	if (ret)
+		return (ret);
+	*stmnt = ft_stmnt_new();
 	if (!*stmnt)
 		return (malloc_err);
-	if (tpip && (tpip - 1 >= tokens) && (tpip + 1 <= lim_token))
-	{
-		return (ft_cmd(stmnt, tokens) || \
-			ft_stmnt(&(*stmnt)->next_stmnt, tpip + 1, lim_token));
-	}
-	else if (tpip)
-		return (syntax_error(syntax_err));
-	else
+	if (!tpip)
 	{
 		(*stmnt)->next_stmnt = NULL;
 		return (ft_cmd(stmnt, tokens));
 	}
+	return (ft_cmd(stmnt, tokens) || \
+			ft_stmnt(&(*stmnt)->next_stmnt, tpip + 1, lim_token));
 }
 
 int ft_parser(t_stmnt **stmnt, char **tokens, char **lim_token)
 {
 	char	**oper;
+	int		ret;
 
-	*stmnt = ft_oper(&oper, tokens, lim_token, op);
+	ret =ft_oper(&oper, tokens, lim_token, op);
+	if (ret)
+		return (ret);
+	*stmnt = ft_stmnt_new();
 	if (!*stmnt)
 		return (malloc_err);
-	if (oper && (oper - 1 >= tokens) && (oper + 1 <= lim_token))
+	if (oper)
 	{
 		(*stmnt)->type = ((ft_isoperator(*oper)\
  == ct_and) + op_or);
@@ -66,9 +71,6 @@ int ft_parser(t_stmnt **stmnt, char **tokens, char **lim_token)
                 ft_parser\
 				((t_stmnt **)&(*stmnt)->oper2, oper + 1, lim_token));
 	}
-	else if (oper)
-		return (syntax_error(syntax_err));
-	else
-		return (ft_stmnt\
+	return (ft_stmnt\
 			(stmnt, tokens, lim_token));
 }

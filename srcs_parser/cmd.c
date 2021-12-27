@@ -96,7 +96,7 @@ int ft_cmd(t_stmnt **stmnt, char **tokens)
 	ret = ft_write_cmd((*stmnt)->oper1, &tokens);
 	if (ret)
 		return (ret);
-	else if (accept(lb, &tokens) || accept(rb, &tokens))
+	else if (accept(lb, &tokens))
 		return (syntax_error(syntax_err));
 	return (0);
 }
