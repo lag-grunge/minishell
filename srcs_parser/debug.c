@@ -31,36 +31,49 @@ void print_type(t_stmnt *stmnt)
 char redir_type_to_char(t_tred red)
 {
 	static int i;
+	int ret;
 
-	if (red == red_rifile)
-		return ('<' * (i == 0));
-	else if (red == red_rh_doc)
-		return ('<');
-	else if (red == red_wofile)
-		return ('>' * (i == 0));
+	ret = 0;
+	if (red == red_rh_doc)
+		ret = '<';
 	else if (red == red_aofile)
-		return ('>');
+		ret = '>';
+	else if (red == red_wofile && i == 0)
+		ret = '>';
+	else if (red == red_rifile && i == 0)
+		ret = '<';
 	i = (i + 1) % 2;
+	return (ret);
 }
 
-void print_redir(t_stmnt *stmnt, int sbsh)
+void print_redir(void *st, int sbsh)
 {
 	int i;
 	char c1;
 	char c2;
-	if (sbsh)
+	t_redir *red;
+
+	if (sbsh) {
 		printf("common subshell redirect ");
+		red = ((t_stmnt *)st)->redir;
+	}
+	else {
+		printf("smpl cmd redirect ");
+		red = ((t_cmd *)st)->redir;
+	}
 	i = 1;
-	while (stmnt->redir)
-	{
-		printf("%d ", i);
-		c1 = redir_type_to_char(stmnt->redir->type);
-		c2 = redir_type_to_char(stmnt->redir->type);
-		printf("%c%c", c1, c2);
-		printf(" %s", stmnt->redir->word);
-		stmnt->redir = stmnt->redir->next;
+	while (red) {
+		c1 = redir_type_to_char(red->type);
+		c2 = redir_type_to_char(red->type);
+		printf("%c", c1);
+		if (c2)
+			printf("%c", c2);
+		printf(" %s", red->word);
+		red = red->next;
 		i++;
 	}
+	if (i == 1)
+		printf("empty");
 	printf("\n");
 }
 

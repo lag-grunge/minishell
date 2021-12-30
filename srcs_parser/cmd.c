@@ -1,16 +1,6 @@
 #include "parser.h"
 #include "clean.h"
 
-static t_cmd *ft_cmd_new(void)
-{
-	t_cmd	*cmd1;
-
-	cmd1 = (t_cmd *)malloc(sizeof(t_cmd) * 1);
-	cmd1->args = NULL;
-	cmd1->redir = NULL;
-	return (cmd1);
-}
-
 static int count_args(char **tokens)
 {
 	int		count;
@@ -28,14 +18,29 @@ static int count_args(char **tokens)
 	return (count);
 }
 
+static int write_word(char ***cur, char **tokens)
+{
+	char *tmp;
+
+	tmp =  ft_strdup(tokens[-1]);
+	if (!tmp)
+		return (malloc_err);
+	**cur = tmp;
+	*cur += 1;
+	return (0);
+}
+
+
 static t_cmd	*ft_init_cmd(char **tokens)
 {
 	int		count;
 	t_cmd	*cmd;
 
-	cmd = ft_cmd_new();
+	cmd = (t_cmd *)malloc(sizeof(t_cmd) * 1);
 	if (!cmd)
 		return (NULL);
+	cmd->args = NULL;
+	cmd->redir = NULL;
 	count = count_args(tokens);
 	if (count)
 	{
@@ -55,7 +60,6 @@ static int ft_write_cmd(t_cmd *cmd, char ***tokens)
 	int		ret;
 	char	**cur;
 	t_redir	*red;
-	char	*tmp;
 
 	ret = 0;
 	cur = cmd->args;
@@ -63,22 +67,16 @@ static int ft_write_cmd(t_cmd *cmd, char ***tokens)
 	while (!ret && **tokens)
 	{
 		if (accept(lg, tokens))
-			ret = ft_redir(red, tokens);
+			ret = ft_redir(&red, tokens);
 		else if (accept(wrd, tokens))
-		{
-			tmp =  ft_strdup((*tokens)[-1]);
-			if (!tmp)
-				return (malloc_err);
-			*cur = tmp;
-			cur++;
-		}
+			ret = write_word(&cur, *tokens);
 		else
 			break ;
 	}
 	return (ret);
 }
 
-int ft_cmd(t_stmnt **stmnt, char **tokens)
+int ft_cmd(t_stmnt **stmnt, char **tokens, char **lim_token)
 {
 	t_cmd	*cmd;
 	int		ret;
@@ -86,7 +84,8 @@ int ft_cmd(t_stmnt **stmnt, char **tokens)
 	if (accept(lb, &tokens))
 	{
 		(*stmnt)->type = op_sbsh;
-		return (ft_subshell((t_stmnt **)&(*stmnt)->oper1, tokens));
+		return (ft_subshell((t_stmnt **) &(*stmnt)->oper1, \
+				&(*stmnt)->redir, tokens));
 	}
 	(*stmnt)->type = op_smpl;
 	cmd = ft_init_cmd(tokens);
@@ -96,8 +95,7 @@ int ft_cmd(t_stmnt **stmnt, char **tokens)
 	ret = ft_write_cmd((*stmnt)->oper1, &tokens);
 	if (ret)
 		return (ret);
-	else if (accept(lb, &tokens))
-		return (syntax_error(syntax_err));
+	else if (lim_token != tokens - 1)
+		return (syntax_error(syntax_err, *tokens));
 	return (0);
 }
-

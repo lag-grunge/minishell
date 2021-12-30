@@ -23,12 +23,15 @@ int expect(t_token t, char ***cur)
 {
 	if (accept(t, cur))
 		return (1);
-	return (syntax_error(0));
+	return (syntax_error(syntax_err, **cur));
 }
 
-int syntax_error(int ret)
+int syntax_error(int ret, char *token)
 {
-	printf("unexpected token\n");
+	printf("unexpected token ");
+	if (token)
+		printf("'%s'", token);
+	printf("\n");
 	return (ret);
 }
 

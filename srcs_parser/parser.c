@@ -21,11 +21,16 @@ static int ft_oper(char ***oper, char **tokens, char **lim_token, t_token top)
 	cur_token = tokens;
 	while (cur_token <= lim_token && \
 		type(*cur_token) != top)
-		cur_token++;
+		{
+		if (accept(lb, &cur_token))
+			cur_token = close_bracket(cur_token) + 1;
+		else
+			cur_token++;
+	}
 	if (cur_token > lim_token)
 		*oper = NULL;
 	else if (cur_token == lim_token || cur_token == tokens)
-		return (syntax_error(syntax_err));
+		return (syntax_error(syntax_err, NULL));
 	else
 		*oper = cur_token;
 	return (0);
@@ -45,9 +50,9 @@ static int ft_stmnt(t_stmnt **stmnt, char **tokens, char **lim_token)
 	if (!tpip)
 	{
 		(*stmnt)->next_stmnt = NULL;
-		return (ft_cmd(stmnt, tokens));
+		return (ft_cmd(stmnt, tokens, lim_token));
 	}
-	return (ft_cmd(stmnt, tokens) || \
+	return (ft_cmd(stmnt, tokens, tpip - 1) || \
 			ft_stmnt(&(*stmnt)->next_stmnt, tpip + 1, lim_token));
 }
 
@@ -56,7 +61,7 @@ int ft_parser(t_stmnt **stmnt, char **tokens, char **lim_token)
 	char	**oper;
 	int		ret;
 
-	ret =ft_oper(&oper, tokens, lim_token, op);
+	ret = ft_oper(&oper, tokens, lim_token, op);
 	if (ret)
 		return (ret);
 	*stmnt = ft_stmnt_new();

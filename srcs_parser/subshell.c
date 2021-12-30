@@ -19,7 +19,7 @@ static int  check_brackets(char **tokens)
 	return (0);
 }
 
-static char **close_bracket(char **tokens)
+char **close_bracket(char **tokens)
 {
 	int	brackets;
 
@@ -33,7 +33,7 @@ static char **close_bracket(char **tokens)
 		else
 			tokens = nextsym(tokens);
 	}
-	return (tokens - 2);
+	return (tokens - 1);
 }
 
 static int	empty_brackets(char **lim_token)
@@ -41,23 +41,23 @@ static int	empty_brackets(char **lim_token)
 	return (type(*lim_token) == lb);
 }
 
-int ft_subshell(t_stmnt **stmnt, char **tokens)
+int ft_subshell(t_stmnt **stmnt, t_redir **common_red, char **tokens)
 {
 	char	**lim_token;
 	int		ret;
 
 	if (!check_brackets(tokens))
-		return syntax_error(syntax_err);
-	lim_token = close_bracket(tokens);
+		return syntax_error(syntax_err, "newline");
+	lim_token = close_bracket(tokens) - 1;
 	if (empty_brackets(lim_token))
-		return syntax_error(syntax_err);
+		return syntax_error(syntax_err, lim_token[1]);
 	ret = ft_parser(stmnt, tokens, lim_token);
 	if (ret)
 		return (ret);
-	tokens = lim_token + 1;
+	tokens = lim_token + 2;
 	while (!ret && accept(lg, &tokens))
-		ret = ft_redir((*stmnt)->redir, &tokens);
+		ret = ft_redir(common_red, &tokens);
 	if (accept(wrd, &tokens))
-		return (syntax_error(syntax_err));
+		return (syntax_error(syntax_err, tokens[-1]));
 	return (0);
 }

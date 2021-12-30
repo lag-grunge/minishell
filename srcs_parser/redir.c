@@ -28,14 +28,14 @@ static t_redir	*add_redir_item(t_redir **red)
 	return (r->next);
 }
 
-static int write_redir(t_redir *redirect, char **tokens)
+static int write_redir(t_redir **redirect, char **tokens)
 {
 	char		*red_token;
 	char 		*wrd_token;
 	t_ctrls		red_type;
 	t_redir		*red;
 
-	red = add_redir_item(&redirect);
+	red = add_redir_item(redirect);
 	if (!red)
 		return (malloc_err);
 	red_token = tokens[-2];
@@ -55,10 +55,10 @@ static int write_redir(t_redir *redirect, char **tokens)
 	return (0);
 }
 
-int ft_redir(t_redir *red, char ***tokens)
+int ft_redir(t_redir **red, char ***tokens)
 {
 	if (!expect(wrd, tokens))
-		return (syntax_error(syntax_err));
+		return (syntax_error(syntax_err, **tokens));
 	if (red)
 		return (write_redir(red, *tokens));
 	return (0);

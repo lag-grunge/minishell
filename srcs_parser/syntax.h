@@ -5,7 +5,7 @@
 t_token	type(char *cur);
 int expect(t_token t, char ***cur);
 char **nextsym(char **cur);
-int syntax_error(int ret);
+int syntax_error(int ret, char *token);
 int accept(t_token t, char ***cur);
 
 
