@@ -8,7 +8,7 @@ DEPS = ${OBJS:.o=.d}
 LIBFT = libft/libft.a
 
 INCLUDE = -I. -I./libft
-CFLAGS = -g -Wall -Werror -Wextra ${INCLUDE} -MMD
+CFLAGS = -g -Wall -Werror -Wextra ${INCLUDE} -MMD -fsanitize=address
 LDFLAGS = -L./libft
 LIBRARIES = -lft
 CC = gcc

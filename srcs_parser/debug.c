@@ -81,34 +81,24 @@ void print_stmnt(t_stmnt *stmnt, char *pos);
 
 void move(t_stmnt *stmnt, char *pos)
 {
-	char *tmp;
-	tmp = pos;
 	if (stmnt->type == op_sbsh)
 	{
-		pos = ft_strjoin(tmp, "s");
-		free(tmp);
 		print_redir(stmnt, 1);
-		print_stmnt(stmnt->oper1, pos);
+		print_stmnt(stmnt->oper1, ft_strjoin(pos, "s"));
 	}
 	else if (stmnt->type == op_or || stmnt->type == op_and)
 	{
-		print_stmnt(stmnt->oper1, ft_strjoin(tmp, "l"));
-		print_stmnt(stmnt->oper2, ft_strjoin(tmp, "r"));
-		free(tmp);
+		print_stmnt(stmnt->oper1, ft_strjoin(pos, "l"));
+		print_stmnt(stmnt->oper2, ft_strjoin(pos, "r"));
 	}
 	else if (stmnt->type == op_smpl)
 	{
 		print_args(stmnt->oper1);
 		print_redir(stmnt->oper1, 0);
-		if (stmnt->next_stmnt)
-		{
-			pos = ft_strjoin(tmp, "p");
-			free(tmp);
-			print_stmnt(stmnt->next_stmnt, pos);
-		}
-		else
-			free(pos);
 	}
+	if (stmnt->next_stmnt)
+		print_stmnt(stmnt->next_stmnt, ft_strjoin(pos, "p"));
+	free(pos);
 }
 
 void print_stmnt(t_stmnt *stmnt, char *pos)

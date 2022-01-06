@@ -58,14 +58,19 @@ static int ft_write_cmd(char **cmd_args, t_redir **cmd_red, \
 						char **tokens, char **lim_token)
 {
 	int		ret;
+	int		i;
 
 	ret = 0;
+	i = 0;
 	while (!ret && *tokens)
 	{
 		if (accept(lg, &tokens))
 			ret = ft_redir(cmd_red, &tokens);
 		else if (cmd_args && accept(wrd, &tokens))
-			ret = write_word(cmd_args, tokens);
+		{
+			ret = write_word(cmd_args + i, tokens);
+			i++;
+		}
 		else if (accept(wrd, &tokens))
 			continue ;
 		else

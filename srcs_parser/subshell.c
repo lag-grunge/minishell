@@ -6,7 +6,7 @@ int check_brackets(char **tokens)
 	int	brackets;
 
 	brackets = 1;
-	while (*tokens && brackets >= 0)
+	while (*tokens && brackets)
 	{
 		if (accept(lb, &tokens))
 			brackets++;
@@ -15,7 +15,7 @@ int check_brackets(char **tokens)
 		else
 			tokens++;
 	}
-	if (!*tokens && !brackets)
+	if (!brackets)
 		return (1);
 	return (0);
 }
@@ -72,7 +72,7 @@ int ft_subshell(t_stmnt **stmnt, t_redir **common_red, char **tokens)
 	tokens = lim_token + 2;
 	while (*tokens && !ret && accept(lg, &tokens))
 		ret = ft_redir(common_red, &tokens);
-	if (!stmnt && *tokens && type(*tokens) != op && type(*tokens) != pp)
+	if (!stmnt && *tokens && type(*tokens) == wrd)
 		return (syntax_error(syntax_err, tokens[-1], "ft_subshell"));
 	return (ret);
 }
