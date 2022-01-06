@@ -4,10 +4,23 @@
 
 static char	*oper_token(char *read_line, int *len)
 {
+	char *ret;
+	char *tmp;
+
+
 	while (ft_isspace(*read_line))
 		read_line++;
 	if (ft_ismeta(*read_line))
-		return (meta(read_line, len));
+	{
+		tmp = NULL;
+		ret = meta(read_line, len, &tmp);
+		if (tmp)
+		{
+			syntax_error(syntax_err, tmp, "tokens");
+			free(tmp);
+		}
+		return (ret);
+	}
 	return (word(read_line, len));
 }
 
@@ -19,6 +32,8 @@ static size_t get_number(char *read_line)
 	while (read_line && *read_line)
 	{
 		read_line = oper_token(read_line, NULL);
+		if (!read_line)
+			return (0);
 		num++;
 	}
 	return (num);

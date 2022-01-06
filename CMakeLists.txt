@@ -8,7 +8,7 @@ include_directories(srcs_parser/libft)
 
 add_executable(minishell
         srcs_parser/cmd.c
-        srcs_parser/clean.c
+        srcs_parser/clean_utils.c
         srcs_parser/clean.h
         srcs_parser/exec_line.c
         srcs_parser/minishell.h

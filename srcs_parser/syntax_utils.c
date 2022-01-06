@@ -19,15 +19,25 @@ t_token	type(char *cur)
 		return (wrd);
 }
 
-int expect(t_token t, char ***cur)
+int expect(t_token t, char ***cur, char *module)
 {
 	if (accept(t, cur))
-		return (1);
-	return (syntax_error(syntax_err, **cur));
+		return (0);
+	return (syntax_error(syntax_err, **cur, module));
 }
 
-int syntax_error(int ret, char *token)
+int expect2(t_token t, t_token t2, char ***cur, char *module)
 {
+	if (accept(t, cur) || accept(t2, cur))
+		return (0);
+	return (syntax_error(syntax_err, **cur, module));
+}
+
+
+int syntax_error(int ret, char *token, char *module)
+{
+	if (module)
+		printf("%s: ", module);
 	printf("unexpected token ");
 	if (token)
 		printf("'%s'", token);
@@ -35,16 +45,11 @@ int syntax_error(int ret, char *token)
 	return (ret);
 }
 
-char **nextsym(char **cur)
-{
-	return (cur + 1);
-}
-
 int accept(t_token t, char ***cur)
 {
 	if (**cur && t == type(**cur))
 	{
-		*cur = nextsym(*cur);
+		*cur += 1;
 		return (1);
 	}
 	return (0);

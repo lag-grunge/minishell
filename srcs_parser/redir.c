@@ -6,6 +6,8 @@ static t_redir *ft_redir_new(void)
 	t_redir	*red;
 
 	red = malloc(sizeof(t_redir) * 1);
+	if (!red)
+		return (NULL);
 	red->type = 0;
 	red->word = NULL;
 	red->next = NULL;
@@ -57,8 +59,8 @@ static int write_redir(t_redir **redirect, char **tokens)
 
 int ft_redir(t_redir **red, char ***tokens)
 {
-	if (!expect(wrd, tokens))
-		return (syntax_error(syntax_err, **tokens));
+	if (expect(wrd, tokens, "ft_redir"))
+		return (syntax_error(syntax_err, **tokens, "ft_redir"));
 	if (red)
 		return (write_redir(red, *tokens));
 	return (0);

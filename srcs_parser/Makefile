@@ -1,6 +1,7 @@
 NAME = parser
 
-SRCS = exec_line.c tokens.c parser.c parser_utils.c syntax.c syntax_utils.c syntax_write.c
+SRCS = exec_line.c tokens.c token_utils.c parser.c syntax_utils.c \
+       clean_utils.c cmd.c debug.c subshell.c redir.c
 OBJS = ${SRCS:.c=.o}
 DEPS = ${OBJS:.o=.d}
 

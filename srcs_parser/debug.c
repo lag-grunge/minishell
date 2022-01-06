@@ -101,9 +101,13 @@ void move(t_stmnt *stmnt, char *pos)
 		print_args(stmnt->oper1);
 		print_redir(stmnt->oper1, 0);
 		if (stmnt->next_stmnt)
-			print_stmnt(stmnt->next_stmnt, ft_strjoin(tmp, "p"));
+		{
+			pos = ft_strjoin(tmp, "p");
+			free(tmp);
+			print_stmnt(stmnt->next_stmnt, pos);
+		}
 		else
-			return ;
+			free(pos);
 	}
 }
 

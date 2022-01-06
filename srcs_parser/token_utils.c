@@ -34,23 +34,31 @@ int ft_isoperator(char *s)
 	return (-1);
 }
 
-char	*meta(char *read_line, int *nt)
+char *meta(char *read_line, int *nt, char **unexp)
 {
 	int 	next_token;
 	char	*tmp;
-
+	char	*ret;
 
 	tmp = ft_substr(read_line, 0, MAX_CTRLS_LEN);
-	next_token = MAX_CTRLS_LEN;
-	while (ft_isoperator(tmp) == -1)
+	next_token = (int)ft_strlen(tmp);
+	while (ft_isoperator(tmp) == -1 && next_token > 1)
 	{
 		next_token--;
 		free(tmp);
 		tmp = ft_substr(read_line, 0, next_token);
 	}
+	ret = read_line + next_token;
+	if (ft_isoperator(tmp) == -1)
+	{
+		*unexp = tmp;
+		ret = NULL;
+	}
+	else
+		free(tmp);
 	if (nt)
 		*nt = next_token;
-	return (read_line + next_token);
+	return (ret);
 }
 
 static int		quoting(char *read_line)

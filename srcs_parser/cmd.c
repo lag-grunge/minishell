@@ -18,15 +18,14 @@ static int count_args(char **tokens)
 	return (count);
 }
 
-static int write_word(char ***cur, char **tokens)
+static int write_word(char **cur, char **tokens)
 {
 	char *tmp;
 
 	tmp =  ft_strdup(tokens[-1]);
 	if (!tmp)
 		return (malloc_err);
-	**cur = tmp;
-	*cur += 1;
+	*cur = tmp;
 	return (0);
 }
 
@@ -55,47 +54,50 @@ static t_cmd	*ft_init_cmd(char **tokens)
 	return (cmd);
 }
 
-static int ft_write_cmd(t_cmd *cmd, char ***tokens)
+static int ft_write_cmd(char **cmd_args, t_redir **cmd_red, \
+						char **tokens, char **lim_token)
 {
 	int		ret;
-	char	**cur;
-	t_redir	*red;
 
 	ret = 0;
-	cur = cmd->args;
-	red = cmd->redir;
-	while (!ret && **tokens)
+	while (!ret && *tokens)
 	{
-		if (accept(lg, tokens))
-			ret = ft_redir(&red, tokens);
-		else if (accept(wrd, tokens))
-			ret = write_word(&cur, *tokens);
+		if (accept(lg, &tokens))
+			ret = ft_redir(cmd_red, &tokens);
+		else if (cmd_args && accept(wrd, &tokens))
+			ret = write_word(cmd_args, tokens);
+		else if (accept(wrd, &tokens))
+			continue ;
 		else
 			break ;
 	}
-	return (ret);
+	if (ret)
+		return (ret);
+	else if (tokens <= lim_token)
+		return (syntax_error(syntax_err, *tokens, "cmd"));
+	return (0);
 }
 
 int ft_cmd(t_stmnt **stmnt, char **tokens, char **lim_token)
 {
 	t_cmd	*cmd;
-	int		ret;
 
 	if (accept(lb, &tokens))
 	{
-		(*stmnt)->type = op_sbsh;
-		return (ft_subshell((t_stmnt **) &(*stmnt)->oper1, \
-				&(*stmnt)->redir, tokens));
+		if (stmnt)
+		{
+			(*stmnt)->type = op_sbsh;
+			return (ft_subshell((t_stmnt **) &(*stmnt)->oper1, \
+                &(*stmnt)->redir, tokens));
+		}
+		return (ft_subshell(NULL, NULL, tokens));
 	}
+	if (!stmnt)
+		return (ft_write_cmd(NULL, NULL, tokens, lim_token));
 	(*stmnt)->type = op_smpl;
 	cmd = ft_init_cmd(tokens);
 	if (!cmd)
 		return (malloc_err);
 	(*stmnt)->oper1 = cmd;
-	ret = ft_write_cmd((*stmnt)->oper1, &tokens);
-	if (ret)
-		return (ret);
-	else if (lim_token != tokens - 1)
-		return (syntax_error(syntax_err, *tokens));
-	return (0);
+	return (ft_write_cmd(cmd->args, &cmd->redir, tokens, lim_token));
 }
