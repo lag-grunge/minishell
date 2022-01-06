@@ -17,7 +17,7 @@ add_executable(minishell
         srcs_parser/redir.c
         srcs_parser/syntax.h
         srcs_parser/syntax_utils.c
-        srcs_parser/tokens.c srcs_parser/token_utils.c srcs_parser/subshell.c srcs_parser/debug.c)
+        srcs_parser/tokens.c srcs_parser/token_utils.c srcs_parser/subshell.c srcs_parser/debug.c srcs_parser/expansions.c)
 
 target_link_directories(minishell PUBLIC srcs_parser/libft)
 target_link_libraries(minishell libft.a)
