@@ -73,4 +73,11 @@ typedef struct s_stmnt {
 	struct s_stmnt 	*next_stmnt; // pipe
 }			t_stmnt;
 
+typedef struct s_env {
+	char *key;
+	char sep;
+	char *value;
+	struct s_env *next;
+} 				t_env;
+
 #endif

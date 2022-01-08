@@ -15,5 +15,6 @@ char *meta(char *read_line, int *nt, char **unexp);
 char	*word(char *read_line, int *nt);
 int		ft_ismeta(int c);
 int 	ft_isoperator(char *s);
+int		quoting(char *read_line);
 
 #endif

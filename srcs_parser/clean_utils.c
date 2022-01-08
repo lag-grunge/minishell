@@ -1,10 +1,21 @@
 #include "clean.h"
 
-static void free_if_exist(void *s, void (*func)(void **))
+void clean_env_hash(t_env *env_start)
 {
-	if (s)
-		func(&s);
+	t_env	*cur;
+	t_env	*tmp;
+
+	cur = env_start;
+	while (cur)
+	{
+		free(cur->key);
+		free(cur->value);
+		tmp = cur;
+		cur = cur->next;
+		free(tmp);
+	}
 }
+
 
 static void	clean_redir(void **ptr)
 {
@@ -29,7 +40,8 @@ void clean_cmd(t_cmd *cmd)
 		clean_split(cmd->args, ft_spllen(cmd->args));
 		cmd->args = NULL;
 	}
-	free_if_exist(cmd->redir, clean_redir);
+	if (cmd->redir)
+		clean_redir((void **)&cmd->redir);
 	free(cmd);
 }
 
@@ -41,7 +53,8 @@ void clean_all(t_stmnt **st)
 	if (stmnt->type == op_sbsh)
 	{
 		clean_all((t_stmnt **)&stmnt->oper1);
-		free_if_exist(stmnt->redir, clean_redir);
+		if (stmnt->redir)
+			clean_redir((void **)&stmnt->redir);
 	}
 	else if (stmnt->type == op_or || stmnt->type == op_and)
 	{
