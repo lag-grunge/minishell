@@ -1,7 +1,7 @@
-#include "minishell.h"
-#include "parser.h"
-#include "syntax.h"
-#include "clean.h"
+#include "../includes/minishell.h"
+#include "../includes/parser.h"
+#include "../includes/syntax.h"
+#include "../includes/clean.h"
 
 void print_stmnt(t_stmnt *stmnt, char *pos);
 
@@ -37,8 +37,8 @@ int exec_line(char *read_line)
 	return (ret);
 }
 
-int main(int argc, char *argv[])
-{
-	if (argc == 2)
-		return (exec_line(argv[1]));
-}
+//int main(int argc, char *argv[])
+//{
+//	if (argc == 2)
+//		return (exec_line(argv[1]));
+//}

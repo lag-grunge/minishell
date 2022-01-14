@@ -1,7 +1,7 @@
-#include "minishell.h"
-#include "syntax.h"
-#include "environment.h"
-#include "clean.h"
+#include "../../includes/minishell.h"
+#include "../../includes/syntax.h"
+#include "../../includes/environment.h"
+#include "../../includes/clean.h"
 
 static char *ft_name(char *start)
 {
@@ -55,7 +55,7 @@ char *oper_dollar(char **tokens, char *dollar, t_env *env)
 	return (ret);
 }
 
-int	variable_expansion(char **tokens, t_env *env)
+void	variable_expansion(char **tokens, t_env *env)
 {
 	char *cur;
 
@@ -71,13 +71,14 @@ int	variable_expansion(char **tokens, t_env *env)
 	}
 }
 
-int main(int argc, char *argv[], char *env[])
-{
-	char *str = ft_strdup(" $OLDPWD $SHLVL $abracadabra ");
-	t_env	*env_start;
-
-	get_env_hash(&env_start, env);
-	variable_expansion(&str, env_start);
-	printf("%s\n", str);
-	clean_env_hash(env_start);
-}
+//int main(int argc, char *argv[], char *env[])
+//{
+//	char *str = ft_strdup(" $OLDPWD $SHLVL $abracadabra ");
+//	t_env	*env_start;
+//
+//	get_env_hash(&env_start, env);
+//	variable_expansion(&str, env_start);
+//	printf("%s\n", str);
+//	clean_env_hash(env_start);
+//	free(str);
+//}

@@ -3,21 +3,21 @@ project(minishell C)
 
 set(CMAKE_C_STANDARD 11)
 
-include_directories(srcs_parser)
-include_directories(srcs_parser/libft)
+include_directories(includes)
+include_directories(srcs/libft)
 
 add_executable(minishell
-        srcs_parser/cmd.c
-        srcs_parser/clean_utils.c
-        srcs_parser/clean.h
-        srcs_parser/exec_line.c
-        srcs_parser/minishell.h
-        srcs_parser/parser.c
-        srcs_parser/parser.h
-        srcs_parser/redir.c
-        srcs_parser/syntax.h
-        srcs_parser/syntax_utils.c
-        srcs_parser/tokens.c srcs_parser/token_utils.c srcs_parser/subshell.c srcs_parser/debug.c srcs_parser/expansions.c srcs_parser/environment.c srcs_parser/environment.h srcs_parser/variable.c)
+        srcs/parser/cmd.c
+        srcs/clean_utils.c
+        includes/clean.h
+        srcs/exec_line.c
+        includes/minishell.h
+        srcs/parser/parser.c
+        includes/parser.h
+        srcs/parser/redir.c
+        includes/syntax.h
+        srcs/syntax/syntax_utils.c
+        srcs/syntax/tokens.c srcs/syntax/token_utils.c srcs/parser/subshell.c srcs/debug.c srcs/expansions/filename.c srcs/environment.c includes/environment.h srcs/expansions/variable.c includes/expansions.h srcs/expansions/quote_removal.c)
 
-target_link_directories(minishell PUBLIC srcs_parser/libft)
+target_link_directories(minishell PUBLIC srcs/libft)
 target_link_libraries(minishell libft.a)

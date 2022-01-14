@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 void print_args(t_cmd *cmd) {
 	char **args = cmd->args;

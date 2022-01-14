@@ -1,5 +1,5 @@
-#include "minishell.h"
-#include "syntax.h"
+#include "../../includes/minishell.h"
+#include "../../includes/syntax.h"
 
 static int	trim_space(char **read_line)
 {

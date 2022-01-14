@@ -1,5 +1,5 @@
-#include "parser.h"
-#include "clean.h"
+#include "../../includes/parser.h"
+#include "../../includes/clean.h"
 
 static t_stmnt *ft_stmnt_new(void)
 {

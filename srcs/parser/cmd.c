@@ -1,5 +1,5 @@
-#include "parser.h"
-#include "clean.h"
+#include "../../includes/parser.h"
+#include "../../includes/clean.h"
 
 static int count_args(char **tokens)
 {

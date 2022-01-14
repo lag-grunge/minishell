@@ -1,5 +1,5 @@
-#include "syntax.h"
-#include "parser.h"
+#include "../../includes/syntax.h"
+#include "../../includes/parser.h"
 
 int check_brackets(char **tokens)
 {

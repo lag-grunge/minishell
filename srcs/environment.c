@@ -1,5 +1,5 @@
-#include "minishell.h"
-#include "clean.h"
+#include "../includes/minishell.h"
+#include "../includes/clean.h"
 
 char *get_key_value(t_env *env, char *key)
 {

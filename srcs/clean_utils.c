@@ -1,4 +1,4 @@
-#include "clean.h"
+#include "../includes/clean.h"
 
 void clean_env_hash(t_env *env_start)
 {

@@ -1,5 +1,5 @@
-#include "syntax.h"
-#include "parser.h"
+#include "../../includes/syntax.h"
+#include "../../includes/parser.h"
 
 static t_redir *ft_redir_new(void)
 {

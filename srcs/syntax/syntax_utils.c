@@ -1,4 +1,4 @@
-#include "syntax.h"
+#include "../../includes/syntax.h"
 
 t_token	type(char *cur)
 {
