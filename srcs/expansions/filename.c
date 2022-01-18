@@ -1,20 +1,30 @@
 #include "../../includes/minishell.h"
 #include <dirent.h>
 
-static int test_pattern(char *next, char *token)
+static int test_pattern(char **next, char **token)
 {
-	int		i;
+	char	lim;
 
-	i = 0;
-	while (token[i] != '*')
+	lim = '*';
+	if (**token == '\"' ||  **token == '\'')
+		lim = **token;
+	if (**token == '\"' ||  **token == '\'')
+		(*token)++;
+	while (**token != lim)
 	{
-		if (token[i] != next[i])
+		if (lim == '*' && (**token == '\"' ||  **token == '\'') \
+			&& !test_pattern(next, token))
 			return (0);
-		else if (!token[i])
-			return (i);
-		i++;
+		if (**token != **next)
+			return (0);
+		else if (!**token)
+			break ;
+		(*token)++;
+		(*next)++;
 	}
-	return (i);
+	if (**token == '\"' || **token== '\'')
+		(*token)++;
+	return (1);
 }
 
 static int match(char *d_name, char *token)
@@ -23,11 +33,9 @@ static int match(char *d_name, char *token)
 
 	if (*token != '*')
 	{
-		ret = test_pattern(d_name, token);
+		ret = test_pattern(&d_name, &token);
 		if (!ret)
 			return (0);
-		token += ret;
-		d_name += ret;
 	}
 	while (*token == '*')
 		token++;
@@ -39,7 +47,7 @@ static int match(char *d_name, char *token)
 	ret = 0;
 	while (d_name && *d_name && !ret)
 	{
-		ret = ret | match(d_name, token);
+		ret = match(d_name, token);
 		d_name = ft_strchr(d_name + 1, *token);
 	}
 	return (ret);
@@ -126,18 +134,13 @@ int main(int argc, char *argv[], char *env[])
 	int empty;
 
 	empty = 0;
-	files = filename_expansion("/Users/", "*s*s*", &empty);
+	files = filename_expansion(argv[1], argv[2], &empty);
 	if (!empty && !files)
 		return (malloc_err);
-	while (*files)
+	while (files && *files)
 	{
 		printf("%s\n", *files);
 		files++;
 	}
 	return (0);
 }
-//
-//int main(int argc, char *argv[])
-//{
-//	printf("%s %s %d\n", argv[1], argv[2], match(argv[1], argv[2]));
-//}
