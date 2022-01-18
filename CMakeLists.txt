@@ -4,7 +4,7 @@ project(minishell C)
 set(CMAKE_C_STANDARD 11)
 
 include_directories(includes)
-include_directories(srcs/libft)
+include_directories(libft)
 
 add_executable(minishell
         srcs/parser/cmd.c
@@ -19,5 +19,5 @@ add_executable(minishell
         srcs/syntax/syntax_utils.c
         srcs/syntax/tokens.c srcs/syntax/token_utils.c srcs/parser/subshell.c srcs/debug.c srcs/expansions/filename.c srcs/environment.c includes/environment.h srcs/expansions/variable.c includes/expansions.h srcs/expansions/quote_removal.c)
 
-target_link_directories(minishell PUBLIC srcs/libft)
+target_link_directories(minishell PUBLIC libft)
 target_link_libraries(minishell libft.a)
