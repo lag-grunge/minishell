@@ -4,8 +4,9 @@
 # include "minishell.h"
 
 int ft_redir(t_redir **red, char ***tokens);
-int ft_subshell(t_stmnt **stmnt, t_redir **red, char **tokens);
+int ft_parenthesis(t_stmnt **stmnt, t_redir **red, char **tokens);
 int ft_cmd(t_stmnt **stmnt, char **tokens, char **lim_token);
+int		write_word(char **cur, char *tokens);
 char **close_bracket(char **tokens, char **lim_token);
 int check_brackets(char **tokens);
 int ft_parser(t_stmnt **stmnt, char **tokens, char **lim_token);

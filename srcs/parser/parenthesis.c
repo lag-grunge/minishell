@@ -53,16 +53,16 @@ static int	empty_brackets(char **lim_token)
 	return (type(*lim_token) == lb);
 }
 
-int ft_subshell(t_stmnt **stmnt, t_redir **common_red, char **tokens)
+int ft_parenthesis(t_stmnt **stmnt, t_redir **red, char **tokens)
 {
 	char	**lim_token;
 	int		ret;
 
 	if (!stmnt && !check_brackets(tokens))
-		return syntax_error(syntax_err, "newline", "ft_subshell");
+		return syntax_error(syntax_err, "newline", "ft_parenthesis");
 	lim_token = close_bracket(tokens, NULL) - 1;
 	if (!stmnt && empty_brackets(lim_token))
-		return syntax_error(syntax_err, lim_token[1], "ft_subshell");
+		return syntax_error(syntax_err, lim_token[1], "ft_parenthesis");
 	if (!stmnt)
 		ret = ft_preparser(tokens, lim_token);
 	else
@@ -71,8 +71,8 @@ int ft_subshell(t_stmnt **stmnt, t_redir **common_red, char **tokens)
 		return (ret);
 	tokens = lim_token + 2;
 	while (*tokens && !ret && accept(lg, &tokens))
-		ret = ft_redir(common_red, &tokens);
+		ret = ft_redir(red, &tokens);
 	if (!stmnt && *tokens && type(*tokens) == wrd)
-		return (syntax_error(syntax_err, tokens[-1], "ft_subshell"));
+		return (syntax_error(syntax_err, tokens[-1], "ft_parenthesis"));
 	return (ret);
 }

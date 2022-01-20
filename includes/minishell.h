@@ -1,6 +1,7 @@
-#ifndef MINISHELL_MINISHELL_H
-#define MINISHELL_MINISHELL_H
+#ifndef MINISHELL_H
+#define MINISHELL_H
 # include "libft.h"
+#include <dirent.h>
 # include <stdio.h>
 
 typedef enum e_errors {
@@ -79,5 +80,12 @@ typedef struct s_env {
 	char *value;
 	struct s_env *next;
 } 				t_env;
+
+typedef struct s_data {
+	t_env	*env;
+
+}				t_data;
+
+t_data g_data;
 
 #endif

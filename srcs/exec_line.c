@@ -2,6 +2,7 @@
 #include "../includes/parser.h"
 #include "../includes/syntax.h"
 #include "../includes/clean.h"
+#include "../includes/environment.h"
 
 void print_stmnt(t_stmnt *stmnt, char *pos);
 
@@ -37,8 +38,11 @@ int exec_line(char *read_line)
 	return (ret);
 }
 
-//int main(int argc, char *argv[])
-//{
-//	if (argc == 2)
-//		return (exec_line(argv[1]));
-//}
+int main(int argc, char *argv[], char *env[])
+{
+	get_env_hash(&g_data.env, env);
+	write_key_value(&g_data.env, "a=*2 \"\"\"t\"*\"e\"*\"s\"*\"s\"* *3", 0);
+	write_key_value(&g_data.env, "b=file", 0);
+	if (argc == 2)
+		return (exec_line(argv[1]));
+}

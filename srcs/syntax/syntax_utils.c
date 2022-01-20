@@ -26,12 +26,15 @@ int expect(t_token t, char ***cur, char *module)
 	return (syntax_error(syntax_err, **cur, module));
 }
 
-int expect2(t_token t, t_token t2, char ***cur, char *module)
+char *ft_name(char *start)
 {
-	if (accept(t, cur) || accept(t2, cur))
-		return (0);
-	return (syntax_error(syntax_err, **cur, module));
+	if (!ft_isalpha(*start) && *start != '_')
+		return (start);
+	while (ft_isalnum(*start) || *start == '_')
+		start++;
+	return (start);
 }
+
 
 
 int syntax_error(int ret, char *token, char *module)

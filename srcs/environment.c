@@ -30,7 +30,7 @@ static t_env *ft_env_new_elem(void)
 	return (new_elem);
 }
 
-static int write_key_value(t_env *cur, char *cur_env)
+static int write_key_value_to_elem(t_env *cur, char *cur_env, int start)
 {
 	char *tmp;
 	char *sep;
@@ -41,68 +41,77 @@ static int write_key_value(t_env *cur, char *cur_env)
 	else
 		tmp = ft_strdup(cur_env);
 	if (!tmp)
-		return (malloc_err);
+		exit (malloc_err);
 	cur->key = ft_strdup(tmp);
 	cur->sep = '=';
-	if (sep)
+	if (sep && start)
 		cur->value = ft_strdup(getenv(tmp));
+	else if (sep)
+		cur->value = ft_substr(sep, 1, ft_strlen(sep));
 	else
 		cur->value = ft_strdup("");
 	free(tmp);
 	if (!cur->key || !cur->value)
-		return (malloc_err);
+		exit (malloc_err);
+	return (0);
+}
+
+
+int write_key_value(t_env **env_hash, char *cur_env, int start)
+{
+	t_env *cur_hash;
+
+	if (!*env_hash)
+	{
+		*env_hash = ft_env_new_elem();
+		cur_hash = *env_hash;
+	}
+	else
+	{
+		cur_hash = *env_hash;
+		while (cur_hash->next)
+			cur_hash = cur_hash->next;
+		cur_hash->next = ft_env_new_elem();
+		cur_hash = cur_hash->next;
+	}
+	write_key_value_to_elem(cur_hash, cur_env, start);
 	return (0);
 }
 
 int get_env_hash(t_env **env_start, char *env[])
 {
 	t_env	*cur;
-	int		ret;
 
 	if (!*env)
 	{
 		*env_start = NULL;
 		return (0);
 	}
-	*env_start = ft_env_new_elem();
-	cur = *env_start;
-	ret = 0;
-	if (!cur)
-		ret = malloc_err;
-	while (!ret)
+	while (*env)
 	{
-		ret = write_key_value(cur, *env);
-		if (ret)
-			break ;
+		write_key_value(env_start, *env, 1);
 		env++;
-		if (!*env)
-			return (0);
-		cur->next = ft_env_new_elem();
-		if (!cur->next)
-			ret = malloc_err;
-		cur = cur->next;
 	}
-	clean_env_hash(*env_start);
-	return (ret);
+	return (0);
 }
 
-
-/*int main(int argc, char *argv[], char *env[])
-{
-	t_env	*env_hash;
-	t_env	*cur;
-	int		ret;
-
-	env_hash = NULL;
-	ret = get_env_hash(&env_hash, env);
-	if (ret)
-		return (ret);
-	cur = env_hash;
-	while (cur)
-	{
-		printf("%s=%s\n", cur->key, cur->value);
-		cur = cur->next;
-	}
-	clean_env_hash(env_hash);
-	return (0);
-}*/
+//
+//int main(int argc, char *argv[], char *env[])
+//{
+//	t_env	*env_hash;
+//	t_env	*cur;
+//	int		ret;
+//
+//	env_hash = NULL;
+//	ret = get_env_hash(&env_hash, env);
+//	if (ret)
+//		return (ret);
+//	cur = env_hash;
+//	while (cur)
+//	{
+//		printf("%s=%s\n", cur->key, cur->value);
+//		cur = cur->next;
+//	}
+//	clean_env_hash(env_hash);
+//	return (0);
+//}
