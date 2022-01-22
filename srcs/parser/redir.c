@@ -52,8 +52,8 @@ static int write_redir(t_redir **redirect, char **tokens, char *pwd)
 	red = add_redir_item(redirect);
 	if (!red)
 		exit (malloc_err);
-	red_token = tokens[-2];
-	wrd_token = tokens[-1];
+	red_token = tokens[-1];
+	wrd_token = tokens[0];
 	red_type = ft_isoperator(red_token);
 	if (red_type == ct_ltlt)
 		red->type = red_rh_doc;
@@ -84,7 +84,7 @@ int ft_redir(t_redir **red, char ***tokens)
 	pwd = get_key_value(g_data.env, "PWD");
 	ret = count_filename_expansion(pwd, spl_tokens);
 	if (red && ret == 1)
-		ret = write_redir(red, &(*tokens)[-1], pwd);
+		ret = write_redir(red, *tokens - 1, pwd);
 	else if (ret > 1)
 		ret = syntax_error(syntax_err, (*tokens)[-1], "ft_redir: ambigious redirect");
 	else if (!red)

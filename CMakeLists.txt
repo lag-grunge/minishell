@@ -18,9 +18,13 @@ add_executable(minishell
         includes/syntax.h
         srcs/syntax/syntax_utils.c
         srcs/syntax/tokens.c srcs/syntax/token_utils.c srcs/parser/parenthesis.c
-        srcs/debug.c srcs/expansions/filename.c srcs/environment.c
+        srcs/debug.c srcs/expansions/filename.c srcs/environment/environment.c
         includes/environment.h srcs/expansions/variable.c includes/expansions.h
-        srcs/expansions/quote_removal.c srcs/expansions/filename_utils.c)
+        srcs/expansions/quote_removal.c srcs/expansions/filename_utils.c
+        srcs/exec_stmnt/exec_stmnt.c srcs/exec_stmnt/ft_which.c includes/exec_stmnt.h
+        srcs/environment/environment_utils.c
+        srcs/redirect.c)
+
 
 target_link_directories(minishell PUBLIC libft)
 target_link_libraries(minishell libft.a)

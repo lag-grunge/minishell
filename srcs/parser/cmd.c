@@ -81,6 +81,8 @@ static int ft_write_cmd(char **cmd_args, t_redir **cmd_red, char **tokens, char 
 		}
 		else if (accept(wrd, &tokens))
 			continue ;
+		else
+			break ;
 	}
 	return (ret);
 }

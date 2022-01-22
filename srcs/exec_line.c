@@ -3,6 +3,7 @@
 #include "../includes/syntax.h"
 #include "../includes/clean.h"
 #include "../includes/environment.h"
+#include "exec_stmnt.h"
 
 void print_stmnt(t_stmnt *stmnt, char *pos);
 
@@ -31,7 +32,7 @@ int exec_line(char *read_line)
 	if (!ret)
 	{
 		print_stmnt(stmnt, NULL);
-		//exec_stmnt(stmnt);
+		ret = exec_stmnt(stmnt);
 	}
 	if (stmnt)
 		clean_all(&stmnt);

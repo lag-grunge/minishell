@@ -1,12 +1,16 @@
 #ifndef MINISHELL_H
 #define MINISHELL_H
 # include "libft.h"
-#include <dirent.h>
+# include <dirent.h>
 # include <stdio.h>
+# include <errno.h>
+# include <fcntl.h>
 
 typedef enum e_errors {
 	syntax_err = 2,
-	malloc_err = 3
+	malloc_err = 3,
+	file_err = 4,
+	fork_err = 5
 }				t_returns;
 
 # define LTLT "<<"
@@ -70,6 +74,8 @@ typedef struct s_stmnt {
 	int 			type;
 	void			*oper1;
 	void			*oper2;
+	pid_t			pid1;
+	pid_t			pid2;
 	t_redir			*redir; //	common redir for subshell
 	struct s_stmnt 	*next_stmnt; // pipe
 }			t_stmnt;
@@ -83,6 +89,7 @@ typedef struct s_env {
 
 typedef struct s_data {
 	t_env	*env;
+	int 	last_status;
 
 }				t_data;
 

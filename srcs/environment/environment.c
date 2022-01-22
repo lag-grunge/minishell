@@ -1,5 +1,5 @@
-#include "../includes/minishell.h"
-#include "../includes/clean.h"
+#include "minishell.h"
+#include "clean.h"
 
 char *get_key_value(t_env *env, char *key)
 {
@@ -43,15 +43,14 @@ static int write_key_value_to_elem(t_env *cur, char *cur_env, int start)
 	if (!tmp)
 		exit (malloc_err);
 	cur->key = ft_strdup(tmp);
-	cur->sep = '=';
+	if (sep)
+		cur->sep = '=';
 	if (sep && start)
 		cur->value = ft_strdup(getenv(tmp));
 	else if (sep)
 		cur->value = ft_substr(sep, 1, ft_strlen(sep));
-	else
-		cur->value = ft_strdup("");
 	free(tmp);
-	if (!cur->key || !cur->value)
+	if ((sep &&!cur->key) || (sep && !cur->value))
 		exit (malloc_err);
 	return (0);
 }
@@ -78,7 +77,7 @@ int write_key_value(t_env **env_hash, char *cur_env, int start)
 	return (0);
 }
 
-int get_env_hash(t_env **env_start, char *env[])
+int get_env_hash(t_env **env_start, char **env)
 {
 	t_env	*cur;
 
