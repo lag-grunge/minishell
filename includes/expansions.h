@@ -2,6 +2,7 @@
 #define MINISHELL_EXPANSIONS_H
 #include "minishell.h"
 
+char *make_substitution(char **tokens, char *dollar, char *end_var, char *value);
 char ** variable_expansion(char **token, t_env *env);
 int filename_expansion(char **filenames, char *pwd, char **spl_token);
 int	match(char *d_name, char *token);

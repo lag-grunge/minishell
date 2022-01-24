@@ -1,19 +1,17 @@
-#include "../includes/minishell.h"
+#include "minishell.h"
+#include "redirect.h"
 
-int	open_for_read(char *filename)
+int open_for_read(char *filename, char *cmd_name)
 {
 	int	fd_in;
 
 	fd_in = open(filename, O_RDONLY);
 	if (fd_in == -1)
-	{
-		perror(filename);
-		return (-file_err);
-	}
+		return (print_err(filename, cmd_name));
 	return (fd_in);
 }
 
-int	open_for_write(char *filename, int append)
+int open_for_write(char *filename, int append, char *cmd_name)
 {
 	int	fd_out;
 
@@ -21,21 +19,18 @@ int	open_for_write(char *filename, int append)
 	if (fd_out == -1)
 	{
 		if (errno != EEXIST)
-		{
-			perror(filename);
-			return (-file_err);
-		}
+			return (print_err(filename, cmd_name));
 		if (append)
 			fd_out = open(filename, O_WRONLY | O_APPEND);
 		else
 			fd_out = open(filename, O_WRONLY | O_TRUNC);
 		if (fd_out == -1)
-			return (-file_err);
+			return (print_err(filename, cmd_name));
 	}
 	return (fd_out);
 }
 
-int	ft_openfiles(t_redir *red)
+int ft_openfiles(t_redir *red, char *cmd_name)
 {
 	int	fd_in;
 	int fd_out;
@@ -45,9 +40,9 @@ int	ft_openfiles(t_redir *red)
 	while (red)
 	{
 		if (red->type == red_rifile)
-			fd_in = open_for_read(red->word);
+			fd_in = open_for_read(red->word, cmd_name);
 		else if (red->type == red_wofile || red->type == red_aofile)
-			fd_out = open_for_write(red->word, red->type == red_aofile);
+			fd_out = open_for_write(red->word, red->type == red_aofile, cmd_name);
 		if (fd_in < 0 || fd_out < 0)
 			return (file_err);
 		red = red->next;

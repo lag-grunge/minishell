@@ -1,6 +1,5 @@
 #ifndef MINISHELL_EXEC_STMNT_H
 #define MINISHELL_EXEC_STMNT_H
-#include <sys/wait.h>
 
 enum e_err	{
 	nopath_in_env = 2,
@@ -8,7 +7,13 @@ enum e_err	{
 	not_fnd_bin_in_path = 4,
 };
 
-int exec_stmnt(t_stmnt *stmnt);
+int exec_stmnt(t_stmnt *stmnt, int p);
 int	ft_which(char **exec_path, char *cmd);
+
+//int wait_child(pid_t pid);
+//int wait_pipe(int *p);
+void save_restore_stdin_stdount(void);
+//int exec_stmnt_or_and(t_stmnt *stmnt);
+int exec_smpl_sbsh(t_stmnt *stmnt, int p, int h_doc[2], int pdes[2]);
 
 #endif

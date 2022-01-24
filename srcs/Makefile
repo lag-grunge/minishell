@@ -1,16 +1,23 @@
-NAME = parser
+NAME = minishell
 
-SRCS = exec_line.c tokens.c token_utils.c parser.c syntax_utils.c \
-       clean_utils.c cmd.c debug.c parenthesis.c redir.c
+MAIN_SRCS = exec_line.c clean_utils.c debug.c
+SYN_SRCS = $(shell ls syntax/*.c)
+RED_SRCS = $(shell ls redirect/*.c)
+PARS_SRCS = $(shell ls parser/*.c)
+EXEC_SRCS = $(shell ls exec_stmnt/*.c)
+EXP_SRCS = $(shell ls expansions/*.c)
+ENV_SRCS = $(shell ls environment/*.c)
+SRCS = ${MAIN_SRCS} ${SYN_SRCS} ${RED_SRCS} ${PARS_SRCS} ${EXEC_SRCS} ${EXP_SRCS} ${ENV_SRCS}
 OBJS = ${SRCS:.c=.o}
 DEPS = ${OBJS:.o=.d}
 
-LIBFT = libft/libft.a
+LIB_DIR = ../libft
+LIBFT = ${LIB_DIR}/libft.a
 
-INCLUDE = -I. -I./libft
+INCLUDE = -I../includes -I${LIB_DIR} -I/usr/share/
 CFLAGS = -g -Wall -Werror -Wextra ${INCLUDE} -MMD -fsanitize=address
-LDFLAGS = -L./libft
-LIBRARIES = -lft
+LDFLAGS = -L${LIB_DIR} -L/usr/local/lib
+LIBRARIES = -lft -lreadline
 CC = gcc
 
 all : ${NAME}
@@ -25,7 +32,7 @@ ${LIBFT} : libft ;
 
 clean : 
 	rm -rf ${OBJS} ${DEPS}
-	make clean -C libft/
+	make clean -C ${LIB_DIR}
 
 fclean : clean
 	rm -rf ${NAME}
@@ -38,4 +45,4 @@ re : fclean all
 .PHONY : all re clean fclean libft
 
 libft : 
-	make -C libft/
+	make -C ${LIB_DIR}

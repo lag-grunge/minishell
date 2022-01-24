@@ -2,29 +2,7 @@
 #include "../../includes/syntax.h"
 #include "../../includes/environment.h"
 #include "../../includes/clean.h"
-
-char *make_substitution(char **tokens, char *dollar, char *end_var, char *value)
-{
-	int	count;
-	char *new_str;
-	int val;
-	char *ret;
-
-	val = (int)ft_strlen(value);
-	count = (int)ft_strlen(*tokens);
-	count -= (int)(end_var - dollar);
-	count += val;
-	new_str = (char *) ft_calloc((count + 1), sizeof(char));
-	if (!new_str)
-		exit (malloc_err);
-	ft_strlcpy(new_str, *tokens, dollar - *tokens + 1);
-	ft_strlcat(new_str, value, dollar - *tokens + val + 1);
-	ret = new_str + ft_strlen(new_str);
-	ft_strlcat(new_str, end_var, count + 1);
-	free(*tokens);
-	*tokens = new_str;
-	return (ret);
-}
+#include "expansions.h"
 
 char *oper_dollar(char **tokens, char *dollar, t_env *env)
 {

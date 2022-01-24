@@ -10,6 +10,7 @@ static t_stmnt *ft_stmnt_new(void)
 	stmnt->oper1 = NULL;
 	stmnt->oper2 = NULL;
 	stmnt->redir = NULL;
+	stmnt->h_doc = 0;
 	stmnt->next_stmnt = NULL;
 	return (stmnt);
 }

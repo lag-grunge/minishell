@@ -5,6 +5,9 @@
 # include <stdio.h>
 # include <errno.h>
 # include <fcntl.h>
+# include <sys/wait.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 typedef enum e_errors {
 	syntax_err = 2,
@@ -12,6 +15,11 @@ typedef enum e_errors {
 	file_err = 4,
 	fork_err = 5
 }				t_returns;
+
+typedef enum e_codes {
+	perm_den_bin = 126,
+	not_found_bin = 127
+} t_codes;
 
 # define LTLT "<<"
 # define GTGT ">>"
@@ -74,9 +82,8 @@ typedef struct s_stmnt {
 	int 			type;
 	void			*oper1;
 	void			*oper2;
-	pid_t			pid1;
-	pid_t			pid2;
 	t_redir			*redir; //	common redir for subshell
+	int 			h_doc;
 	struct s_stmnt 	*next_stmnt; // pipe
 }			t_stmnt;
 

@@ -20,7 +20,7 @@ ${OBJS} : %.o : %.c
 	gcc ${CFLAGS} ${INCLUDES} -c $< -o $@
 
 clean :
-	rm -rf ${OBJS}
+	rm -rf ${OBJS} ${DEPS}
 
 fclean : clean
 	rm -rf ${NAME}

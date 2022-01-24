@@ -8,7 +8,7 @@ char *get_key_value(t_env *env, char *key)
 	len_key = (int)ft_strlen(key);
 	while (env)
 	{
-		if (len_key == ft_strlen(env->key) &&\
+		if (len_key == (int)ft_strlen(env->key) &&\
 			!ft_strncmp(env->key, key, len_key))
 			return (ft_strdup(env->value));
 		env = env->next;
@@ -79,8 +79,6 @@ int write_key_value(t_env **env_hash, char *cur_env, int start)
 
 int get_env_hash(t_env **env_start, char **env)
 {
-	t_env	*cur;
-
 	if (!*env)
 	{
 		*env_start = NULL;

@@ -32,7 +32,7 @@ int exec_line(char *read_line)
 	if (!ret)
 	{
 		print_stmnt(stmnt, NULL);
-		ret = exec_stmnt(stmnt);
+		ret = exec_stmnt(stmnt, 0);
 	}
 	if (stmnt)
 		clean_all(&stmnt);
