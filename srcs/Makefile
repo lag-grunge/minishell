@@ -1,6 +1,6 @@
 NAME = minishell
 
-MAIN_SRCS = exec_line.c clean_utils.c debug.c
+MAIN_SRCS = exec_line.c clean_utils.c debug.c signal_dispose.c exit_shell.c
 SYN_SRCS = $(shell ls syntax/*.c)
 RED_SRCS = $(shell ls redirect/*.c)
 PARS_SRCS = $(shell ls parser/*.c)
@@ -14,13 +14,26 @@ DEPS = ${OBJS:.o=.d}
 LIB_DIR = ../libft
 LIBFT = ${LIB_DIR}/libft.a
 
-INCLUDE = -I../includes -I${LIB_DIR} -I/usr/share/
-CFLAGS = -g -Wall -Werror -Wextra ${INCLUDE} -MMD -fsanitize=address
-LDFLAGS = -L${LIB_DIR} -L/usr/local/lib
+INCLUDE = -I. -I${LIB_DIR} -I../includes
+LDFLAGS = -L${LIB_DIR}
 LIBRARIES = -lft -lreadline
 CC = gcc
 
+OS = $(shell uname -s)
+ifeq (${OS}, Darwin)
+LDFLAGS+=-L/Users/sdalton/.brew/opt/readline/lib
+INCLUDE+=-I/Users/sdalton/.brew/opt/readline/include
+else
+ifeq (${OS}, Linux)
+INCLUDE+=-I/usr/share/
+LDFLAGS+=-L/usr/local/lib
+endif
+endif
+CFLAGS = -Wall -Werror -Wextra ${INCLUDE} -MMD
+
 all : ${NAME}
+debug : fclean ${NAME}
+debug : CFLAGS+=-g -fsanitize=address
 
 ${NAME} : ${OBJS} ${LIBFT}
 	${CC} ${CFLAGS} ${LDFLAGS} $(filter-out ${LIBFT},$^ ) -o $@ ${LIBRARIES}
@@ -30,7 +43,7 @@ ${OBJS} : %.o : %.c
 
 ${LIBFT} : libft ;
 
-clean : 
+clean :
 	rm -rf ${OBJS} ${DEPS}
 	make clean -C ${LIB_DIR}
 
@@ -44,5 +57,5 @@ re : fclean all
 
 .PHONY : all re clean fclean libft
 
-libft : 
+libft :
 	make -C ${LIB_DIR}

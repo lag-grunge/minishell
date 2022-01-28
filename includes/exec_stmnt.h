@@ -7,7 +7,7 @@ enum e_err	{
 	not_fnd_bin_in_path = 4,
 };
 
-int exec_stmnt(t_stmnt *stmnt, int p);
+void exec_stmnt(t_stmnt *stmnt, int *res, int p);
 int	ft_which(char **exec_path, char *cmd);
 
 //int wait_child(pid_t pid);

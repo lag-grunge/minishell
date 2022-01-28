@@ -1,5 +1,8 @@
 #include "../includes/minishell.h"
 #include "exec_stmnt.h"
+#include "environment.h"
+#include "redirect.h"
+#include "signal_dispose.h"
 
 static void open_pipes(t_stmnt *stmnt, int p, int h_doc[2], int pdes[2])
 {
@@ -11,24 +14,21 @@ static void open_pipes(t_stmnt *stmnt, int p, int h_doc[2], int pdes[2])
 		exit (fork_err);
 }
 
-static int exec_stmnt_or_and(t_stmnt *stmnt)
+static void exec_stmnt_or_and(t_stmnt *stmnt, int *res)
 {
-	int	ret;
-
-	ret = exec_stmnt(stmnt->oper1, 0);
-	if ((!ret && stmnt->type == op_and) || (ret && stmnt->type == op_or))
-		ret = exec_stmnt(stmnt->oper2, 0);
-	return (ret);
+	exec_stmnt(stmnt->oper1, res, 0);
+	if ((!*res && stmnt->type == op_and) || (*res && stmnt->type == op_or))
+		exec_stmnt(stmnt->oper2, res, 0);
 }
 
-int exec_stmnt(t_stmnt *stmnt, int p)
+void exec_stmnt(t_stmnt *stmnt, int *res, int p)
 {
 	int pdes[2];
 	int h_doc[2];
 
 	open_pipes(stmnt, p, h_doc, pdes);
 	if (stmnt->type == op_smpl || stmnt->type == op_sbsh)
-		return (exec_smpl_sbsh(stmnt, p, h_doc, pdes));
+		*res = exec_smpl_sbsh(stmnt, p, h_doc, pdes);
 	else
-		return (exec_stmnt_or_and(stmnt));
+		exec_stmnt_or_and(stmnt, res);
 }
