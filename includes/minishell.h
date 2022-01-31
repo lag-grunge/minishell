@@ -6,6 +6,7 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -84,7 +85,7 @@ typedef struct s_stmnt {
 	void			*oper1;
 	void			*oper2;
 	t_redir			*redir; //	common redir for subshell
-	int 			h_doc;
+	long 			h_doc;
 	struct s_stmnt 	*next_stmnt; // pipe
 }			t_stmnt;
 
@@ -94,6 +95,13 @@ typedef struct s_env {
 	char *value;
 	struct s_env *next;
 } 				t_env;
+
+enum e_child_disp {
+	new_shell,
+	parent_fork,
+	child_fork,
+	readln
+};
 
 typedef struct s_data {
 	t_env	*env;

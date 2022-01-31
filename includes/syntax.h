@@ -11,7 +11,7 @@ int accept(t_token t, char ***cur);
 
 
 char **get_tokens(char *read_line, int *empty);
-char *meta(char *read_line, int *nt, char **unexp);
+char *ft_meta(char *read_line, int *nt, char **unexp);
 char	*word(char *read_line, int *nt);
 int		ft_ismeta(int c);
 int 	ft_isoperator(char *s);

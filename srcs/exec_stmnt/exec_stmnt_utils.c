@@ -60,52 +60,50 @@ static void exec_cmd(t_cmd *cmd)
 	char	**env;
 	int 	ret;
 
+	signal_dispose(child_fork);
+	ret = ft_openfiles(cmd->redir);
+	if (ret)
+		exit(1);
+	if (!cmd->args)
+		exit (0);
 	ret = ft_which(&exec_path, cmd->args[0]);
 	if (ret == not_fnd_bin_in_path || ret == nopath_in_env)
 		exit (not_found_bin);
 	else if (ret == not_perms_for_exec)
 		exit (perm_den_bin);
-	if (ft_strncmp(cmd->args[0], "./minishell", 12))
+	if (!ft_strncmp(cmd->args[0], "./minishell", 12))
 		increment_shell_level();
 	env = get_env_array(g_data.env);
-	ret = ft_openfiles(cmd->redir, cmd->args[0]);
-	if (ret)
-		exit(1);
 	execve(exec_path, cmd->args, env);
 	perror(exec_path);
 }
 
-static void child(t_stmnt *stmnt, int h_doc[2], int pdes[2], int *res)
+static void child(t_stmnt *stmnt, int pdes[2], int *res)
 {
-	if (stmnt->h_doc)
-		ft_redirect(h_doc, STDIN_FILENO);
 	if (stmnt->next_stmnt)
 		ft_redirect(pdes, STDOUT_FILENO);
 	if (stmnt->type == op_smpl)
 		exec_cmd(stmnt->oper1);
 	else if (stmnt->type == op_sbsh)
+	{
+		ft_openfiles(stmnt->redir);
 		exec_stmnt(stmnt->oper1, res, 0);
+	}
 }
 
-int exec_smpl_sbsh(t_stmnt *stmnt, int p, int h_doc[2], int pdes[2])
+int exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2])
 {
 	pid_t pid;
 	int ret;
 
+	signal_dispose(parent_fork);
 	pid = fork();
 	if (pid < 0)
 		exit(fork_err);
 	else if (pid == 0)
-		child(stmnt, h_doc, pdes, &ret);
+		child(stmnt, pdes, &ret);
 	else
 	{
-		if (stmnt->type == op_smpl && ft_strncmp(((t_cmd *)stmnt->oper1)->args[0], "./minishell", 12))
-			signal_dispose(1);
-		if (stmnt->h_doc)
-		{
-			ft_redirect(h_doc, STDOUT_FILENO);
-			//			read_here_doc();
-		}
 		if (stmnt->next_stmnt)
 		{
 			ft_redirect(pdes, STDIN_FILENO);

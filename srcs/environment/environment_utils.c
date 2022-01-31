@@ -61,21 +61,6 @@ char	**get_env_array(t_env *env_hash)
 	return (env_array);
 }
 
-int set_key_value(t_env *env, char *key, char *value)
-{
-	while (env)
-	{
-		if (!ft_strncmp(env->key, key, ft_strlen(key)))
-		{
-			if (env->value)
-				free(env->value);
-			env->sep = '=';
-			env->value = value;
-		}
-		env = env->next;
-	}
-}
-
 int	increment_shell_level(void)
 {
 	char	*s1;
@@ -88,8 +73,7 @@ int	increment_shell_level(void)
 	free(s1);
 	if (!s2)
 		exit (malloc_err);
-	set_key_value(g_data.env, "", 0);
-	free(s2);
+	set_key_value(&g_data.env, "SHLVL", s2, 0);
 	return (0);
 }
 

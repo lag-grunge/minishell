@@ -44,21 +44,22 @@ int main(int argc, char *argv[], char *env[])
 {
 	char 			*line;
 
-	signal_dispose(0);
+	signal_dispose(new_shell);
 	get_env_hash(&g_data.env, env);
 	write_key_value(&g_data.env, "a=*2 \"\"\"t\"*\"e\"*\"s\"*\"s\"* *3", 0);
 	write_key_value(&g_data.env, "b=file", 0);
-	if (argc >= 2)
+	if (argc > 2)
+		return (1);
+	else if (argc == 2)
 		return (exec_line(argv[1]));
 	while (1)
 	{
-			line = readline("minishell>");
-			if (!line)
-				exit_shell();
-			exec_line(line);
-			signal_dispose(0);
-			free(line);
-			line = NULL;
+		line = readline("minishell>");
+		if (!line)
+			exit_shell();
+		exec_line(line);
+		signal_dispose(new_shell);
+		free(line);
 	}
 	return (0);
 }

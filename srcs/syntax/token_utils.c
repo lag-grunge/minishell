@@ -34,7 +34,7 @@ int ft_isoperator(char *s)
 	return (-1);
 }
 
-char *meta(char *read_line, int *nt, char **unexp)
+char *ft_meta(char *read_line, int *nt, char **unexp)
 {
 	int 	next_token;
 	char	*tmp;

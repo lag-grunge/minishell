@@ -31,9 +31,3 @@ int		print_err(char *filename, char *cmd_name)
 	return (-file_err);
 }
 
-
-
-
-// Created by dfyz on 24.01.2022.
-//
-

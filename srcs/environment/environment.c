@@ -16,7 +16,7 @@ char *get_key_value(t_env *env, char *key)
 	return (ft_strdup(""));
 }
 
-static t_env *ft_env_new_elem(void)
+t_env *ft_env_new_elem(void)
 {
 	t_env	*new_elem;
 
@@ -30,7 +30,7 @@ static t_env *ft_env_new_elem(void)
 	return (new_elem);
 }
 
-static int write_key_value_to_elem(t_env *cur, char *cur_env, int start)
+int write_key_value_to_elem(t_env *cur, char *cur_env, int start)
 {
 	char *tmp;
 	char *sep;

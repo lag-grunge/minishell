@@ -26,14 +26,15 @@ INCLUDE+=-I/Users/sdalton/.brew/opt/readline/include
 else
 ifeq (${OS}, Linux)
 INCLUDE+=-I/usr/share/
-LDFLAGS+=-L/usr/local/lib
+LDFLAGS+=-L/usr/lib/x86_64-linux-gnu/
+LIBRARIES+=-ltinfo
 endif
 endif
 CFLAGS = -Wall -Werror -Wextra ${INCLUDE} -MMD
 
 all : ${NAME}
-debug : fclean ${NAME}
-debug : CFLAGS+=-g -fsanitize=address
+dbg : fclean ${NAME}
+dbg : CFLAGS+=-g -fsanitize=address
 
 ${NAME} : ${OBJS} ${LIBFT}
 	${CC} ${CFLAGS} ${LDFLAGS} $(filter-out ${LIBFT},$^ ) -o $@ ${LIBRARIES}

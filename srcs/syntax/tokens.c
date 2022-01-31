@@ -18,7 +18,7 @@ static char	*oper_token(char *read_line, int *len)
 	if (ft_ismeta(*read_line))
 	{
 		tmp = NULL;
-		ret = meta(read_line, len, &tmp);
+		ret = ft_meta(read_line, len, &tmp);
 		if (tmp)
 		{
 			syntax_error(syntax_err, tmp, "tokens");
