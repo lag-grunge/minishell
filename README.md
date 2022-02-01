@@ -1,11 +1,11 @@
 # minishell
 write your own shell (cmd interpretator)
 
-##Usage
-#Compile
+###Usage
+###Compile
 make -C srcs/
 dbg for compile with flags -g -fsanitize=address
-#Run
+###Run
 ./minishell (to run interpretator) or ./minishell <cmd_str> to run one command
 #Commands
 As subject requires we are supposed to rewrite some simple demo of bash v3.2,
