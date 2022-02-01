@@ -1,6 +1,6 @@
 NAME = minishell
 
-MAIN_SRCS = exec_line.c clean_utils.c debug.c signal_dispose.c exit_shell.c
+MAIN_SRCS = $(shell ls *.c)  #exec_line.c clean_utils.c debug.c signal_dispose.c exit_shell.c
 SYN_SRCS = $(shell ls syntax/*.c)
 RED_SRCS = $(shell ls redirect/*.c)
 PARS_SRCS = $(shell ls parser/*.c)
