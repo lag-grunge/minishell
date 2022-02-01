@@ -19,7 +19,7 @@ add_executable(minishell
         srcs/parser/redir.c
         includes/syntax.h srcs/syntax/syntax_utils.c srcs/syntax/tokens.c srcs/syntax/token_utils.c
         srcs/parser/parenthesis.c
-        srcs/debug.c srcs/expansions/filename.c srcs/environment/environment.c srcs/environment/set_key_value.c
+        srcs/debug.c srcs/expansions/filename.c srcs/environment/get_hash_get_array.c srcs/environment/set_value_get_value.c
         includes/environment.h srcs/expansions/variable.c includes/expansions.h
         srcs/expansions/quote_removal.c srcs/expansions/filename_utils.c srcs/expansions/variable_utils.c
         srcs/exec_stmnt/exec_stmnt.c srcs/exec_stmnt/exec_stmnt_utils.c

@@ -15,7 +15,8 @@ typedef enum e_errors {
 	syntax_err = 2,
 	malloc_err = 3,
 	file_err = 4,
-	fork_err = 5
+	fork_err = 5,
+	child_exec_err = 6
 }				t_returns;
 
 typedef enum e_codes {
@@ -105,8 +106,6 @@ enum e_child_disp {
 
 typedef struct s_data {
 	t_env	*env;
-	int 	last_status;
-
 }				t_data;
 
 t_data g_data;

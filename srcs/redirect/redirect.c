@@ -85,7 +85,7 @@ int ft_openfiles(t_redir *red)
 			return (file_err);
 		red = red->next;
 	}
-	if (fd_in == h_doc[0])
+	if (fd_in != STDIN_FILENO && fd_in == h_doc[0])
 		ft_redirect(h_doc, STDIN_FILENO);
 	else if (fd_in != STDIN_FILENO)
 	{

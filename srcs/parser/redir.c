@@ -73,15 +73,15 @@ int ft_redir(t_redir **red, char ***tokens)
 	char	*pwd;
 	int 	ret;
 
-	if (expect(wrd, tokens, "ft_redir"))
-		return (syntax_error(syntax_err, **tokens, "ft_redir"));
+	if (expect(wrd, tokens, "redir"))
+		return (syntax_err);
 	spl_tokens = variable_expansion(*tokens - 1, g_data.env);
 	if (ft_spllen(spl_tokens) > 1)
 	{
 		clean_split(spl_tokens, ft_spllen(spl_tokens));
 		return (syntax_error(syntax_err, (*tokens)[-1], "ft_redir: ambigious redirect"));
 	}
-	pwd = get_key_value(g_data.env, "PWD");
+	pwd = get_value(g_data.env, "PWD");
 	ret = count_filename_expansion(pwd, spl_tokens);
 	if (red && ret == 1)
 		ret = write_redir(red, *tokens - 1, pwd);

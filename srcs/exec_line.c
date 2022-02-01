@@ -32,7 +32,7 @@ int exec_line(char *read_line)
 	clean_split(tokens, ft_spllen(tokens));
 	if (!ret)
 	{
-//		print_stmnt(stmnt, NULL);
+//		print_stmnt(stmnt, NULL); //УБРАТЬ ПОТОМ !!! ОТЛАДКА
 		exec_stmnt(stmnt, &ret,  0);
 	}
 	if (stmnt)
@@ -46,8 +46,6 @@ int main(int argc, char *argv[], char *env[])
 
 	signal_dispose(new_shell);
 	get_env_hash(&g_data.env, env);
-	write_key_value(&g_data.env, "a=*2 \"\"\"t\"*\"e\"*\"s\"*\"s\"* *3", 0);
-	write_key_value(&g_data.env, "b=file", 0);
 	if (argc > 2)
 		return (1);
 	else if (argc == 2)

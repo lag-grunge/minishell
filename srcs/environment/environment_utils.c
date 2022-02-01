@@ -1,64 +1,43 @@
 #include "../includes/minishell.h"
 #include "environment.h"
 
-static	int get_size(t_env *env_hash)
+t_env *ft_env_new_elem(void)
 {
-	int	i;
+	t_env	*new_elem;
 
-	if (!env_hash)
-		return (0);
-	i = 1;
-	while (env_hash->next)
-	{
-		env_hash = env_hash->next;
-		i++;
-	}
-	return (i);
+	new_elem = (t_env *) malloc(sizeof(t_env));
+	if (!new_elem)
+		return (NULL);
+	new_elem->key = NULL;
+	new_elem->sep = 0;
+	new_elem->value = NULL;
+	new_elem->next = NULL;
+	return (new_elem);
 }
 
-static char *cat_env_str(t_env *env_hash)
+int write_key_value_to_elem(t_env *cur, char *cur_env, int start)
 {
-	char	*new_str;
-	int		len;
-	int		keylen;
+	char *tmp;
+	char *sep;
 
-	keylen = (int)ft_strlen(env_hash->key);
-	len = keylen;
-	if (env_hash->sep)
-		len += 1;
-	if (env_hash->value)
-		len += (int)ft_strlen(env_hash->value);
-	new_str = (char *) malloc(sizeof(char) * (len + 1));
-	if (!new_str)
+	sep = ft_strchr(cur_env, '=');
+	if (sep)
+		tmp = ft_substr(cur_env, 0, sep - cur_env);
+	else
+		tmp = ft_strdup(cur_env);
+	if (!tmp)
 		exit (malloc_err);
-	ft_strlcpy(new_str, env_hash->key, keylen + 1);
-	if (env_hash->sep)
-	{
-		new_str[keylen] = '=';
-		new_str[keylen + 1] = 0;
-	}
-	if (env_hash->value)
-		ft_strlcat(new_str, env_hash->value, len + 1);
-	return (new_str);
-}
-
-char	**get_env_array(t_env *env_hash)
-{
-	int		size;
-	char	**env_array;
-	int		i;
-
-	size = get_size(env_hash);
-	env_array = (char **) malloc(sizeof(char *) * (size + 1));
-	env_array[size] = NULL;
-	i = 0;
-	while (i < size)
-	{
-		env_array[i] = cat_env_str(env_hash);
-		i++;
-		env_hash = env_hash->next;
-	}
-	return (env_array);
+	cur->key = ft_strdup(tmp);
+	if (sep)
+		cur->sep = '=';
+	if (sep && start)
+		cur->value = ft_strdup(getenv(tmp));
+	else if (sep)
+		cur->value = ft_substr(sep, 1, ft_strlen(sep));
+	free(tmp);
+	if ((sep &&!cur->key) || (sep && !cur->value))
+		exit (malloc_err);
+	return (0);
 }
 
 int	increment_shell_level(void)
@@ -66,29 +45,13 @@ int	increment_shell_level(void)
 	char	*s1;
 	char	*s2;
 
-	s1 = get_key_value(g_data.env, "SHLVL");
+	s1 = get_value(g_data.env, "SHLVL");
 	if (!s1)
 		exit (malloc_err);
 	s2 = ft_itoa(ft_atoi(s1) + 1);
 	free(s1);
 	if (!s2)
 		exit (malloc_err);
-	set_key_value(&g_data.env, "SHLVL", s2, 0);
+	set_value(&g_data.env, "SHLVL", s2, 0);
 	return (0);
 }
-
-//int main(int argc, char *argv[], char *env[])
-//{
-//	char **env2;
-//
-//	get_env_hash(&g_data.env, env);
-//	write_key_value(&g_data.env, "b=", 0);
-//	write_key_value(&g_data.env, "a", 0);
-//	env2 = get_env_array(g_data.env);
-//	while (*env2)
-//	{
-//		printf("%s\n", *env2);
-//		env2++;
-//	}
-//	return (0);
-//}

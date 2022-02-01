@@ -57,7 +57,7 @@ int ft_which(char **exec_path, char *cmd)
 		*exec_path = cmd;
 		return (0);
 	}
-	path_str = get_key_value(g_data.env, "PATH");
+	path_str = get_value(g_data.env, "PATH");
 	if (path_str == NULL)
 		return (nopath_in_env);
 	find_cmd = find_cmd_in_var(exec_path, cmd, path_str);

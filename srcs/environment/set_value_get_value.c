@@ -1,7 +1,10 @@
 #include "minishell.h"
 #include "environment.h"
 
-int set_key_value(t_env **env, char *key, char *value, int new)
+/* set value to the key, free old one
+ * if key not exist and new is True create new elem */
+
+int set_value(t_env **env, char *key, char *value, int new)
 {
 	t_env	*tmp;
 	t_env	*cur;
@@ -35,4 +38,23 @@ int set_key_value(t_env **env, char *key, char *value, int new)
 		return (0);
 	}
 	return (1);
+}
+
+/*
+ * get_value returns value (char *) corresponds key or empty if key not in env
+ * get_value allocates memory
+ */
+char *get_value(t_env *env, char *key)
+{
+	int len_key;
+
+	len_key = (int)ft_strlen(key);
+	while (env)
+	{
+		if (len_key == (int)ft_strlen(env->key) &&\
+			!ft_strncmp(env->key, key, len_key))
+			return (ft_strdup(env->value));
+		env = env->next;
+	}
+	return (ft_strdup(""));
 }

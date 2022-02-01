@@ -106,7 +106,7 @@ int ft_cmd(t_stmnt **stmnt, char **tokens, char **lim_token)
 	if (!stmnt)
 		return (ft_write_cmd(NULL, NULL, tokens, NULL));
 	(*stmnt)->type = op_smpl;
-	pwd = get_key_value(g_data.env, "PWD");
+	pwd = get_value(g_data.env, "PWD");
 	cmd = (t_cmd **)&(*stmnt)->oper1;
 	ret = ft_init_cmd(cmd, tokens, pwd, lim_token);
 	if (!ret)

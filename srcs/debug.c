@@ -3,10 +3,16 @@
 void print_args(t_cmd *cmd) {
 	char **args = cmd->args;
 	printf("type simple command \n");
-	while (*args) {
-		printf("%s\n", *args);
-		args++;
+	if (args)
+	{
+		while (*args) {
+			printf("%s\n", *args);
+			args++;
+		}
 	}
+	else
+		printf("empty command \n");
+
 }
 void print_pos(char *pos)
 {

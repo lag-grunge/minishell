@@ -1,7 +1,6 @@
 #include "../../includes/minishell.h"
 #include "../../includes/syntax.h"
 #include "../../includes/environment.h"
-#include "../../includes/clean.h"
 #include "expansions.h"
 
 char *oper_dollar(char **tokens, char *dollar, t_env *env)
@@ -16,10 +15,13 @@ char *oper_dollar(char **tokens, char *dollar, t_env *env)
 	end_var = ft_name(start_var);
 	if (end_var == start_var)
 		return (dollar + 1);
-	tmp = ft_substr(start_var, 0, end_var - start_var);
+	if (*start_var == '?')
+		tmp = ft_strdup("last_status");
+	else
+		tmp = ft_substr(start_var, 0, end_var - start_var);
 	if (!tmp)
 		exit (malloc_err);
-	value = get_key_value(env, tmp);
+	value = get_value(env, tmp);
 	free(tmp);
 	ret = make_substitution(tokens, dollar, end_var, value);
 	free(value);
@@ -111,15 +113,3 @@ char ** variable_expansion(char **token, t_env *env)
 	fill_expan_split(expan, *token);
 	return (expan);
 }
-
-//int main(int argc, char *argv[], char *env[])
-//{
-//	char *str = ft_strdup(" $OLDPWD $SHLVL $abracadabra ");
-//	t_env	*env_start;
-//
-//	get_env_hash(&env_start, env);
-//	variable_expansion(&str, env_start);
-//	printf("%s\n", str);
-//	clean_env_hash(env_start);
-//	free(str);
-//}
