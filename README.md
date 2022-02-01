@@ -4,7 +4,9 @@ write your own shell (cmd interpretator)
 ## Usage
 ### Compile
 make -C srcs/
+
 dbg for compile with flags -g -fsanitize=address
+
 ### Run
 ./minishell (to run interpretator) or ./minishell <cmd_str> to run one command
 #Commands
