@@ -1,5 +1,3 @@
-#include "../../includes/minishell.h"
-#include "parser.h"
 #include "expansions.h"
 
 static int get_size(char *pwd, char *token)
@@ -25,68 +23,57 @@ static int get_size(char *pwd, char *token)
 	return (i);
 }
 
-static int write_filenames(char **filenames, char *token, DIR *dir)
+static void write_filenames(t_list *args_list, DIR *dir, int fil_num)
 {
 	struct dirent *cont;
 	int 	i;
 	char 	*tmp;
 
 	i = 0;
-	while (1)
+	while (i < fil_num)
 	{
 		cont = readdir(dir);
 		if (!cont)
 			break ;
 		if (cont->d_name[0] == '.')
 			continue ;
-		if (match(cont->d_name, token))
-			write_word(filenames + i++, cont->d_name);
+		if (match(cont->d_name, args_list->content))
+		{
+			write_word(&args_list, cont->d_name);
+			args_list = args_list->next;
+			i++;
+		}
 	}
 	if (!i)
 	{
-		tmp = quote_removal(token);
-		write_word(filenames, tmp);
+		tmp = quote_removal(args_list->content);
+		write_word(&args_list, tmp);
 		free(tmp);
-		i = 1;
 	}
-	return (i);
 }
 
-int count_filename_expansion(char *pwd, char **spl_token)
-{
-	int	ret;
-	int	i;
-
-	i = 0;
-	if (!spl_token)
-		exit (malloc_err);
-	while (*spl_token)
-	{
-		ret = get_size(pwd, *spl_token);
-		if (!ret)
-			ret = 1;
-		i += ret;
-		spl_token++;
-	}
-	return (i);
-}
-
-int filename_expansion(char **filenames, char *pwd, char **spl_token)
+void filename_expansion(t_list *args_list, int exp_num)
 {
 	DIR *dir;
-	int i;
+	int	i;
+	int fil_num;
+	char *pwd;
+	t_list	*next;
 
-	if (!spl_token)
-		exit (malloc_err);
 	i = 0;
-	while (*spl_token)
+	pwd = get_value(g_data.env, "PWD");
+	while (i <= exp_num)
 	{
+		fil_num = get_size(pwd, args_list->content);
 		dir = opendir(pwd);
-		i += write_filenames(filenames + i, *spl_token, dir);
+		next = args_list->next;
+		ft_lstins_few_empty(args_list, fil_num - 1);
+		write_filenames(args_list, dir, fil_num);
+		args_list = next;
 		closedir(dir);
-		spl_token++;
+		i++;
 	}
-	return (i);
+	free(pwd);
 }
 
 //int exec_test(char *token)

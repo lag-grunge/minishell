@@ -1,12 +1,17 @@
 #ifndef MINISHELL_EXPANSIONS_H
 #define MINISHELL_EXPANSIONS_H
 #include "minishell.h"
+#include "environment.h"
+#include "parser.h"
+#include "syntax.h"
 
-char *make_substitution(char **tokens, char *dollar, char *end_var, char *value);
-char ** variable_expansion(char **token, t_env *env);
-int filename_expansion(char **filenames, char *pwd, char **spl_token);
+int variable_expansion(t_list *args);
+void filename_expansion(t_list *args_list, int exp_num);
 int	match(char *d_name, char *token);
-int	count_filename_expansion(char *pwd, char **spl_token);
 char	*quote_removal(char *token);
+void exec_expansion(char **token);
+int make_all_red_exp(t_redir *red);
+void	make_expansions(t_list **args);
+
 
 #endif

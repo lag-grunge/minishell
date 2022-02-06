@@ -1,5 +1,9 @@
 #ifndef MINISHELL_EXEC_STMNT_H
 #define MINISHELL_EXEC_STMNT_H
+#include "minishell.h"
+#include "redirect.h"
+#include "environment.h"
+#include "expansions.h"
 
 enum e_err	{
 	nopath_in_env = 2,
@@ -13,5 +17,6 @@ void save_restore_stdin_stdount(void);
 void exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2], int *res);
 int wait_child(int p);
 void exec_cmd(t_cmd *cmd);
+char	**get_cmd_array(t_list *args_list);
 
 #endif

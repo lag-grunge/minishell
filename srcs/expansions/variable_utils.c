@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "expansions.h"
 
 static int quote_num(char *value)
 {
@@ -42,7 +42,7 @@ static void ft_strlcat_q(char *new_str, char *value, int prefix)
 	new_str[i] = 0;
 }
 
-char *make_substitution(char **tokens, char *dollar, char *end_var, char *value)
+static char *make_substitution(char **tokens, char *dollar, char *end_var, char *value)
 {
 	int	count;
 	char *new_str;
@@ -62,10 +62,51 @@ char *make_substitution(char **tokens, char *dollar, char *end_var, char *value)
 	if (!q_count)
 		ft_strlcat(new_str, value, dollar - *tokens + val + 1);
 	else
-		ft_strlcat_q(new_str, value, dollar - *tokens);
+		ft_strlcat_q(new_str, value, (int)(dollar - *tokens));
 	ret = new_str + ft_strlen(new_str);
 	ft_strlcat(new_str, end_var, count + 1);
 	free(*tokens);
 	*tokens = new_str;
 	return (ret);
+}
+
+static char *oper_dollar(char **tokens, char *dollar)
+{
+	char *start_var;
+	char *end_var;
+	char *tmp;
+	char *ret;
+	char *value;
+
+	start_var = dollar + 1;
+	end_var = ft_name(start_var);
+	if (end_var == start_var)
+		return (dollar + 1);
+	if (*start_var == '?')
+		tmp = ft_strdup("last_status");
+	else
+		tmp = ft_substr(start_var, 0, end_var - start_var);
+	if (!tmp)
+		exit (malloc_err);
+	value = get_value(g_data.env, tmp);
+	free(tmp);
+	ret = make_substitution(tokens, dollar, end_var, value);
+	free(value);
+	return (ret);
+}
+
+void exec_expansion(char **token)
+{
+	char *cur;
+
+	cur = *token;
+	while (*cur)
+	{
+		if (*cur == '$')
+			cur = oper_dollar(token, cur);
+		else if (*cur == '\'')
+			cur += quoting(cur);
+		else
+			cur++;
+	}
 }

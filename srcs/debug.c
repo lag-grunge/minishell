@@ -1,19 +1,21 @@
 #include "../includes/minishell.h"
 
-void print_args(t_cmd *cmd) {
-	char **args = cmd->args;
+void print_args(t_cmd *cmd) 
+{
+	t_list *args = cmd->args;
 	printf("type simple command \n");
 	if (args)
 	{
-		while (*args) {
-			printf("%s\n", *args);
-			args++;
+		while (args) 
+		{
+			printf("%s\n", (char *)args->content);
+			args = args->next;
 		}
 	}
 	else
 		printf("empty command \n");
-
 }
+
 void print_pos(char *pos)
 {
 	if (!pos)

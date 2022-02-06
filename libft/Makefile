@@ -13,7 +13,8 @@ SRCS = 	ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c ft_memmove.c \
 
 SRCS_B = ft_lstnew.c ft_lstadd_front.c ft_lstsize.c \
 		 ft_lstlast.c ft_lstadd_back.c ft_lstdelone.c \
-		 ft_lstclear.c ft_lstiter.c ft_lstmap.c \
+		 ft_lstins_few_empty.c ft_lstclear.c ft_lstiter.c ft_lstmap.c \
+		 ft_lstdel_empty.c \
 		 ft_dlst/ft_dlst.c ft_dlst/ft_dlst_two.c
 
 OBJS = $(SRCS:.c=.o)

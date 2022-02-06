@@ -29,7 +29,7 @@ static int ft_oper(char ***oper, char **tokens, char **lim_token, t_token top)
 			cur_token++;
 	}
 	if (cur_token && (cur_token == lim_token || cur_token == tokens))
-		return (syntax_error(syntax_err, *cur_token, "ft_oper"));
+		return (syntax_error(syntax_err, *cur_token, "minishell"));
 	else if (!cur_token || cur_token > lim_token)
 		*oper = NULL;
 	else

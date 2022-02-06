@@ -77,7 +77,7 @@ typedef struct s_redir {
 }			t_redir;
 
 typedef struct s_cmd {
-	char 			**args;
+	t_list			*args;
 	t_redir 		*redir;
 }			t_cmd;
 

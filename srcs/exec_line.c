@@ -32,7 +32,7 @@ int exec_line(char *read_line)
 	clean_split(tokens, ft_spllen(tokens));
 	if (!ret)
 	{
-//		print_stmnt(stmnt, NULL); //УБРАТЬ ПОТОМ !!! ОТЛАДКА
+		print_stmnt(stmnt, NULL); //УБРАТЬ ПОТОМ !!! ОТЛАДКА
 		exec_stmnt(stmnt, &ret,  0);
 	}
 	if (stmnt)

@@ -1,7 +1,4 @@
-#include "minishell.h"
 #include "exec_stmnt.h"
-#include "redirect.h"
-#include "environment.h"
 
 void	save_restore_stdin_stdount(void)
 {
@@ -60,26 +57,33 @@ int	wait_child(int p)
 	return (get_status(status));
 }
 
+
 void	exec_cmd(t_cmd *cmd)
 {
 	char	*exec_path;
 	char	**env;
+	char 	**args;
 	int 	ret;
 
-	ret = ft_openfiles(cmd->redir);
+	ret = make_all_red_exp(cmd->redir) || ft_openfiles(cmd->redir);
+//	ret = ft_openfiles(cmd->redir);
 	if (ret)
 		exit(1);
 	if (!cmd->args)
 		exit (0);
-	ret = ft_which(&exec_path, cmd->args[0]);
+	make_expansions(&cmd->args);
+	if (!cmd->args)
+		exit(0);
+	ret = ft_which(&exec_path, cmd->args->content);
 	if (ret == not_fnd_bin_in_path || ret == nopath_in_env)
 		exit (not_found_bin);
 	else if (ret == not_perms_for_exec)
 		exit (perm_den_bin);
-	if (!ft_strncmp(cmd->args[0], "./minishell", 12))
+	if (!ft_strncmp(cmd->args->content, "./minishell", 12))
 		increment_shell_level();
 	env = get_env_array(g_data.env);
-	execve(exec_path, cmd->args, env);
+	args = get_cmd_array(cmd->args);
+	execve(exec_path, args, env);
 	perror(exec_path);
 	exit(child_exec_err);
 }

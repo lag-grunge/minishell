@@ -32,17 +32,7 @@ static t_redir	*add_redir_item(t_redir **red)
 	return (r->next);
 }
 
-static int write_redir_word(char **word, char **tokens, char *pwd)
-{
-	char	**spl_token;
-
-	spl_token = variable_expansion(tokens, g_data.env);
-	filename_expansion(word, pwd, spl_token);
-	clean_split(spl_token, ft_spllen(spl_token));
-	return (0);
-}
-
-static int write_redir(t_redir **redirect, char **tokens, char *pwd)
+static int write_redir(t_redir **redirect, char **tokens)
 {
 	char		*red_token;
 	char 		*wrd_token;
@@ -63,33 +53,20 @@ static int write_redir(t_redir **redirect, char **tokens, char *pwd)
 		red->type = red_wofile;
 	else if (red_type == ct_gtgt)
 		red->type = red_aofile;
-	write_redir_word(&red->word, &wrd_token, pwd);
+	red->word = ft_strdup(wrd_token);
+	if (!red->word)
+		exit(malloc_err);
 	return (0);
 }
 
 int ft_redir(t_redir **red, char ***tokens)
 {
-	char	**spl_tokens;
-	char	*pwd;
 	int 	ret;
 
+	ret = 0;
 	if (expect(wrd, tokens, "redir"))
 		return (syntax_err);
-	spl_tokens = variable_expansion(*tokens - 1, g_data.env);
-	if (ft_spllen(spl_tokens) > 1)
-	{
-		clean_split(spl_tokens, ft_spllen(spl_tokens));
-		return (syntax_error(syntax_err, (*tokens)[-1], "ft_redir: ambigious redirect"));
-	}
-	pwd = get_value(g_data.env, "PWD");
-	ret = count_filename_expansion(pwd, spl_tokens);
-	if (red && ret == 1)
-		ret = write_redir(red, *tokens - 1, pwd);
-	else if (ret > 1)
-		ret = syntax_error(syntax_err, (*tokens)[-1], "ft_redir: ambigious redirect");
-	else if (!red)
-		ret = 0;
-	clean_split(spl_tokens, ft_spllen(spl_tokens));
-	free(pwd);
+	if (red)
+		ret = write_redir(red, *tokens - 1);
 	return (ret);
 }

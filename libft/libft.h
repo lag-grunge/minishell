@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libft.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/03 23:27:44 by sdalton           #+#    #+#             */
+/*   Updated: 2022/02/03 23:30:19 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LIBFT_H
 # define LIBFT_H
 # include <stdlib.h>
@@ -23,18 +35,18 @@ char	*ft_strnstr(const char	*big, const char *little, size_t len);
 int		ft_strncmp(const char	*s1, const char	*s2, size_t len);
 int		ft_atoi(char *s);
 int		ft_atoi_base(char *s, char *base, char *prefix, int *ovflw);
-unsigned	ft_usgn_atoi_base(char *s, char *base, char *prfx, int *ovflw);
+t_uint	ft_usgn_atoi_base(char *s, char *base, char *prfx, int *ovflw);
 
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strtrim(char const *s1, char const *set);
 char	**ft_split(const char *s, char c);
 char	**ft_dsplit(const char *s, char c1, char c2);
-char*	get_next_word(char **tail, char c);
-char*	get_next_word_beg(char *cur_delim, char c);
-t_uint get_number_words(const char *s, char c);
-size_t  ft_spllen(char **spl);
-void    clean_split(char **split, unsigned i);
+char	*get_next_word(char **tail, char c);
+char	*get_next_word_beg(char *cur_delim, char c);
+t_uint	get_number_words(const char *s, char c);
+size_t	ft_spllen(char **spl);
+void	clean_split(char **split, t_uint i);
 char	*ft_itoa(int n);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 
@@ -70,5 +82,7 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+t_list	*ft_lstins_few_empty(t_list *list, int num);
+void	ft_lstdel_empty(t_list **list);
 
 #endif

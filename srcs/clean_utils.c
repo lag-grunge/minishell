@@ -1,4 +1,4 @@
-#include "../includes/clean.h"
+#include "clean.h"
 
 void clean_env_hash(t_env *env_start)
 {
@@ -15,7 +15,6 @@ void clean_env_hash(t_env *env_start)
 		free(tmp);
 	}
 }
-
 
 static void	clean_redir(void **ptr)
 {
@@ -36,10 +35,7 @@ static void	clean_redir(void **ptr)
 void clean_cmd(t_cmd *cmd)
 {
 	if (cmd->args)
-	{
-		clean_split(cmd->args, ft_spllen(cmd->args));
-		cmd->args = NULL;
-	}
+		ft_lstclear(&cmd->args, free);
 	if (cmd->redir)
 		clean_redir((void **)&cmd->redir);
 	free(cmd);

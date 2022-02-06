@@ -14,7 +14,9 @@ static void child(t_stmnt *stmnt, int pdes[2])
 		exec_cmd(stmnt->oper1);
 	else if (stmnt->type == op_sbsh)
 	{
-		ft_openfiles(stmnt->redir);
+		ret = make_all_red_exp(stmnt->redir) || ft_openfiles(stmnt->redir);
+		if (ret)
+			exit(1);
 		exec_stmnt(stmnt->oper1, &ret, 0);
 		exit(ret);
 	}

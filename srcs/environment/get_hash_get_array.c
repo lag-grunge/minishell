@@ -75,7 +75,11 @@ char	**get_env_array(t_env *env_hash)
 	int		i;
 
 	size = get_size(env_hash);
+	if (!size)
+		return (NULL);
 	env_array = (char **) malloc(sizeof(char *) * (size + 1));
+	if (!env_array)
+		exit(malloc_err);
 	env_array[size] = NULL;
 	i = 0;
 	while (i < size)

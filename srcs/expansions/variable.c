@@ -1,55 +1,11 @@
-#include "../../includes/minishell.h"
-#include "../../includes/syntax.h"
-#include "../../includes/environment.h"
 #include "expansions.h"
-
-char *oper_dollar(char **tokens, char *dollar, t_env *env)
-{
-	char *start_var;
-	char *end_var;
-	char *tmp;
-	char *ret;
-	char *value;
-
-	start_var = dollar + 1;
-	end_var = ft_name(start_var);
-	if (end_var == start_var)
-		return (dollar + 1);
-	if (*start_var == '?')
-		tmp = ft_strdup("last_status");
-	else
-		tmp = ft_substr(start_var, 0, end_var - start_var);
-	if (!tmp)
-		exit (malloc_err);
-	value = get_value(env, tmp);
-	free(tmp);
-	ret = make_substitution(tokens, dollar, end_var, value);
-	free(value);
-	return (ret);
-}
-
-static void exec_expansion(char **token, t_env *env)
-{
-	char *cur;
-
-	cur = *token;
-	while (*cur)
-	{
-		if (*cur == '$')
-			cur = oper_dollar(token, cur, env);
-		else if (*cur == '\'')
-			cur += quoting(cur);
-		else
-			cur++;
-	}
-}
 
 static int get_size(char *token)
 {
 	char *cur;
-	int	spl_num;
+	int	exp_num;
 
-	spl_num = 1;
+	exp_num = 0;
 	cur = token;
 	while (*cur)
 	{
@@ -57,59 +13,72 @@ static int get_size(char *token)
 			cur += quoting(cur);
 		else if (*cur == ' ')
 		{
-			spl_num++;
+			exp_num++;
 			cur++;
 		}
 		else
 			cur++;
 	}
-	return (spl_num);
+	return (exp_num);
 }
 
-static void fill_expan_split(char **expan, char *token)
+static void write_content(t_list *args_list, char *cur, char *token, int s)
+{
+	if (args_list->content)
+		free(args_list->content);
+	args_list->content = ft_substr(token, s, cur - token - s);
+	if (!args_list->content)
+		exit(malloc_err);
+}
+
+static int oper_word(t_list *args_list, char **cur_ptr, char *token, int s)
 {
 	char *cur;
-	int	i;
-	long s;
+
+	cur = *cur_ptr;
+	if (cur != token)
+		write_content(args_list, cur, token, s);
+	while (*cur == ' ')
+		cur++;
+	return ((int)(cur - token));
+}
+
+static void expan_list(t_list *args_list, char *token)
+{
+	char *cur;
+	int	s;
 
 	cur = token;
 	s = 0;
-	i = 0;
 	while (*cur)
 	{
 		if (*cur == '\'' || *cur == '\"')
 			cur += quoting(cur);
 		else if (*cur == ' ')
 		{
-			if (cur != token)
-			{
-				expan[i] = ft_substr(token, s, cur - token - s);
-				if (!expan[i])
-					exit(malloc_err);
-			}
-			while (*cur == ' ')
-				cur++;
-			s = cur - token;
-			i++;
+			s = oper_word(args_list, &cur, token, s);
+			args_list = args_list->next;
 		}
 		else
 			cur++;
 	}
 	if (cur - token - s > 0)
-		expan[i] = ft_substr(token, s, cur - token - s);
+		write_content(args_list, cur, token, s);
+	else if (cur == token)
+		args_list->content = ft_strdup("");
 }
 
-char ** variable_expansion(char **token, t_env *env)
+int variable_expansion(t_list *args_list)
 {
-	int	spl_num;
-	char **expan;
+	int	exp_num;
+	char *token;
 
-	exec_expansion(token, env);
-	spl_num = get_size(*token);
-	expan = (char **) malloc(sizeof(char *) * (spl_num + 1));
-	if (!expan)
-		exit (malloc_err);
-	expan[spl_num] = NULL;
-	fill_expan_split(expan, *token);
-	return (expan);
+	token = ft_strdup(args_list->content);
+	exec_expansion(&token);
+	exp_num = get_size(token);
+	if (exp_num)
+		ft_lstins_few_empty(args_list, exp_num);
+	expan_list(args_list, token);
+	free(token);
+	return (exp_num);
 }
