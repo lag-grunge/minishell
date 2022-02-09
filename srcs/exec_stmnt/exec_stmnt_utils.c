@@ -29,7 +29,7 @@ static int get_status(int status)
 	if (WIFEXITED(status))
 		code = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-		code = WTERMSIG(status);
+		code = 128 + WTERMSIG(status);
 	tmp = get_value(g_data.env, "last_status");
 	if (ft_atoi(tmp) != code)
 	{
@@ -46,8 +46,6 @@ int	wait_child(int p)
 {
 	int	status;
 
-	if (p >= 1)
-		save_restore_stdin_stdount();
 	p++;
 	while (p)
 	{
@@ -57,7 +55,6 @@ int	wait_child(int p)
 	return (get_status(status));
 }
 
-
 void	exec_cmd(t_cmd *cmd)
 {
 	char	*exec_path;
@@ -66,7 +63,6 @@ void	exec_cmd(t_cmd *cmd)
 	int 	ret;
 
 	ret = make_all_red_exp(cmd->redir) || ft_openfiles(cmd->redir);
-//	ret = ft_openfiles(cmd->redir);
 	if (ret)
 		exit(1);
 	if (!cmd->args)

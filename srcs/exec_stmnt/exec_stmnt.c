@@ -31,13 +31,24 @@ static void parent(t_stmnt *stmnt, int pdes[2], int p, int *res)
 		exec_stmnt(stmnt->next_stmnt, res, ++p);
 	}
 	else
+	{
+		if (p >= 1)
+			save_restore_stdin_stdount();
 		*res = wait_child(p);
+		signal_dispose(new_shell);
+	}
+
 }
 
 void exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2], int *res)
 {
 	pid_t pid;
 
+	/*if (БИЛТИН)
+	{
+		*res = ВЫПОЛНИТЬ ФУНКЦИЮ БИЛТИН;
+		return ;
+	}*/
 	pid = fork();
 	if (pid < 0)
 		exit(fork_err);
