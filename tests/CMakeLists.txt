@@ -13,6 +13,7 @@
 #add_executable(example example.cpp)
 #target_link_libraries(example gtest_main)
 #add_test(NAME example_test COMMAND example)
+
 # 'Google_test' is the subproject name
 project(Google_tests)
 
