@@ -4,7 +4,7 @@
 /* set value to the key, free old one
  * if key not exist and new is True create new elem */
 
-int set_value(t_env **env, char *key, char *value, int new)
+int set_value(t_env **env, char *key, char *value, int new_val)
 {
 	t_env	*tmp;
 	t_env	*cur;
@@ -23,7 +23,7 @@ int set_value(t_env **env, char *key, char *value, int new)
 		cur = tmp;
 		tmp = tmp->next;
 	}
-	if (new)
+	if (new_val)
 	{
 		tmp = ft_env_new_elem();
 		tmp->key = ft_strdup(key);

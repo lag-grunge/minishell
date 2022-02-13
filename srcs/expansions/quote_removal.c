@@ -12,9 +12,12 @@ static int get_size(char *token)
 		if (*token == '\'' || *token == '\"')
 		{
 			qlen = quoting(token);
-			size += qlen - 2;
-			token += qlen;
-			continue ;
+			if (qlen > 2)
+				size += qlen - 2;
+			if (qlen >= 2)
+				token += qlen;
+			if (qlen >= 2)
+				continue ;
 		}
 		token++;
 		size++;
@@ -22,45 +25,37 @@ static int get_size(char *token)
 	return (size);
 }
 
-/* 'a" b"c' -> 'a bc' */
-//void quote_removal(char **token)
+static char *quote_copy(char *new_token, char *token, int *i_ptr)
+{
+	int qlen;
+
+	qlen = quoting(token);
+	if (qlen == 2)
+		return (token + 2);
+	ft_strlcat(new_token, token + 1, *i_ptr + qlen - 2 + 1);
+	*i_ptr += qlen - 2;
+	return (token + qlen);
+}
+
 char  *quote_removal(char *token)
 {
 	int new_len;
 	int	i;
 	char	*new_token;
-	int qlen;
 
 	new_len = get_size(token);
 	new_token = ft_calloc(new_len + 1, sizeof(char));
 	i = 0;
 	while (*token)
 	{
-		if (*token == '\'' || *token == '\"')
+		if ((*token != '\'' && *token != '\"') || quoting(token) == 1)
 		{
-			qlen = quoting(token);
-			ft_strlcat(new_token, token + 1, i + qlen - 2 + 1);
-			(token) += qlen;
-			i += qlen - 2;
-			continue ;
+			new_token[i] = *token;
+			token++;
+			i++;
 		}
-		new_token[i] = *token;
-		(token)++;
-		i++;
+		else
+			token = quote_copy(new_token, token, &i);
 	}
 	return (new_token);
 }
-
-//int main()
-//{
-//	printf("%s\n%s\n\n", "\"*\"", quote_removal("\"*\""));
-//	printf("%s\n%s\n\n", "\"*.c\"", quote_removal("\"*.c\""));
-//	printf("%s\n%s\n\n", "\"*\'.c\"", quote_removal("\"*\'.c\""));
-//	printf("%s\n%s\n\n", "\"*\'.c\"", quote_removal("\"*\'.c\""));
-//	printf("%s\n%s\n\n", "\"*\'.\'c\"", quote_removal("\"*\'.\'c\""));
-//
-//	printf("%s\n%s\n\n", "*.c\"*\"", quote_removal("*.c\"*\""));
-//	printf("%s\n%s\n\n", "\"*\"*.c", quote_removal("\"*\"*.c"));
-//	printf("%s\n%s\n\n", "*\"*\".c", quote_removal("*\"*\".c"));
-//	printf("%s\n%s\n\n", "*.c", quote_removal("*.c"));
-//}

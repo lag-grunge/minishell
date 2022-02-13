@@ -3,6 +3,9 @@ project(minishell C)
 
 set(CMAKE_C_STANDARD 11)
 
+add_subdirectory(tests)
+add_subdirectory(tests_cp)
+
 include_directories(includes)
 include_directories(libft)
 #include_directories(/Users/sdalton/.brew/opt/readline/include)
