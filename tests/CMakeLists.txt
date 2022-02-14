@@ -24,8 +24,8 @@ include_directories(../includes ../libft)
 
 # 'Google_Tests_run' is the target name
 # 'test1.cpp tests2.cpp' are source files with tests
-add_executable(Google_Tests_run test1.cpp tests2.cpp ../srcs/syntax/token_utils.c ../srcs/syntax/syntax_utils.c
-                ../srcs/expansions/quote_removal.c)
+add_executable(Google_Tests_run test_quote_removal.cpp tests2.cpp ../srcs/syntax/token_utils.c ../srcs/syntax/syntax_utils.c
+                ../srcs/expansions/quote_removal.c ../srcs/expansions/filename_utils.c tests.hpp)
 target_link_directories(Google_Tests_run PUBLIC ../libft)
 target_link_directories(Google_Tests_run PUBLIC ./lib/ )
 target_link_libraries(Google_Tests_run libft.a)

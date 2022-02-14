@@ -108,6 +108,10 @@ typedef struct s_data {
 	t_env	*env;
 }				t_data;
 
-t_data g_data;
+#ifdef __cplusplus  //for CPP googletests
+	extern t_data g_data;
+#else
+	t_data g_data;
+#endif
 
 #endif
