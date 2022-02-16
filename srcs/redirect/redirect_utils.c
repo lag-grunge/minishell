@@ -31,3 +31,31 @@ int		print_err(char *filename, char *cmd_name)
 	return (-file_err);
 }
 
+int open_for_read(char *filename, int fd_in)
+{
+	if (fd_in != STDIN_FILENO)
+		close(fd_in);
+	fd_in = open(filename, O_RDONLY);
+	if (fd_in == -1)
+		return (print_err(filename, "./minishell"));
+	return (fd_in);
+}
+
+int open_for_write(char *filename, int fd_out, int append, int err)
+{
+	if ((!err && fd_out != STDOUT_FILENO) || (err && fd_out != STDERR_FILENO))
+		close(fd_out);
+	fd_out = open(filename, O_WRONLY | O_CREAT | O_EXCL, 0666);
+	if (fd_out == -1)
+	{
+		if (errno != EEXIST)
+			return (print_err(filename, "./minishell"));
+		if (append)
+			fd_out = open(filename, O_WRONLY | O_APPEND);
+		else
+			fd_out = open(filename, O_WRONLY | O_TRUNC);
+		if (fd_out == -1)
+			return (print_err(filename, "./minishell"));
+	}
+	return (fd_out);
+}

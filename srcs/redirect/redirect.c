@@ -2,9 +2,28 @@
 #include "redirect.h"
 #include "signal_dispose.h"
 
-int read_here_doc(const char *lim, int fd_in, int *h_doc)
+static int read_in_child(const char *lim, int *h_doc)
 {
 	char	*line;
+
+	signal_dispose(readln);
+	while (1)
+	{
+		line = readline(">");
+		if (!line)
+			break;
+		if (!ft_strncmp(line, lim, ft_strlen(lim) + 1))
+			break;
+		ft_putendl_fd(line, h_doc[1]);
+		free(line);
+		line = NULL;
+	}
+	close(h_doc[1]);
+	exit (0);
+}
+
+int read_here_doc(const char *lim, int fd_in, int *h_doc)
+{
 	pid_t	pid;
 
 	if (fd_in != STDIN_FILENO)
@@ -15,91 +34,60 @@ int read_here_doc(const char *lim, int fd_in, int *h_doc)
 	if (pid < 0)
 		exit(fork_err);
 	else if (pid == 0)
-	{
-		signal_dispose(readln);
-		while (1)
-		{
-			line = readline(">");
-			if (!line)
-				break;
-			if (!ft_strncmp(line, lim, ft_strlen(lim) + 1))
-				break;
-			ft_putendl_fd(line, h_doc[1]);
-			free(line);
-			line = NULL;
-		}
-		close(h_doc[1]);
-		exit (0);
-	}
+		read_in_child(lim, h_doc);
 	else
 		waitpid(pid, NULL, 0);
 	return (h_doc[0]);
 }
 
-int open_for_read(char *filename, int fd_in)
+static void std_redirect(int *std, int *h_doc)
 {
-	if (fd_in != STDIN_FILENO)
-		close(fd_in);
-	fd_in = open(filename, O_RDONLY);
-	if (fd_in == -1)
-		return (print_err(filename, "./minishell"));
-	return (fd_in);
-}
-
-int open_for_write(char *filename, int fd_out, int append)
-{
-	if (fd_out != STDOUT_FILENO)
-		close(fd_out);
-	fd_out = open(filename, O_WRONLY | O_CREAT | O_EXCL, 0666);
-	if (fd_out == -1)
+	if (std[STDIN_FILENO] != STDIN_FILENO && std[STDIN_FILENO] == h_doc[0])
+		ft_redirect(h_doc, STDIN_FILENO);
+	else if (std[STDIN_FILENO] != STDIN_FILENO)
 	{
-		if (errno != EEXIST)
-			return (print_err(filename, "./minishell"));
-		if (append)
-			fd_out = open(filename, O_WRONLY | O_APPEND);
-		else
-			fd_out = open(filename, O_WRONLY | O_TRUNC);
-		if (fd_out == -1)
-			return (print_err(filename, "./minishell"));
+		dup2(std[STDIN_FILENO], STDIN_FILENO);
+		close(std[STDIN_FILENO]);
 	}
-	return (fd_out);
+	if (std[STDOUT_FILENO] != STDOUT_FILENO)
+	{
+		dup2(std[STDOUT_FILENO], STDOUT_FILENO);
+		close(std[STDOUT_FILENO]);
+	}
+	if (std[STDERR_FILENO] != STDERR_FILENO)
+	{
+		dup2(std[STDERR_FILENO], STDERR_FILENO);
+		close(std[STDERR_FILENO]);
+	}
 }
 
 int ft_openfiles(t_redir *red)
 {
-	int	fd_in;
-	int fd_out;
+	int std[3];
 	int h_doc[2];
 
-	fd_in = STDIN_FILENO;
-	fd_out = STDOUT_FILENO;
+	std[STDIN_FILENO] = STDIN_FILENO;
+	std[STDOUT_FILENO] = STDOUT_FILENO;
+	std[STDERR_FILENO] = STDERR_FILENO;
+	h_doc[STDIN_FILENO] = -1;
+	h_doc[STDOUT_FILENO] = -1;
 	while (red)
 	{
 		if (red->type == red_rifile)
-			fd_in = open_for_read(red->word, fd_in);
-		else if (red->type == red_wofile || red->type == red_aofile)
-			fd_out = open_for_write(red->word, fd_out, red->type == red_aofile);
+			std[STDIN_FILENO] = open_for_read(red->word, std[STDIN_FILENO]);
 		else if (red->type == red_rh_doc)
-			fd_in = read_here_doc(red->word, fd_in, h_doc);
-		if (fd_in < 0 || fd_out < 0)
+			std[STDIN_FILENO] = read_here_doc(red->word, std[STDIN_FILENO], h_doc);
+		else if (red->type == red_wofile || red->type == red_aofile)
+			std[STDOUT_FILENO] = open_for_write(red->word, std[STDOUT_FILENO], red->type == red_aofile, 0);
+		else if (red->type == red_eofile || red->type == red_aefile)
+			std[STDERR_FILENO] = open_for_write(red->word, std[STDERR_FILENO], red->type == red_aefile, 1);
+		if (std[STDIN_FILENO] < 0 || std[STDOUT_FILENO] < 0 || std[STDERR_FILENO] < 0)
 			return (file_err);
 		red = red->next;
 	}
-	if (fd_in != STDIN_FILENO && fd_in == h_doc[0])
-		ft_redirect(h_doc, STDIN_FILENO);
-	else if (fd_in != STDIN_FILENO)
-	{
-		dup2(fd_in, STDIN_FILENO);
-		close(fd_in);
-	}
-	if (fd_out != STDOUT_FILENO)
-	{
-		dup2(fd_out, STDOUT_FILENO);
-		close(fd_out);
-	}
+	std_redirect(std, h_doc);
 	return (0);
 }
-
 
 void	ft_redirect(int *pdes, int in_out)
 {
