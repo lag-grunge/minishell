@@ -14,9 +14,8 @@ static int test_pattern(char **next, char **token)
 	}
 	while (**token != lim)
 	{
-		if (lim == '*' && \
-			(**token == '\"' ||  **token == '\'') && \
-			!test_pattern(next, token))
+		if (lim == '*' && ((**token == '\"' ||  **token == '\'') && \
+			quoting(*token) > 1) && !test_pattern(next, token))
 			return (0);
 		if (**token != **next)
 			return (0);
