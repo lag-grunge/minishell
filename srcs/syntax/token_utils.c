@@ -21,6 +21,10 @@ int ft_isoperator(char *s)
 		return (ct_lt);
 	if (!ft_strncmp(s, GT, MAX_CTRLS_LEN + 1))
 		return (ct_gt);
+	if (!ft_strncmp(s, EGT, MAX_CTRLS_LEN + 1))
+		return (ct_egt);
+	if (!ft_strncmp(s, EGTGT, MAX_CTRLS_LEN + 1))
+		return (ct_egtgt);
 	if (!ft_strncmp(s, OR, MAX_CTRLS_LEN + 1))
 		return (ct_or);
 	if (!ft_strncmp(s, PIPE, MAX_CTRLS_LEN + 1))

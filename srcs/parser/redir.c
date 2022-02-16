@@ -53,6 +53,10 @@ static int write_redir(t_redir **redirect, char **tokens)
 		red->type = red_wofile;
 	else if (red_type == ct_gtgt)
 		red->type = red_aofile;
+	else if (red_type == ct_egt)
+		red->type = red_eofile;
+	else if (red_type == ct_egtgt)
+		red->type = red_aefile;
 	red->word = ft_strdup(wrd_token);
 	if (!red->word)
 		exit(malloc_err);
@@ -64,6 +68,9 @@ int ft_redir(t_redir **red, char ***tokens)
 	int 	ret;
 
 	ret = 0;
+	if (!**tokens)
+		return (syntax_error(syntax_err, **tokens, \
+		"minishell: redir: unexpected newline"));
 	if (expect(wrd, tokens, "redir"))
 		return (syntax_err);
 	if (red)

@@ -15,7 +15,13 @@ static char	*oper_token(char *read_line, int *len)
 	char *ret;
 	char *tmp;
 
-	if (ft_ismeta(*read_line))
+//	if ()
+//	{
+//		if (len)
+//			*len = 2;
+//		return (read_line + 2);
+//	}
+	if (ft_ismeta(*read_line) || !ft_strncmp(read_line, "2>", 2))
 	{
 		tmp = NULL;
 		ret = ft_meta(read_line, len, &tmp);
