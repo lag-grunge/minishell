@@ -1,6 +1,10 @@
 #ifndef MINISHELL_H
 #define MINISHELL_H
+#ifndef TEST_G
 # include "libft.h"
+#else
+# include "../../../libft/libft.h"
+#endif
 # include <dirent.h>
 # include <stdio.h>
 # include <errno.h>

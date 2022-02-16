@@ -6,6 +6,7 @@ extern "C" {
 #include "expansions.h"
 #include "syntax.h"
 #include "libft.h"
+#include "environment.h"
 }
 #include "gtest/gtest.h"
 
