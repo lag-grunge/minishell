@@ -55,11 +55,30 @@ int	wait_child(int p)
 	return (get_status(status));
 }
 
-void	exec_cmd(t_cmd *cmd)
+int exec_bin(t_cmd *cmd)
 {
-	char	*exec_path;
 	char	**env;
 	char 	**args;
+	char	*exec_path;
+	int		ret;
+
+	ret = ft_which(&exec_path, cmd->args->content);
+	if (ret == not_fnd_bin_in_path || ret == nopath_in_env)
+		exit(not_found_bin);
+	else if (ret == not_perms_for_exec)
+		exit(perm_den_bin);
+	if (!ft_strncmp(cmd->args->content, "./minishell", 12))
+		increment_shell_level();
+	env = get_env_array(g_data.env);
+	args = get_cmd_array(cmd->args);
+	execve(exec_path, args, env);
+	perror(exec_path);
+	ret = child_exec_err;
+	return (ret);
+}
+
+void exec_cmd(t_cmd *cmd, int *res_if_single_builtin)
+{
 	int 	ret;
 
 	ret = make_all_red_exp(cmd->redir) || ft_openfiles(cmd->redir);
@@ -68,18 +87,16 @@ void	exec_cmd(t_cmd *cmd)
 	if (!cmd->args)
 		exit (0);
 	make_expansions(&cmd->args);
-	if (!cmd->args)
-		exit(0);
-	ret = ft_which(&exec_path, cmd->args->content);
-	if (ret == not_fnd_bin_in_path || ret == nopath_in_env)
-		exit (not_found_bin);
-	else if (ret == not_perms_for_exec)
-		exit (perm_den_bin);
-	if (!ft_strncmp(cmd->args->content, "./minishell", 12))
-		increment_shell_level();
-	env = get_env_array(g_data.env);
-	args = get_cmd_array(cmd->args);
-	execve(exec_path, args, env);
-	perror(exec_path);
-	exit(child_exec_err);
+	if (!fake_isbuiltin(cmd) && cmd->args)
+		ret = exec_bin(cmd);
+	else if (cmd->args)
+	{
+		ret = fake_exec_builtin(cmd);
+		if (res_if_single_builtin)
+		{
+			*res_if_single_builtin = ret;
+			return ;
+		}
+	}
+	exit(ret);
 }
