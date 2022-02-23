@@ -35,7 +35,7 @@ static void parent(t_stmnt *stmnt, int pdes[2], int p, int *res)
 		if (p >= 1)
 			save_restore_stdin_stdount();
 		*res = wait_child(p);
-		signal_dispose(new_shell);
+		signal_dispose(main_shell);
 	}
 
 }

@@ -7,6 +7,7 @@ static int read_in_child(const char *lim, int *h_doc)
 	char	*line;
 
 	signal_dispose(readln);
+	switch_echoctl(0);
 	while (1)
 	{
 		line = readline(">");

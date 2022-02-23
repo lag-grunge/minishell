@@ -14,6 +14,7 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <termios.h>
 
 typedef enum e_errors {
 	syntax_err = 2,
@@ -108,7 +109,7 @@ typedef struct s_env {
 } 				t_env;
 
 enum e_child_disp {
-	new_shell,
+	main_shell,
 	parent_fork,
 	child_fork,
 	readln

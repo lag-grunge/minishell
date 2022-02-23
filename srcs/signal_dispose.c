@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void signal_handler(int signum, siginfo_t *info, void *args)
+static void signal_handler(int signum, siginfo_t *info, void *args)
 {
 	(void) info;
 	(void) args;
@@ -13,19 +13,34 @@ void signal_handler(int signum, siginfo_t *info, void *args)
 	}
 }
 
-void signal_dispose(int child)
+void switch_echoctl(char on)
+{
+	struct termios ts;
+
+	tcgetattr(STDIN_FILENO, &ts);
+	if (on)
+		ts.c_lflag |= ECHOCTL;
+	else
+		ts.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSAFLUSH, &ts);
+}
+
+static void main_shell_dispose(void)
 {
 	struct sigaction act;
 
-	if (child == new_shell)
-	{
-		rl_catch_signals = 0;
-		signal(SIGQUIT, SIG_IGN);
-		ft_memset(&act, 0, sizeof(struct sigaction));
-		act.sa_sigaction = signal_handler;
-		sigaction(SIGINT, &act, NULL);
-		signal(SIGHUP, SIG_DFL);
-	}
+	rl_catch_signals = 0;
+	signal(SIGQUIT, SIG_IGN);
+	ft_memset(&act, 0, sizeof(struct sigaction));
+	act.sa_sigaction = signal_handler;
+	sigaction(SIGINT, &act, NULL);
+	signal(SIGHUP, SIG_DFL);
+}
+
+void signal_dispose(int child)
+{
+	if (child == main_shell)
+		main_shell_dispose();
 	else if (child == readln)
 	{
 		rl_catch_signals = 1;
