@@ -11,7 +11,7 @@ static void signal_handler(int signum, siginfo_t *info, void *args)
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_redisplay();
-		set_value(&g_data.env, "last_status", ft_strdup("1"), 0);
+		set_value(&g_data.env, "last_status", ft_strdup("1"));
 	}
 }
 

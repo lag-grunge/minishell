@@ -36,7 +36,7 @@ static int get_status(int status)
 		new_value = ft_itoa(code);
 		if (!new_value)
 			exit(malloc_err);
-		set_value(&g_data.env, "last_status", new_value, 0);
+		set_value(&g_data.env, "last_status", new_value);
 	}
 	free(tmp);
 	return (code);
@@ -95,7 +95,7 @@ void exec_cmd(t_cmd *cmd, int *res_if_single_builtin)
 		if (res_if_single_builtin)
 		{
 			*res_if_single_builtin = ret;
-			return ;
+			return;
 		}
 	}
 	exit(ret);

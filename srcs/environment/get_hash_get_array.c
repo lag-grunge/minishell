@@ -90,3 +90,18 @@ char	**get_env_array(t_env *env_hash)
 	}
 	return (env_array);
 }
+
+void	print_env(t_env *env_hash)
+{
+	while (env_hash)
+	{
+		printf("declare -x ");
+		printf("%s", env_hash->key);
+		if (env_hash->sep == '=')
+			printf("=");
+		if (env_hash->value)
+			printf("\"%s\"", env_hash->value);
+		printf("\n");
+		env_hash = env_hash->next;
+	}
+}
