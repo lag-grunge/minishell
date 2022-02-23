@@ -79,7 +79,10 @@ static char *oper_dollar(char **tokens, char *dollar)
 	char *value;
 
 	start_var = dollar + 1;
-	end_var = ft_name(start_var);
+	if (*start_var == '?')
+		end_var = start_var + 1;
+	else
+		end_var = ft_name(start_var);
 	if (end_var == start_var)
 		return (dollar + 1);
 	if (*start_var == '?')
