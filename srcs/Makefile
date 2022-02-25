@@ -21,13 +21,13 @@ CC = gcc
 
 OS = $(shell uname -s)
 ifeq (${OS}, Darwin)
-LDFLAGS+=-L/Users/sdalton/.brew/opt/readline/lib
-INCLUDE+=-I/Users/sdalton/.brew/opt/readline/include
+LDFLAGS+=-L/Users/sdalton/.brew/opt/readline/lib -L/Users/sdalton/.brew/opt/readline/lib
+INCLUDE+=-I/Users/sdalton/.brew/opt/readline/include -I/Users/sdalton/.brew/opt/ncurses/include
 else
 ifeq (${OS}, Linux)
 INCLUDE+=-I/usr/share/
 LDFLAGS+=-L/usr/lib/x86_64-linux-gnu/
-LIBRARIES+=-ltinfo
+LIBRARIES+= -ltinfo
 endif
 endif
 CFLAGS = -Wall -Werror -Wextra ${INCLUDE} -MMD
