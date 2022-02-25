@@ -53,6 +53,7 @@ int fake_exec_builtin(t_cmd *cmd)
 	(void)cmd;
 	int		ret;
 
+    ret = 0;
 	if (!ft_strncmp(cmd->args->content, "export", 256))
 	{
 		ret = fake_export(cmd->args);
