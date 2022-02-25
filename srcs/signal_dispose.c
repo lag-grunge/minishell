@@ -1,6 +1,7 @@
 #include "minishell.h"
 #include "environment.h"
 
+
 static void signal_handler(int signum, siginfo_t *info, void *args)
 {
 	(void) info;
@@ -32,6 +33,7 @@ static void main_shell_dispose(void)
 	struct sigaction act;
 
 	rl_catch_signals = 0;
+    switch_echoctl(0);
 	signal(SIGQUIT, SIG_IGN);
 	ft_memset(&act, 0, sizeof(struct sigaction));
 	act.sa_sigaction = signal_handler;
@@ -45,8 +47,8 @@ void signal_dispose(int child)
 		main_shell_dispose();
 	else if (child == readln)
 	{
-		rl_catch_signals = 1;
-		signal(SIGHUP, SIG_DFL);
+        rl_catch_signals = 1;
+        signal(SIGHUP, SIG_DFL);
 	}
 	else if (child == parent_fork)
 	{
