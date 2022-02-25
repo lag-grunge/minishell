@@ -1,42 +1,53 @@
 #include "minishell.h"
 #include "environment.h"
 
-/* set value to the key, free old one
- * if key not exist and new is True create new elem */
+static void add_new_value(t_env **last, char *key, char *value)
+{
+	t_env *tmp;
 
-int set_value(t_env **env, char *key, char *value, int new_val)
+	tmp = ft_env_new_elem();
+	tmp->key = ft_strdup(key);
+	if (value)
+	{
+		tmp->sep = '=';
+		tmp->value = value;
+		if (!tmp->value)
+			exit (malloc_err);
+	}
+	if (!tmp->key)
+		exit (malloc_err);
+	*last = tmp;
+}
+
+/* set value to the key, free old one
+ * if key not exist create new elem */
+/* not protected from NULL */
+/* key not free */
+
+
+int set_value(t_env **env, char *key, char *value)
 {
 	t_env	*tmp;
-	t_env	*cur;
+	t_env	**last;
 
 	tmp = *env;
+	last = env;
 	while (tmp)
 	{
 		if (!ft_strncmp(tmp->key, key, ft_strlen(key)))
 		{
-			if (tmp->value)
+			if (tmp->value && value)
 				free(tmp->value);
-			tmp->sep = '=';
-			tmp->value = value;
+			if (value)
+				tmp->sep = '=';
+			if (value)
+				tmp->value = value;
 			return (0);
 		}
-		cur = tmp;
+		last = &tmp->next;
 		tmp = tmp->next;
 	}
-	if (new_val)
-	{
-		tmp = ft_env_new_elem();
-		tmp->key = ft_strdup(key);
-		tmp->sep = '=';
-		tmp->value = ft_strdup(value);
-		if (!tmp->key || !tmp->value)
-			exit (malloc_err);
-		if (!*env)
-			*env = tmp;
-		else
-			cur->next = tmp;
-		return (0);
-	}
+	add_new_value(last, key, value);
 	return (1);
 }
 

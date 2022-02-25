@@ -11,7 +11,7 @@ static void child(t_stmnt *stmnt, int pdes[2])
 	if (stmnt->next_stmnt)
 		ft_redirect(pdes, STDOUT_FILENO);
 	if (stmnt->type == op_smpl)
-		exec_cmd(stmnt->oper1);
+		exec_cmd(stmnt->oper1, NULL);
 	else if (stmnt->type == op_sbsh)
 	{
 		ret = make_all_red_exp(stmnt->redir) || ft_openfiles(stmnt->redir);
@@ -35,7 +35,7 @@ static void parent(t_stmnt *stmnt, int pdes[2], int p, int *res)
 		if (p >= 1)
 			save_restore_stdin_stdount();
 		*res = wait_child(p);
-		signal_dispose(new_shell);
+		signal_dispose(main_shell);
 	}
 
 }
@@ -44,11 +44,11 @@ void exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2], int *res)
 {
 	pid_t pid;
 
-	/*if (БИЛТИН)
+	if (!p && !stmnt->next_stmnt && fake_isbuiltin(stmnt->oper1)) //builtin bez paipa
 	{
-		*res = ВЫПОЛНИТЬ ФУНКЦИЮ БИЛТИН;
+		exec_cmd(stmnt->oper1, res);
 		return ;
-	}*/
+	}
 	pid = fork();
 	if (pid < 0)
 		exit(fork_err);

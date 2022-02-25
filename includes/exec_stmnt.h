@@ -11,12 +11,15 @@ enum e_err	{
 	not_fnd_bin_in_path = 4,
 };
 
-void exec_stmnt(t_stmnt *stmnt, int *res, int p);
+int fake_isbuiltin(t_cmd *cmd); //test
+int fake_exec_builtin(t_cmd *cmd); //test
+
+		void exec_stmnt(t_stmnt *stmnt, int *res, int p);
 int	ft_which(char **exec_path, char *cmd);
 void save_restore_stdin_stdount(void);
 void exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2], int *res);
 int wait_child(int p);
-void exec_cmd(t_cmd *cmd);
+void exec_cmd(t_cmd *cmd, int *res_if_single_builtin);
 char	**get_cmd_array(t_list *args_list);
 
 #endif

@@ -28,8 +28,6 @@ int expect(t_token t, char ***cur, char *module)
 
 char *ft_name(char *start)
 {
-	if (*start == '?')
-		return (start + 1);
 	if (!ft_isalpha(*start) && *start != '_')
 		return (start);
 	while (ft_isalnum(*start) || *start == '_')

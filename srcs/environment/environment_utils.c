@@ -44,14 +44,18 @@ int	increment_shell_level(void)
 {
 	char	*s1;
 	char	*s2;
+	int 	num = 0;
 
 	s1 = get_value(g_data.env, "SHLVL");
 	if (!s1)
 		exit (malloc_err);
-	s2 = ft_itoa(ft_atoi(s1) + 1);
+	num = 0;
+	if (ft_strncmp("", s1, 1))
+		num = ft_atoi(s1);
+	s2 = ft_itoa(num + 1);
 	free(s1);
 	if (!s2)
 		exit (malloc_err);
-	set_value(&g_data.env, "SHLVL", s2, 0);
+	set_value(&g_data.env, "SHLVL", s2);
 	return (0);
 }
