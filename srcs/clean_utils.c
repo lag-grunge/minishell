@@ -1,5 +1,12 @@
 #include "clean.h"
 
+void del_env_one(t_env *tmp)
+{
+    free(tmp->key);
+    free(tmp->value);
+    free(tmp);
+}
+
 void clean_env_hash(t_env *env_start)
 {
 	t_env	*cur;
@@ -8,11 +15,11 @@ void clean_env_hash(t_env *env_start)
 	cur = env_start;
 	while (cur)
 	{
-		free(cur->key);
-		free(cur->value);
-		tmp = cur;
-		cur = cur->next;
-		free(tmp);
+        tmp = cur;
+        cur = cur->next;
+		free(tmp->key);
+		free(tmp->value);
+        free(tmp);
 	}
 }
 

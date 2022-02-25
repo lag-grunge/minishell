@@ -19,6 +19,8 @@ project(Google_tests)
 
 # 'lib' is the folder with Google Test sources
 add_subdirectory(lib)
+add_definitions(-DTEST_G)
+add_subdirectory(/Users/sdalton/CLionProjects/minishell/libft /Users/sdalton/CLionProjects/minishell/libft)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 include_directories(../includes ../libft)
 
@@ -26,7 +28,8 @@ include_directories(../includes ../libft)
 # 'test1.cpp tests2.cpp' are source files with tests
 add_executable(Google_Tests_run test_quote_removal.cpp tests2.cpp tests_var_exp.cpp ../srcs/syntax/token_utils.c ../srcs/syntax/syntax_utils.c
                 ../srcs/expansions/quote_removal.c ../srcs/expansions/filename_utils.c ../srcs/expansions/variable_utils.c
-                ../srcs/environment/set_value_get_value.c ../srcs/environment/environment_utils.c ../srcs/environment/get_hash_get_array.c)
+                ../srcs/environment/set_value_get_value.c ../srcs/environment/environment_utils.c ../srcs/environment/get_hash_get_array.c
+                ../srcs/syntax/tokens.c get_tokens_tests.cpp)
 target_link_directories(Google_Tests_run PUBLIC ../libft)
 target_link_directories(Google_Tests_run PUBLIC ./lib/ )
 target_link_libraries(Google_Tests_run libft.a)
