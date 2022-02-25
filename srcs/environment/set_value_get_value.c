@@ -1,5 +1,6 @@
 #include "minishell.h"
 #include "environment.h"
+#include "clean.h"
 
 static void add_new_value(t_env **last, char *key, char *value)
 {
@@ -49,6 +50,27 @@ int set_value(t_env **env, char *key, char *value)
 	}
 	add_new_value(last, key, value);
 	return (1);
+}
+
+int unset_value(t_env **env, char *key)
+{
+    t_env   **prev;
+    t_env	*cur;
+
+    prev = env;
+    cur = *env;
+    while (cur)
+    {
+        if (!ft_strncmp(cur->key, key, ft_strlen(key)))
+        {
+            *prev = cur->next;
+            del_env_one(cur);
+            return (1);
+        }
+        prev = &cur->next;
+        cur = cur->next;
+    }
+    return (0);
 }
 
 /*

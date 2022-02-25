@@ -49,6 +49,14 @@ TEST(Var_Exp, set_value) {
     EXPECT_EQ(std::string(in), out);
 }
 
+TEST(Var_Exp, unset_value) {
+    unset_value(&g_data.env, ft_strdup("a"));
+    char *in = ft_strdup("$a ");
+    std::string out = " ";
+    exec_expansion(&in);
+    EXPECT_EQ(std::string(in), out);
+}
+
 TEST(Var_Exp, dollar_end) {
 
     char *in = ft_strdup("fwece$");
