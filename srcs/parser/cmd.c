@@ -29,8 +29,11 @@ int		write_word(t_list **cur, char *tokens)
 		if (!*cur)
 			exit(malloc_err);
 	}
-	else
+	else {
+		if ((*cur)->content)
+			free((*cur)->content);
 		(*cur)->content = tmp;
+	}
 	return (0);
 }
 

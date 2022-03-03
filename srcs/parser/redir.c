@@ -32,6 +32,18 @@ static t_redir	*add_redir_item(t_redir **red)
 	return (r->next);
 }
 
+void	rewrite_redir(char **red_word, char *tokens)
+{
+	char *tmp;
+
+	tmp = ft_strdup(tokens);
+	if (!tmp)
+		exit(malloc_err);
+	if (*red_word)
+		free(*red_word);
+	*red_word = tmp;
+}
+
 static int write_redir(t_redir **redirect, char **tokens)
 {
 	char		*red_token;
