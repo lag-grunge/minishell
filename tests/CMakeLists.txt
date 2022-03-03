@@ -20,7 +20,11 @@ project(Google_tests)
 # 'lib' is the folder with Google Test sources
 add_subdirectory(lib)
 add_definitions(-DTEST_G)
-add_subdirectory(/Users/sdalton/CLionProjects/minishell/libft /Users/sdalton/CLionProjects/minishell/libft)
+#if ($OS EQUAL "Linux" )
+#    add_subdirectory(/home/dfyz/CLionProjects/minishell/libft /home/dfyz/CLionProjects/minishell/libft)
+#else()
+add_subdirectory($ENV{HOME}/CLionProjects/minishell/libft $ENV{HOME}/CLionProjects/minishell/libft)
+#endif()
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 include_directories(../includes ../libft)
 

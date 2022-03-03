@@ -8,8 +8,11 @@ add_subdirectory(libft)
 
 include_directories(includes)
 include_directories(libft)
-include_directories(/Users/sdalton/.brew/opt/readline/include)
-#include_directories(/usr/share)
+if (${CMAKE_SYSTEM_NAME} EQUAL "Linux" )
+    include_directories(/usr/share)
+else()
+    include_directories(~/.brew/opt/readline/include)
+endif()
 
 add_executable(minishell
         srcs/parser/cmd.c
@@ -34,7 +37,11 @@ add_executable(minishell
 
 target_link_directories(minishell PUBLIC libft)
 target_link_libraries(minishell libft.a)
-target_link_directories(minishell PUBLIC /Users/sdalton/.brew/opt/readline/lib)
-#target_link_directories(minishell PUBLIC /usr/lib/x86_64-linux-gnu/)
+if (${CMAKE_SYSTEM_NAME} EQUAL "Linux" )
+    include_directories(/usr/share)
+    target_link_directories(minishell PUBLIC /usr/lib/x86_64-linux-gnu/)
+else()
+    target_link_directories(minishell PUBLIC ~/.brew/opt/readline/lib)
+endif()
 target_link_libraries(minishell libreadline.a)
 target_link_libraries(minishell libtinfo.a)
