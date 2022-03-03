@@ -40,10 +40,13 @@ char *ft_name(char *start)
 int syntax_error(int ret, char *token, char *module)
 {
 	if (module)
-		printf("%s: ", module);
-	printf("unexpected token ");
+		printf("%s", module);
 	if (token)
-		printf("'%s'", token);
+	{
+		printf(" :unexpected token ");
+		if (token)
+			printf("'%s'", token);
+	}
 	printf("\n");
 	return (ret);
 }
