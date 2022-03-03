@@ -23,7 +23,7 @@ static int get_size(char *pwd, char *token)
 	return (i);
 }
 
-static void write_filenames(t_list *args_list, DIR *dir, int fil_num)
+static void write_filenames(t_list *args_list, DIR *dir, int fil_num, char *pattern)
 {
 	struct dirent *cont;
 	int 	i;
@@ -37,7 +37,7 @@ static void write_filenames(t_list *args_list, DIR *dir, int fil_num)
 			break ;
 		if (cont->d_name[0] == '.')
 			continue ;
-		if (match(cont->d_name, args_list->content))
+		if (match(cont->d_name, pattern))
 		{
 			write_word(&args_list, cont->d_name);
 			args_list = args_list->next;
@@ -52,66 +52,20 @@ static void write_filenames(t_list *args_list, DIR *dir, int fil_num)
 	}
 }
 
-void filename_expansion(t_list *args_list, int exp_num)
+void filename_expansion(t_list *args_list)
 {
 	DIR *dir;
-	int	i;
 	int fil_num;
 	char *pwd;
-	t_list	*next;
+	char *pattern;
 
-	i = 0;
 	pwd = get_value(g_data.env, "PWD");
-	while (i <= exp_num)
-	{
-		fil_num = get_size(pwd, args_list->content);
-		dir = opendir(pwd);
-		next = args_list->next;
-		ft_lstins_few_empty(args_list, fil_num - 1);
-		write_filenames(args_list, dir, fil_num);
-		args_list = next;
-		closedir(dir);
-		i++;
-	}
+	pattern = ft_strdup(args_list->content);
+	fil_num = get_size(pwd, pattern);
+	dir = opendir(pwd);
+	args_list = ft_lstins_few_empty(args_list, fil_num - 1);
+	write_filenames(args_list, dir, fil_num, pattern);
+	closedir(dir);
 	free(pwd);
+	free(pattern);
 }
-
-//int exec_test(char *token)
-//{
-//	char **files;
-//	int empty;
-//
-//	empty = 0;
-//	files = filename_expansion("../", token, &empty);
-//	if (!empty && !files)
-//		return (malloc_err);
-//	while (files && *files)
-//	{
-//		printf("%s\n", *files);
-//		files++;
-//	}
-//	return (0);
-//}
-//
-
-//int main(int argc, char *argv[], char *env[])
-//{
-//	printf("%s\n", "\'*\'");
-//	exec_test("\'*\'");
-//	printf("%s\n", "\"*.c\"");
-//	exec_test("\"*.c\"");
-//	printf("%s\n", "\"*\'.c\"");
-//	exec_test("\"*\'.c\"");
-//
-//	printf("%s\n", "*.c\"*\"");
-//	exec_test("*.c\"*\"");
-//	printf("%s\n", "\"*\"*.c");
-//	exec_test("\"*\"*.c");
-//	printf("%s\n", "*\"*\".c");
-//	exec_test("*\"*\".c");
-//	printf("%s\n", "*.c");
-//	exec_test("*.c");
-//
-//	return (0);
-//}
-//

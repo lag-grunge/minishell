@@ -73,8 +73,8 @@ int exec_bin(t_cmd *cmd)
 	args = get_cmd_array(cmd->args);
 	execve(exec_path, args, env);
 	perror(exec_path);
-	ret = child_exec_err;
-	return (ret);
+	return (child_exec_err);
+
 }
 
 void exec_cmd(t_cmd *cmd, int *res_if_single_builtin)
@@ -87,7 +87,7 @@ void exec_cmd(t_cmd *cmd, int *res_if_single_builtin)
 	if (!cmd->args)
 		exit (0);
 	make_expansions(&cmd->args);
-	if (!fake_isbuiltin(cmd) && cmd->args)
+	if (cmd->args && !fake_isbuiltin(cmd))
 		ret = exec_bin(cmd);
 	else if (cmd->args)
 	{

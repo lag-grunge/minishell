@@ -5,8 +5,8 @@
 #include "parser.h"
 #include "syntax.h"
 
-int variable_expansion(t_list *args);
-void filename_expansion(t_list *args_list, int exp_num);
+void variable_expansion(t_list *args_list);
+void filename_expansion(t_list *args_list);
 int	match(char *d_name, char *token);
 char	*quote_removal(char *token);
 void exec_expansion(char **token);

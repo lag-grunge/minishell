@@ -5,7 +5,7 @@ static int get_size(char *token)
 	char *cur;
 	int	exp_num;
 
-	exp_num = 0;
+	exp_num = 1;
 	cur = token;
 	while (*cur)
 	{
@@ -22,22 +22,18 @@ static int get_size(char *token)
 	return (exp_num);
 }
 
-static void write_content(t_list *args_list, char *cur, char *token, int s)
-{
-	if (args_list->content)
-		free(args_list->content);
-	args_list->content = ft_substr(token, s, cur - token - s);
-	if (!args_list->content)
-		exit(malloc_err);
-}
-
 static int oper_word(t_list *args_list, char **cur_ptr, char *token, int s)
 {
 	char *cur;
+	char *tmp;
 
 	cur = *cur_ptr;
-	if (cur != token)
-		write_content(args_list, cur, token, s);
+	if (cur != token) {
+		tmp = ft_substr(token, s, cur - token - s);
+		if (!tmp)
+			exit(malloc_err);
+		write_word(&args_list, tmp);
+	}
 	while (*cur == ' ')
 		cur++;
 	return ((int)(cur - token));
@@ -63,12 +59,10 @@ static void expan_list(t_list *args_list, char *token)
 			cur++;
 	}
 	if (cur - token - s > 0)
-		write_content(args_list, cur, token, s);
-	else if (cur == token)
-		args_list->content = ft_strdup("");
+		oper_word(args_list, &cur, token, s);
 }
 
-int variable_expansion(t_list *args_list)
+void variable_expansion(t_list *args_list)
 {
 	int	exp_num;
 	char *token;
@@ -76,9 +70,15 @@ int variable_expansion(t_list *args_list)
 	token = ft_strdup(args_list->content);
 	exec_expansion(&token);
 	exp_num = get_size(token);
-	if (exp_num)
-		ft_lstins_few_empty(args_list, exp_num);
-	expan_list(args_list, token);
+	if (exp_num == 1) {
+		if (args_list->content)
+			free(args_list->content);
+		args_list->content = ft_strdup(token);
+	}
+	else
+	{
+		args_list = ft_lstins_few_empty(args_list, exp_num - 1);
+		expan_list(args_list, token);
+	}
 	free(token);
-	return (exp_num);
 }
