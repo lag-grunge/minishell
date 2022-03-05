@@ -4,6 +4,7 @@ void	save_restore_stdin_stdount(void)
 {
 	static int sav_in;
 	static int sav_out;
+	static int sav_err;
 
 	if (!isatty(STDIN_FILENO))
 	{
@@ -11,11 +12,14 @@ void	save_restore_stdin_stdount(void)
 		close(sav_in);
 		dup2(sav_out, STDOUT_FILENO);
 		close(sav_out);
+		dup2(sav_err, STDERR_FILENO);
+		close(sav_err);
 	}
 	else
 	{
 		sav_in = dup(STDIN_FILENO);
 		sav_out = dup(STDOUT_FILENO);
+		sav_err = dup(STDERR_FILENO);
 	}
 }
 

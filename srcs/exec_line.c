@@ -46,6 +46,7 @@ int main(int argc, char *argv[], char *env[])
 
 	signal_dispose(main_shell);
 	get_env_hash(&g_data.env, env);
+	rl_outstream = stderr; // for tests
 	if (argc > 2)
 		return (1);
 	else if (argc == 2)
