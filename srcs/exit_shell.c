@@ -4,6 +4,6 @@
 int exit_shell(void)
 {
 	clean_env_hash(g_data.env);
-    printf("\033[Aminishell> exit\n");
+    	ft_putstr_fd("\033[Aminishell> exit\n", STDERR_FILENO);
 	exit(0);
 }

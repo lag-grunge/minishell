@@ -95,13 +95,18 @@ void	print_env(t_env *env_hash)
 {
 	while (env_hash)
 	{
-		printf("declare -x ");
-		printf("%s", env_hash->key);
+//		printf("declare -x ");
+		ft_putstr_fd("declare -x ", STDERR_FILENO);
+		ft_putstr_fd(env_hash->key, STDERR_FILENO);
+//		printf("%s", );
 		if (env_hash->sep == '=')
-			printf("=");
+//			printf("=");
+			ft_putchar_fd('=', STDERR_FILENO);
 		if (env_hash->value)
-			printf("\"%s\"", env_hash->value);
-		printf("\n");
+//			printf("\"%s\"", env_hash->value);
+			ft_putstr_fd(env_hash->value, STDERR_FILENO);
+//		printf("\n");
+		ft_putchar_fd('\n', STDERR_FILENO);
 		env_hash = env_hash->next;
 	}
 }
