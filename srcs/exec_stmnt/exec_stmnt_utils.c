@@ -67,10 +67,22 @@ int exec_bin(t_cmd *cmd)
 	int		ret;
 
 	ret = ft_which(&exec_path, cmd->args->content);
-	if (ret == not_fnd_bin_in_path || ret == nopath_in_env)
+	if (ret == not_fnd_bin_in_path || ret == nopath_in_env || ret == 1)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		if (ret == 1)
+			ft_putstr_fd(cmd->args->content, STDERR_FILENO);
+		else
+			ft_putstr_fd(exec_path, STDERR_FILENO);
+		ft_putendl_fd(": No such file or directory!", STDERR_FILENO);
 		exit(not_found_bin);
-	else if (ret == not_perms_for_exec)
+	}
+	else if (ret == not_perms_for_exec) {
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(exec_path, STDERR_FILENO);
+		ft_putendl_fd(": Permission denied!", STDERR_FILENO);
 		exit(perm_den_bin);
+	}
 	if (!ft_strncmp(cmd->args->content, "./minishell", 12))
 		increment_shell_level();
 	env = get_env_array(g_data.env);

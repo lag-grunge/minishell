@@ -9,7 +9,7 @@ static void signal_handler(int signum, siginfo_t *info, void *args)
 	if (signum == SIGINT)
 	{
 		rl_replace_line("", 0);
-		write(1, "\n", 1);
+		ft_putchar_fd('\n', STDERR_FILENO);
 		rl_on_new_line();
 		rl_redisplay();
 		set_value(&g_data.env, "last_status", ft_strdup("1"));
