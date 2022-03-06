@@ -52,7 +52,9 @@ int ft_which(char **exec_path, char *cmd)
 	char	*path_str;
 	int		find_cmd;
 
-	if (ft_strchr(cmd, '/'))
+	if (cmd[0] == 0)
+		return (1);
+	else if (ft_strchr(cmd, '/'))
 	{
 		*exec_path = cmd;
 		return (0);
