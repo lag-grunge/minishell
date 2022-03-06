@@ -25,6 +25,7 @@ typedef enum e_errors {
 }				t_returns;
 
 typedef enum e_codes {
+	no_file_exists = 1,
 	perm_den_bin = 126,
 	not_found_bin = 127
 } t_codes;

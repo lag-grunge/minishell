@@ -27,13 +27,13 @@ add_executable(minishell
         srcs/parser/parenthesis.c
         srcs/debug.c srcs/expansions/filename.c srcs/environment/get_hash_get_array.c srcs/environment/set_value_get_value.c
         includes/environment.h srcs/expansions/variable.c includes/expansions.h
-        srcs/expansions/quote_removal.c srcs/expansions/filename_utils.c srcs/expansions/variable_utils.c
+        srcs/expansions/filename_utils.c srcs/expansions/variable_utils.c
         srcs/exec_stmnt/exec_stmnt.c srcs/exec_stmnt/exec_stmnt_utils.c
         srcs/exec_stmnt/ft_which.c includes/exec_stmnt.h
         srcs/environment/environment_utils.c srcs/exec_stmnt/get_args.c
-        srcs/signal_dispose.c includes/signal_dispose.h
+        srcs/signal_dispose.c
         srcs/redirect/redirect.c srcs/redirect/redirect_utils.c srcs/exit_shell.c includes/exit_shell.h srcs/expansions/exp_args.c srcs/exec_stmnt/exec_builtin.c
-        srcs/syntax/quoting.c)
+        srcs/syntax/quoting.c srcs/redirect/try_openfiles.c srcs/error.c includes/error.h srcs/error.c includes/error.h)
 
 
 target_link_directories(minishell PUBLIC libft)
