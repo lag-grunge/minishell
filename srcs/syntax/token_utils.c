@@ -1,4 +1,5 @@
 #include "../../includes/minishell.h"
+#include "syntax.h"
 
 int		ft_ismeta(int c)
 {
@@ -65,18 +66,6 @@ char *ft_meta(char *read_line, int *nt, char **unexp)
 	return (ret);
 }
 
-int		quoting(char *read_line)
-{
-	char quote;
-	char *res;
-
-	quote = *read_line;
-	res = ft_strchr(read_line + 1, quote);
-	if (!res)
-		return (1);
-	return (res - read_line + 1);
-}
-
 char	*word(char *read_line, int *nt)
 {
 	int		next_token;
@@ -96,3 +85,4 @@ char	*word(char *read_line, int *nt)
 		*nt = next_token;
 	return (read_line + next_token);
 }
+

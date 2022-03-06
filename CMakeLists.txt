@@ -32,7 +32,8 @@ add_executable(minishell
         srcs/exec_stmnt/ft_which.c includes/exec_stmnt.h
         srcs/environment/environment_utils.c srcs/exec_stmnt/get_args.c
         srcs/signal_dispose.c includes/signal_dispose.h
-        srcs/redirect/redirect.c srcs/redirect/redirect_utils.c srcs/exit_shell.c includes/exit_shell.h srcs/expansions/exp_args.c srcs/exec_stmnt/exec_builtin.c)
+        srcs/redirect/redirect.c srcs/redirect/redirect_utils.c srcs/exit_shell.c includes/exit_shell.h srcs/expansions/exp_args.c srcs/exec_stmnt/exec_builtin.c
+        srcs/syntax/quoting.c)
 
 
 target_link_directories(minishell PUBLIC libft)

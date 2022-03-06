@@ -59,3 +59,15 @@ char  *quote_removal(char *token)
 	}
 	return (new_token);
 }
+
+int		quoting(char *read_line)
+{
+	char quote;
+	char *res;
+
+	quote = *read_line;
+	res = ft_strchr(read_line + 1, quote);
+	if (!res)
+		return (1);
+	return (res - read_line + 1);
+}
