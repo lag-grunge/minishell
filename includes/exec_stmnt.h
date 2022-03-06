@@ -4,6 +4,7 @@
 #include "redirect.h"
 #include "environment.h"
 #include "expansions.h"
+#include "error.h"
 
 enum e_err	{
 	nopath_in_env = 2,

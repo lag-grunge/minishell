@@ -1,4 +1,4 @@
-#include "../../includes/syntax.h"
+#include "syntax.h"
 
 t_token	type(char *cur)
 {
@@ -35,29 +35,6 @@ char *ft_name(char *start)
 	return (start);
 }
 
-
-
-int syntax_error(int ret, char *token, char *module)
-{
-	if (module)
-//		printf("%s", module);
-		ft_putstr_fd(module, STDERR_FILENO);
-	if (token)
-	{
-//		printf(" :unexpected token ");
-		ft_putstr_fd(" :unexpected token ", STDERR_FILENO);
-		if (token) {
-//			printf("'%s'", token);
-			ft_putchar_fd('\'',STDERR_FILENO);
-			ft_putstr_fd(token, STDERR_FILENO);
-			ft_putchar_fd('\'',STDERR_FILENO);
-		}
-	}
-//	printf("\n");
-	ft_putchar_fd('\n',STDERR_FILENO);
-	return (ret);
-}
-
 int accept(t_token t, char ***cur)
 {
 	if (**cur && t == type(**cur))
@@ -67,4 +44,3 @@ int accept(t_token t, char ***cur)
 	}
 	return (0);
 }
-
