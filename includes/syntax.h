@@ -6,6 +6,7 @@ t_token	type(char *cur);
 int expect(t_token t, char ***cur, char *module);
 
 char *ft_name(char *start);
+char*ft_number(char *start);
 int syntax_error(int ret, char *token, char *module);
 int accept(t_token t, char ***cur);
 

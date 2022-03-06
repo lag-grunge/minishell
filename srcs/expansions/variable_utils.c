@@ -81,6 +81,8 @@ static char *oper_dollar(char **tokens, char *dollar)
 	start_var = dollar + 1;
 	if (*start_var == '?')
 		end_var = start_var + 1;
+	else if (ft_isdigit(*start_var))
+		end_var = ft_number(start_var);
 	else
 		end_var = ft_name(start_var);
 	if (end_var == start_var)

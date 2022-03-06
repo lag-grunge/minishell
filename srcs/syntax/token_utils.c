@@ -86,3 +86,10 @@ char	*word(char *read_line, int *nt)
 	return (read_line + next_token);
 }
 
+char	*ft_number(char *start)
+{
+	while (ft_isdigit(*start))
+		start++;
+	return (start);
+}
+
