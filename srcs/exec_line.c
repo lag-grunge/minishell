@@ -19,21 +19,21 @@ int exec_line(char *read_line)
 	tokens = NULL;
 	ret = 0;
 	tokens = get_tokens(read_line, &ret);
-	if (!tokens)
-	{
-		if (!ret)
-			return (malloc_err);
+	if (!tokens && !ret)
+		return (malloc_err);
+	else if (!tokens)
 		return (0);
-	}
 	lim_token = tokens + ft_spllen(tokens) - 1;
 	ret = ft_preparser(tokens, lim_token);
 	if (!ret)
 		ret = ft_parser(&stmnt, tokens, lim_token);
 	clean_split(tokens, ft_spllen(tokens));
-	if (!ret)
-	{
-//		print_stmnt(stmnt, NULL); //УБРАТЬ ПОТОМ !!! ОТЛАДКА
+	if (!ret  && try_openfiles(stmnt) == 0)
 		exec_stmnt(stmnt, &ret,  0);
+	else if (!ret)
+	{
+		set_value(&g_data.env, "last_status", ft_strdup("1"));
+		ret = 1;
 	}
 	if (stmnt)
 		clean_all(&stmnt);
