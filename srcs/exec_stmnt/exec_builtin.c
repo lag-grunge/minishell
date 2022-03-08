@@ -15,6 +15,10 @@ int fake_isbuiltin(t_cmd *cmd)
 	{
 //		printf("export\n");
 	}
+	else if (!ft_strncmp(cmd->args->content, "echo", 256))
+	{
+
+	}
 	else
 		ret = 0;
 	return (ret);
@@ -67,7 +71,12 @@ int fake_exec_builtin(t_cmd *cmd)
 //		printf("export\n");
 	}
 	else if (!ft_strncmp(cmd->args->content, "exit", 256))
-		exit_shell(1);
+	{
+		exit_shell(cmd->args->next, 1);
+		ret = 1;
+	}
+	else if (!ft_strncmp(cmd->args->content, "echo", 256))
+		echo(cmd->args->next);
 	return (ret);
 }
 

@@ -6,7 +6,7 @@ int echo(t_list *args_list)
 	int newline;
 
 	newline = 1;
-	if (*args_list)
+	if (args_list)
 	{
 		if (!ft_strncmp(args_list->content, "-n", 3))
 		{

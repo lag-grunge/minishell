@@ -33,3 +33,12 @@ int exit_no_perms_error(int ret, char *filename)
 	ft_putendl_fd(": Permission denied!", STDERR_FILENO);
 	exit(ret);
 }
+
+int builtin_too_many_arguments_error(char *builtin)
+{
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(builtin, STDERR_FILENO);
+	ft_putendl_fd(": Too many arguments!", STDERR_FILENO);
+	return (1);
+}
+

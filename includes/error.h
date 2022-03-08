@@ -4,5 +4,6 @@
 int syntax_error(int ret, char *token, char *module);
 int exit_no_file_error(int ret, char *filename);
 int exit_no_perms_error(int ret, char *filename);
+int builtin_too_many_arguments_error(char *builtin);
 
 #endif

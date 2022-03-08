@@ -30,11 +30,11 @@ int exec_line(char *read_line)
 	clean_split(tokens, ft_spllen(tokens));
 	if (!ret ) // && try_openfiles(stmnt) == 0)
 		exec_stmnt(stmnt, &ret,  0);
-//	else if (!ret)
-//	{
-//		set_value(&g_data.env, "last_status", ft_strdup("1"));
-//		ret = 1;
-//	}
+	else if (!ret)
+	{
+		set_value(&g_data.env, "last_status", ft_strdup("1"));
+		ret = 1;
+	}
 	if (stmnt)
 		clean_all(&stmnt);
 	return (ret);
@@ -55,7 +55,7 @@ int main(int argc, char *argv[], char *env[])
 	{
 		line = readline("minishell>");
 		if (!line)
-			exit_shell(0);
+			exit_shell(NULL, 0);
 		add_history(line);
 		exec_line(line);
 		free(line);
