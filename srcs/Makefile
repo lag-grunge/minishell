@@ -7,7 +7,8 @@ PARS_SRCS = $(shell ls parser/*.c)
 EXEC_SRCS = $(shell ls exec_stmnt/*.c)
 EXP_SRCS = $(shell ls expansions/*.c)
 ENV_SRCS = $(shell ls environment/*.c)
-SRCS = ${MAIN_SRCS} ${SYN_SRCS} ${RED_SRCS} ${PARS_SRCS} ${EXEC_SRCS} ${EXP_SRCS} ${ENV_SRCS}
+BLTN_SRCS = $(shell ls builtin/*.c)
+SRCS = ${MAIN_SRCS} ${SYN_SRCS} ${RED_SRCS} ${PARS_SRCS} ${EXEC_SRCS} ${EXP_SRCS} ${ENV_SRCS} ${BLTN_SRCS}
 OBJS = ${SRCS:.c=.o}
 DEPS = ${OBJS:.o=.d}
 

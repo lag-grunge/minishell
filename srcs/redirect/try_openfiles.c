@@ -46,12 +46,3 @@ int try_openfiles(t_stmnt *stmnt)
 	}
 	return (res != 0);
 }
-//
-//int main()
-//{
-//	t_stmnt *stmnt;
-//	char *tokens[] = {"<", "4", "|","(" ,"<", "1", "|" , "<", "5" , "&&" , "<", "2", ")", "<", "6", "|", "<", "3", NULL};
-//	ft_parser(&stmnt, tokens, tokens + ft_spllen(tokens) - 1);
-//	printf("%d", try_openfiles(stmnt));
-//	return (0);
-//}

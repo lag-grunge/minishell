@@ -1,3 +1,4 @@
+#include "minishell.h"
 #include "error.h"
 
 int syntax_error(int ret, char *token, char *module)
