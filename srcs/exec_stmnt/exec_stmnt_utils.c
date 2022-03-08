@@ -23,7 +23,7 @@ void	save_restore_stdin_stdount(void)
 	}
 }
 
-static int get_status(int status)
+static int get_status(int status, pid_t pid)
 {
 	int		code;
 	char	*tmp;
@@ -42,6 +42,11 @@ static int get_status(int status)
 			exit(malloc_err);
 		set_value(&g_data.env, "last_status", new_value);
 	}
+	if (code == 128 + SIGPIPE) {
+		char s[256];
+		sprintf(s, "%d pipe", pid);
+		ft_putendl_fd(s, STDERR_FILENO);
+	}
 	free(tmp);
 	return (code);
 }
@@ -49,14 +54,15 @@ static int get_status(int status)
 int	wait_child(int p)
 {
 	int	status;
+	pid_t pid;
 
 	p++;
 	while (p)
 	{
-		waitpid(-1, &status, 0);
+		pid = waitpid(-1, &status, 0);
 		p--;
 	}
-	return (get_status(status));
+	return (get_status(status, pid));
 }
 
 int exec_bin(t_cmd *cmd)
@@ -71,19 +77,18 @@ int exec_bin(t_cmd *cmd)
 	{
 		if (ret == 1)
 			exit_no_file_error(not_found_bin, "");
-		exit_no_file_error(not_found_bin, exec_path);
+		exit_no_file_error(not_found_bin, cmd->args->content);
 	}
 	else if (ret == not_perms_for_exec) {
-		exit_no_perms_error(perm_den_bin, exec_path);
+		exit_no_perms_error(perm_den_bin, cmd->args->content);
 	}
-	if (!ft_strncmp(cmd->args->content, "./minishell", 12))
+	if (!ft_strncmp(cmd->args->content, "./minishell", 12)) /////////////////////  absolute_or_another_path
 		increment_shell_level();
 	env = get_env_array(g_data.env);
 	args = get_cmd_array(cmd->args);
 	execve(exec_path, args, env);
 	perror(exec_path);
 	return (child_exec_err);
-
 }
 
 void exec_cmd(t_cmd *cmd, int *res_if_single_builtin)

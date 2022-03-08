@@ -108,7 +108,7 @@ void	ft_redirect(int *pdes, int in_out)
 	{
 		close(STDIN_FILENO);
 		close(STDOUT_FILENO);
-		close(pdes[0]);
-		close(pdes[1]);
+//		close(pdes[0]);
+//		close(pdes[1]);
 	}
 }

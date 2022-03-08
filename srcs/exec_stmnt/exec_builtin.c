@@ -1,16 +1,22 @@
 #include "exec_stmnt.h"
 #include "syntax.h"
+#include "builtin.h"
 
 int fake_isbuiltin(t_cmd *cmd)
 {
 	int ret;
 
-	ret = 0;
+	ret = 1;
 	if (!ft_strncmp(cmd->args->content, "export", 256))
 	{
 //		printf("export\n");
-		ret = 1;
 	}
+	else if (!ft_strncmp(cmd->args->content, "exit", 256))
+	{
+//		printf("export\n");
+	}
+	else
+		ret = 0;
 	return (ret);
 }
 
@@ -48,6 +54,7 @@ int fake_export(t_list *args)
 	return (0);
 }
 
+
 int fake_exec_builtin(t_cmd *cmd)
 {
 	(void)cmd;
@@ -59,6 +66,8 @@ int fake_exec_builtin(t_cmd *cmd)
 		ret = fake_export(cmd->args);
 //		printf("export\n");
 	}
+	else if (!ft_strncmp(cmd->args->content, "exit", 256))
+		exit_shell(1);
 	return (ret);
 }
 

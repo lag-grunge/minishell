@@ -33,7 +33,7 @@ add_executable(minishell
         srcs/environment/environment_utils.c srcs/exec_stmnt/get_args.c
         srcs/signal_dispose.c
         srcs/redirect/redirect.c srcs/redirect/redirect_utils.c srcs/builtin/exit_shell.c srcs/builtin/echo.c
-        includes/exit_shell.h srcs/expansions/exp_args.c srcs/exec_stmnt/exec_builtin.c
+        includes/exit_shell.h srcs/expansions/exp_args.c srcs/exec_stmnt/exec_builtin.c includes/builtin.h
         srcs/syntax/quoting.c srcs/redirect/try_openfiles.c srcs/error.c includes/error.h srcs/error.c includes/error.h)
 
 
