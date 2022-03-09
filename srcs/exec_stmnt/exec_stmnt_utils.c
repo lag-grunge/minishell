@@ -48,12 +48,11 @@ static int get_status(int status)
 int	wait_child(int p)
 {
 	int	status;
-	pid_t pid;
 
 	p++;
 	while (p)
 	{
-		pid = waitpid(-1, &status, 0);
+		waitpid(-1, &status, 0);
 		p--;
 	}
 	return (get_status(status));
@@ -95,11 +94,11 @@ void exec_cmd(t_cmd *cmd, int *res_if_single_builtin)
 	if (!cmd->args)
 		exit (0);
 	make_expansions(&cmd->args);
-	if (cmd->args && !fake_isbuiltin(cmd))
+	if (cmd->args && !ft_is_bilt(cmd, &g_data))
 		ret = exec_bin(cmd);
 	else if (cmd->args)
 	{
-		ret = fake_exec_builtin(cmd);
+		ret = ft_bilt_start(cmd->args, &g_data);
 		if (res_if_single_builtin)
 		{
 			*res_if_single_builtin = ret;

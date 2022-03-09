@@ -12,10 +12,10 @@ enum e_err	{
 	not_fnd_bin_in_path = 4,
 };
 
-int fake_isbuiltin(t_cmd *cmd); //test
-int fake_exec_builtin(t_cmd *cmd); //test
+int	ft_is_bilt(t_list *orgs, t_data *data);
+int	ft_bilt_start(t_list *orgs, t_data *data);
 
-		void exec_stmnt(t_stmnt *stmnt, int *res, int p);
+void exec_stmnt(t_stmnt *stmnt, int *res, int p);
 int	ft_which(char **exec_path, char *cmd);
 void save_restore_stdin_stdount(void);
 void exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2], int *res);

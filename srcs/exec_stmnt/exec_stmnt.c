@@ -45,7 +45,7 @@ void exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2], int *res)
 	pid_t pid;
 
 	if (!p && !stmnt->next_stmnt && ((t_cmd *)stmnt->oper1)->args && \
-        fake_isbuiltin(stmnt->oper1)) //builtin bez paipa
+        ft_is_bilt(stmnt->oper1, &g_data))
 	{
 		exec_cmd(stmnt->oper1, res);
 		return ;
