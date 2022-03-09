@@ -1,10 +1,9 @@
 #include "../includes/minishell.h"
 #include "../includes/parser.h"
-#include "../includes/clean.h"
 #include "../includes/environment.h"
 #include "exec_stmnt.h"
 #include "signal_dispose.h"
-#include "reserve/builtin.h"
+#include "biltins.h"
 
 void print_stmnt(t_stmnt *stmnt, char *pos);
 
@@ -55,7 +54,7 @@ int main(int argc, char *argv[], char *env[])
 	{
 		line = readline("minishell>");
 		if (!line)
-			exit_shell(NULL, 0);
+			ft_exit(NULL, &g_data);
 		add_history(line);
 		exec_line(line);
 		free(line);
