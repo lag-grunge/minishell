@@ -28,7 +28,7 @@ int exec_line(char *read_line)
 	if (!ret)
 		ret = ft_parser(&stmnt, tokens, lim_token);
 	clean_split(tokens, ft_spllen(tokens));
-	if (!ret ) // && try_openfiles(stmnt) == 0)
+	if (!ret  && try_openfiles(stmnt) == 0)
 		exec_stmnt(stmnt, &ret,  0);
 	else if (!ret)
 	{

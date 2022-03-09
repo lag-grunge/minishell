@@ -50,18 +50,22 @@ static char *make_substitution(char **tokens, char *dollar, char *end_var, char 
 	char *ret;
 	int q_count;
 
-	q_count = quote_num(value);
-	val = (int)ft_strlen(value) +  2 * q_count;
-	count = (int)ft_strlen(*tokens);
-	count -= (int)(end_var - dollar);
-	count += val;
-	new_str = (char *) ft_calloc((count + 1), sizeof(char));
+    count = (int)ft_strlen(*tokens);
+    count -= (int)(end_var - dollar);
+    q_count = 0;
+    if (value)
+    {
+        q_count = quote_num(value);
+        val = (int)ft_strlen(value) +  2 * q_count;
+        count += val;
+    }
+    new_str = (char *) ft_calloc((count + 1), sizeof(char));
 	if (!new_str)
 		exit (malloc_err);
 	ft_strlcpy(new_str, *tokens, dollar - *tokens + 1);
-	if (!q_count)
+	if (value && !q_count)
 		ft_strlcat(new_str, value, dollar - *tokens + val + 1);
-	else
+	else if (value)
 		ft_strlcat_q(new_str, value, (int)(dollar - *tokens));
 	ret = new_str + ft_strlen(new_str);
 	ft_strlcat(new_str, end_var, count + 1);

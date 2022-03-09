@@ -20,7 +20,7 @@ TEST(Var_Exp, dollar_only) {
 TEST(Var_Exp, dollar_num) {
 
     char *in = ft_strdup("$4abc ");
-    std::string out = "$4abc ";
+    std::string out = "abc ";
     exec_expansion(&in);
     EXPECT_EQ(std::string(in), out);
 }

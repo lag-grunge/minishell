@@ -42,3 +42,12 @@ int builtin_too_many_arguments_error(char *builtin)
 	return (1);
 }
 
+int not_valid_argument_error(char *builtin, char *argument)
+{
+    ft_putstr_fd("minishell: ", STDERR_FILENO);
+    ft_putstr_fd(builtin, STDERR_FILENO);
+    ft_putstr_fd(": ", STDERR_FILENO);
+    ft_putstr_fd(argument, STDERR_FILENO);
+    ft_putendl_fd(": Not valid argument!", STDERR_FILENO);
+    return (1);
+}

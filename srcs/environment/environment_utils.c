@@ -46,12 +46,8 @@ int	increment_shell_level(void)
 	char	*s2;
 	int 	num = 0;
 
-	s1 = get_value(g_data.env, "SHLVL");
-	if (!s1)
-		exit (malloc_err);
-	num = 0;
-	if (ft_strncmp("", s1, 1))
-		num = ft_atoi(s1);
+	s1 = get_value_set_if_null("SHLVL", "1");
+    num = ft_atoi(s1);
 	s2 = ft_itoa(num + 1);
 	free(s1);
 	if (!s2)
@@ -60,12 +56,27 @@ int	increment_shell_level(void)
 	return (0);
 }
 
+char *get_value_set_if_null(char *key, char *value)
+{
+    char    *tmp;
+
+    tmp = get_value(g_data.env, key);
+    if (!tmp)
+    {
+        tmp = ft_strdup(value);
+        if (!tmp)
+            exit(malloc_err);
+        set_value(&g_data.env, key, tmp);
+    }
+    return (tmp);
+}
+
 int get_last_status(void)
 {
     char    *tmp;
     int     ret;
 
-    tmp = get_value(g_data.env, "last_status");
+    tmp = get_value_set_if_null("last_status", "0");
     ret = ft_atoi(tmp);
     free(tmp);
     return (ret);

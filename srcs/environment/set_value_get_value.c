@@ -79,15 +79,21 @@ int unset_value(t_env **env, char *key)
  */
 char *get_value(t_env *env, char *key)
 {
-	int len_key;
+	int     len_key;
+    char    *tmp;
 
 	len_key = (int)ft_strlen(key);
 	while (env)
 	{
 		if (len_key == (int)ft_strlen(env->key) &&\
 			!ft_strncmp(env->key, key, len_key))
-			return (ft_strdup(env->value));
+            {
+            tmp = ft_strdup(env->value);
+            if (!tmp)
+                exit(malloc_err);
+            return (tmp);
+        }
 		env = env->next;
 	}
-	return (ft_strdup(""));
+	return (NULL);
 }

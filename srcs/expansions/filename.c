@@ -59,7 +59,7 @@ void filename_expansion(t_list *args_list)
 	char *pwd;
 	char *pattern;
 
-	pwd = get_value(g_data.env, "PWD");
+	pwd = get_value(g_data.env, "our_pwd");
 	pattern = ft_strdup(args_list->content);
 	fil_num = get_size(pwd, pattern);
 	dir = opendir(pwd);
