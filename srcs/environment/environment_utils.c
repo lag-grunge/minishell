@@ -59,3 +59,14 @@ int	increment_shell_level(void)
 	set_value(&g_data.env, "SHLVL", s2);
 	return (0);
 }
+
+int get_last_status(void)
+{
+    char    *tmp;
+    int     ret;
+
+    tmp = get_value(g_data.env, "last_status");
+    ret = ft_atoi(tmp);
+    free(tmp);
+    return (ret);
+}

@@ -23,10 +23,10 @@ void	save_restore_stdin_stdount(void)
 	}
 }
 
-static int get_status(int status, pid_t pid)
+static int get_status(int status)
 {
+    int     prev_code;
 	int		code;
-	char	*tmp;
 	char	*new_value;
 
 	code = 0;
@@ -34,20 +34,14 @@ static int get_status(int status, pid_t pid)
 		code = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
 		code = 128 + WTERMSIG(status);
-	tmp = get_value(g_data.env, "last_status");
-	if (ft_atoi(tmp) != code)
+    prev_code = get_last_status();
+	if (prev_code != code)
 	{
 		new_value = ft_itoa(code);
 		if (!new_value)
 			exit(malloc_err);
 		set_value(&g_data.env, "last_status", new_value);
 	}
-	if (code == 128 + SIGPIPE) {
-		char s[256];
-		sprintf(s, "%d pipe", pid);
-		ft_putendl_fd(s, STDERR_FILENO);
-	}
-	free(tmp);
 	return (code);
 }
 
@@ -62,7 +56,7 @@ int	wait_child(int p)
 		pid = waitpid(-1, &status, 0);
 		p--;
 	}
-	return (get_status(status, pid));
+	return (get_status(status));
 }
 
 int exec_bin(t_cmd *cmd)
