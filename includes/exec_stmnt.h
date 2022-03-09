@@ -12,7 +12,7 @@ enum e_err	{
 	not_fnd_bin_in_path = 4,
 };
 
-int	ft_is_bilt(t_list *orgs, t_data *data);
+int ft_is_bilt(t_list *orgs);
 int	ft_bilt_start(t_list *orgs, t_data *data);
 
 void exec_stmnt(t_stmnt *stmnt, int *res, int p);

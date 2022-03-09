@@ -45,7 +45,7 @@ void exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2], int *res)
 	pid_t pid;
 
 	if (!p && !stmnt->next_stmnt && ((t_cmd *)stmnt->oper1)->args && \
-        ft_is_bilt(stmnt->oper1, &g_data))
+        ft_is_bilt(stmnt->oper1))
 	{
 		exec_cmd(stmnt->oper1, res);
 		return ;

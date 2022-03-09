@@ -94,7 +94,7 @@ void exec_cmd(t_cmd *cmd, int *res_if_single_builtin)
 	if (!cmd->args)
 		exit (0);
 	make_expansions(&cmd->args);
-	if (cmd->args && !ft_is_bilt(cmd, &g_data))
+	if (cmd->args && !ft_is_bilt(cmd->args))
 		ret = exec_bin(cmd);
 	else if (cmd->args)
 	{

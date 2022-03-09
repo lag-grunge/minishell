@@ -2,7 +2,7 @@
 #include "syntax.h"
 #include "biltins.h"
 
-int	ft_is_bilt(t_list *orgs, t_data *data)
+int ft_is_bilt(t_list *orgs)
 {
     if (ft_strncmp(orgs->content, "echo\0", 5) == 0)
         return (1);
