@@ -106,7 +106,7 @@ void exec_cmd(t_cmd *cmd, int *res_if_single_builtin)
 		ret = exec_bin(cmd);
 	else if (cmd->args)
 	{
-		ret = ft_bilt_start(cmd->args, &g_data);
+		ret = ft_bilt_start(cmd->args);
 		if (res_if_single_builtin)
 		{
 			*res_if_single_builtin = ret;
