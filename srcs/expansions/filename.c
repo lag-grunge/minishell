@@ -56,16 +56,15 @@ void filename_expansion(t_list *args_list)
 {
 	DIR *dir;
 	int fil_num;
-	char *pwd;
+	char pwd[2048];
 	char *pattern;
 
-	pwd = get_value(g_data.env, "our_pwd");
+    getcwd(pwd, 2048);
 	pattern = ft_strdup(args_list->content);
 	fil_num = get_size(pwd, pattern);
 	dir = opendir(pwd);
 	args_list = ft_lstins_few_empty(args_list, fil_num - 1);
 	write_filenames(args_list, dir, fil_num, pattern);
 	closedir(dir);
-	free(pwd);
 	free(pattern);
 }
