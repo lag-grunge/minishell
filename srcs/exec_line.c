@@ -34,6 +34,8 @@ int exec_line(char *read_line)
 		set_value(&g_data.env, "last_status", ft_strdup("1"));
 		ret = 1;
 	}
+    else if (ret == syntax_err)
+        set_value(&g_data.env, "last_status", ft_strdup("2"));
 	if (stmnt)
 		clean_all(&stmnt);
 	return (ret);
