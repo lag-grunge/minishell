@@ -1,12 +1,12 @@
 #include "../../includes/syntax.h"
 #include "../../includes/parser.h"
 
-int check_brackets(char **tokens)
+int check_brackets(char **tokens, char **lim_token)
 {
 	int	brackets;
 
-	brackets = 1;
-	while (*tokens && brackets)
+	brackets = 0;
+	while (tokens <= lim_token)
 	{
 		if (accept(lb, &tokens))
 			brackets++;
@@ -14,10 +14,12 @@ int check_brackets(char **tokens)
 			brackets--;
 		else
 			tokens++;
+        if (brackets < 0)
+            return (syntax_error(syntax_err, ")", "bash: syntax:"));
 	}
 	if (!brackets)
-		return (1);
-	return (0);
+		return (0);
+    return (syntax_error(syntax_err, "newline'", "bash: syntax: ("));
 }
 
 static int condition(char **tokens, char **lim_token, int br)
@@ -58,8 +60,6 @@ int ft_parenthesis(t_stmnt **stmnt, t_redir **red, char **tokens)
 	char	**lim_token;
 	int		ret;
 
-	if (!stmnt && !check_brackets(tokens))
-		return syntax_error(syntax_err, "newline", "ft_parenthesis");
 	lim_token = close_bracket(tokens, NULL) - 1;
 	if (!stmnt && empty_brackets(lim_token))
 		return syntax_error(syntax_err, lim_token[1], "ft_parenthesis");
