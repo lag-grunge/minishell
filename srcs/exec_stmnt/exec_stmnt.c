@@ -3,7 +3,7 @@
 #include "signal_dispose.h"
 #include "redirect.h"
 
-static void child(t_stmnt *stmnt, int pdes[2])
+static void ft_child(t_stmnt *stmnt, int pdes[2])
 {
 	int	ret;
 
@@ -22,7 +22,7 @@ static void child(t_stmnt *stmnt, int pdes[2])
 	}
 }
 
-static void parent(t_stmnt *stmnt, int pdes[2], int p, int *res)
+static void ft_parent(t_stmnt *stmnt, int pdes[2], int p, int *res)
 {
 	signal_dispose(parent_fork);
 	if (stmnt->next_stmnt)
@@ -34,7 +34,7 @@ static void parent(t_stmnt *stmnt, int pdes[2], int p, int *res)
 	{
 		if (p >= 1)
 			save_restore_stdin_stdount();
-		*res = wait_child(p);
+		*res = wait_child(p, stmnt->pid);
 		signal_dispose(main_shell);
 	}
 
@@ -45,7 +45,7 @@ void exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2], int *res)
 	pid_t pid;
 
 	if (!p && !stmnt->next_stmnt && ((t_cmd *)stmnt->oper1)->args && \
-        ft_is_bilt(stmnt->oper1))
+        ft_is_bilt(((t_cmd *)stmnt->oper1)->args))
 	{
 		exec_cmd(stmnt->oper1, res);
 		return ;
@@ -54,9 +54,11 @@ void exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2], int *res)
 	if (pid < 0)
 		exit(fork_err);
 	else if (pid == 0)
-		child(stmnt, pdes);
-	else
-		parent(stmnt, pdes, p, res);
+        ft_child(stmnt, pdes);
+	else {
+        stmnt->pid = pid;
+        ft_parent(stmnt, pdes, p, res);
+    }
 }
 
 void exec_stmnt(t_stmnt *stmnt, int *res, int p)

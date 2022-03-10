@@ -19,7 +19,7 @@ void exec_stmnt(t_stmnt *stmnt, int *res, int p);
 int	ft_which(char **exec_path, char *cmd);
 void save_restore_stdin_stdount(void);
 void exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2], int *res);
-int wait_child(int p);
+int wait_child(int p, pid_t pid);
 void exec_cmd(t_cmd *cmd, int *res_if_single_builtin);
 char	**get_cmd_array(t_list *args_list);
 

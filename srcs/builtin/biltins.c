@@ -36,6 +36,13 @@ typedef struct s_bilt_data
 */
 
 /*
+typedef struct s_env {
+	char *key;
+	char sep;
+	char *value;
+	struct s_env *next;
+} 			t_env;
+ 
 typedef struct s_list
 {
 	void			*content;
@@ -44,8 +51,9 @@ typedef struct s_list
 
 typedef struct s_data {
 	t_env	*env;
-	t_list	*orgs;
 }				t_data;
+
+t_data	g_data;
 
 int	ft_lstsize(t_list *lst)
 {
@@ -327,15 +335,16 @@ static int	ft_pre_atoi_znak(char *str)
 		return (1);
 }
 
-int	ft_exit (t_list *orgs, t_data *data) // exit не работает при наличии пайпов!
+int	ft_exit (t_list *orgs) // exit не работает при наличии пайпов!
 {
 	unsigned long long int	num;
 	int		znak;
 	long long int	ret;
 	int				i;
+	char			*vs;
 
 	orgs = orgs->next;
-	if (orgs->content == NULL)
+	if (orgs == NULL)
 		write (1, "exit\n", 5);
 	else
 	{
@@ -346,9 +355,10 @@ int	ft_exit (t_list *orgs, t_data *data) // exit не работает при н
 		{
 			write (1, "minishell: exit: ", 17);
 			i = 0;
-			while (orgs->content[i] != '\0')
+			vs = (char*) orgs->content;
+			while (vs[i] != '\0')
 			{
-				write (1, &orgs->content[i], 1);
+				write (1, &vs[i], 1);
 				i++;
 			}
 			write (1, ": numeric argument required\n", 28);
@@ -364,94 +374,118 @@ int	ft_exit (t_list *orgs, t_data *data) // exit не работает при н
 	return (0);
 }
 
-int	ft_env(t_list *orgs, t_data *data) // нужно расширение для попытки внести как аргумент путь!
+int	ft_env(t_list *orgs) // нужно расширение для попытки внести как аргумент путь!
 {
 	int	i;
-	int	j;
+	char	*vs;
 
 	orgs = orgs->next;
-	j = 0;
-	if (orgs->content == NULL)
+	i = 0;
+	if (orgs == NULL)
 	{
-		while (data->env[j] != NULL)
+		while (g_data.env != NULL)
 		{
 			i = 0;
-			while (data->env[j][i] != '\0')
+			while (g_data.env->key[i] != '\0')
 			{
-				write (1, data-env[j][i], 1);
+				write (1, &g_data.env->key[i], 1);
 				i++;
 			}
-			j++;
+			if (g_data.env->value != NULL)
+				write (1, "=", 1);
+			i = 0;
+			if (g_data.env->value != NULL)
+			{
+				while (g_data.env->value[i] != '\0')
+				{
+					write (1, &g_data.env->value[i], 1);
+					i++;
+				}
+			}
+			write (1, "\n", 1);
+			g_data.env = g_data.env->next;
 		}
 	}
 	else
 	{
 		write (1, "env: ", 5);
-		while (orgs->content[j] != '\0')
+		vs = (char*) orgs->content;
+		while (vs[i] != '\0')
 		{
-			write (1, &orgs->content[j], 1);
-			j++;
+			write (1, &vs[i], 1);
+			i++;
 		}
 		write (1, ": No such file or directory\n", 28);
 	}
 	return (0);
 }
 
-int	ft_unset(t_list *orgs, t_data *data)
+int	ft_unset(t_list *orgs)
 {
 	orgs = orgs->next;
-	if (orgs->content != NULL)
-		unset_value(data->env, orgs->content);
+	if (orgs != NULL)
+		unset_value(&g_data.env, orgs->content);
 	return (0);
 }
 
-int	ft_export(t_list *orgs, t_data *data) // с пайпом до или после работает только без аргументов учти кейсы формата export A=B=12 ---> export $A ---> echo $B ---> 12
+int	ft_export(t_list *orgs) // с пайпом до или после работает только без аргументов учти кейсы формата export A=B=12 ---> export $A ---> echo $B ---> 12
 {
 //	int	have_pipe; При наличии пайпов экспорт не создает переменные env
 	int	i;
 	int	j;
 	char	*s1;
 	char	*s2;
+	char	*vs;
 
 //	have_pipe = 0;
 	j = 0;
 	orgs = orgs->next;
-	if (orgs->content == NULL)
+	if (orgs == NULL)
 	{
-		while (data->env[j] != NULL)
+		while (g_data.env != NULL)
 		{
 			i = 0;
-			write (1, "declare -x", 10);
-			while (data->env[j][i] != '=')
-				i++;
-			while (data->env[j][i] != '\0')
+			write (1, "declare -x ", 11);
+			while (g_data.env->key[i] != '\0')
 			{
-				write (1, &data->env[j][i], 1);
+				write (1, &g_data.env->key[i], 1);
 				i++;
 			}
-			write (1, "\n", 1);
-			j++;
+			if (g_data.env->value != NULL)
+				write (1, "=\"", 2);
+			i = 0;
+			if (g_data.env->value != NULL)
+			{
+				while (g_data.env->value[i] != '\0')
+				{
+					write (1, &g_data.env->value[i], 1);
+					i++;
+				}
+			}
+			write (1, "\"\n", 2);
+			g_data.env = g_data.env->next;
 		}
 	}
 	else // if ((have_pipe == 0) && (bdata->piped == 0))
 	{
-		while ((orgs->content[j] != '=') || (orgs->content[j] != '\0'))
+		vs = (char *) orgs->content;
+		while ((vs[j] != '=') && (vs[j] != '\0'))
 			j++;
 		s1 = ft_substr(orgs->content, 0, j);
 		i = ft_strlen(orgs->content);
-		if (orgs->content[j] != '\0')
+		if (vs[j] != '\0')
 			s2 = ft_substr(orgs->content, j + 1, i);
 		else
 			s2 = NULL;
-		set_value(data->env, s1, s2);
-		free (s1);
-		if (orgs->content[j] != '\0')
-			free (s2);
+		set_value(&g_data.env, s1, s2);
+//		free (s1);
+//		if (vs[j] != '\0')
+//			free (s2);
 	}
 	return (0);
 }
 
-int	ft_pwd(t_list *orgs, t_data *data)
+int	ft_pwd(t_list *orgs)
 {
 	int		i;
 	char	pwd[4000];
@@ -465,6 +499,7 @@ int	ft_pwd(t_list *orgs, t_data *data)
 		write (1, &pwd[i], 1);
 		i++;
 	}
+	write (1, "\n", 1);
 	return (0);
 }
 
@@ -521,70 +556,80 @@ int	ft_pwd_uppdate(t_bilt_data *bdata)
 }
 */
 
-int	ft_cd(t_list *orgs, t_data *data)
+int	ft_cd(t_list *orgs)
 {
 	int		ret;
 	int		i;
 	char	*str;
+	char	*vs;
 
 	orgs = orgs->next;
-	if (orgs->content != NULL)
+	write (1, "CD\n", 3);
+	if (orgs != NULL)
 	{
 		ret = chdir(orgs->content);
 		if (ret != 0)
 		{
-			write (1, "minishell: cd:", 14);
+			write (1, "minishell: cd: ", 15);
 			i = 0;
-			while (orgs->content[i] !='\0')
+			vs = (char*) orgs->content;
+			while (vs[i] !='\0')
 			{
-				write (1, &orgs->content[i], 1);
+				write (1, &vs[i], 1);
 				i++;
 			}
 			write (1, ": No such file or directory\n", 28);
 			return (1); //Код ошибки как в Баш
 		}
 	//	ft_pwd_uppdate(bdata);
-		str = get_value (data->env, "PWD");
-		set_value(data->env, "OLDPWD", str);
-		free str;
+		str = get_value (g_data.env, "PWD");
+		set_value(&g_data.env, "OLDPWD", str);
+	//	free (str);
 		str = getenv("PWD");
-		set_value(data->env, "PWD", str);
-		free str;
+		set_value(&g_data.env, "PWD", str);
+	//	free (str);
 	}
 	else
 	{
-		str = get_value(data->env, "HOME");
+		str = get_value(g_data.env, "HOME");
 		ret = chdir(str);
-		free (str);
+	//	free (str);
 	//	bdata->dupl = ft_convert(bdata, "HOME");
 	//	ret = chdir(bdata->dupl);
 	//	free (bdata->dupl);
 	}
+	write (1, "A", 1);
 	return (ret);
 }
 
-int	ft_echo(t_list *orgs, t_data *data)
+int	ft_echo(t_list *orgs)
 {
 	int	n;
 	int	i;
+	char *vs;
 
 	n = 0;
 	orgs = orgs->next;
-	if (ft_strncmp(orgs->content, "-n\0", 3) == 0)
+	if (orgs != NULL)
 	{
-		n = 1;
-		orgs = orgs->next;
-	}
-	while (orgs->content != NULL)
-	{
-		i = 0;
-		while (orgs->content[i] != '\0')
+		if (ft_strncmp(orgs->content, "-n\0", 3) == 0)
 		{
-			write (1, &orgs->content[i], 1);
-			i++;
+			n = 1;
+			orgs = orgs->next;
 		}
-		write (1, " ", 1);
-		orgs = orgs->next;
+		while (orgs != NULL)
+		{
+			i = 0;
+			vs = (char*) orgs->content;
+			while (vs[i] != '\0')
+			{
+				write (1, &vs[i], 1);
+				i++;
+			}
+			orgs = orgs->next;
+			if (orgs != NULL)
+				write (1, " ", 1);
+		}
 	}
 	if (n == 0)
 		write (1, "\n", 1);
@@ -595,11 +640,11 @@ int	ft_echo(t_list *orgs, t_data *data)
 /*
 int	main (int argc, char **argv, char *evn[])
 {
-	t_data	*data;
+	t_data	*g_data;
 	int		ret;
 	t_list	**spis;
 
-	data = malloc (sizeof (t_data));
+	g_data = malloc (sizeof (t_data));
 	spis = malloc (sizeof (t_list *) * 2000);
 	orgs = ft_lstnew(argv[1]);
 	ret = 2;
@@ -609,8 +654,8 @@ int	main (int argc, char **argv, char *evn[])
 		ft_lstadd_front(&orgs, spis[ret]);
 		ret++;
 	}
-//	ret = ft_bilt_start(orgs, data);
-	ret = ft_bilt_start(data);
+//	ret = ft_bilt_start(orgs, g_data);
+	ret = ft_bilt_start(g_data);
 	return (ret);
 }
 */

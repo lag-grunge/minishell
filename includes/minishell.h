@@ -98,7 +98,7 @@ typedef struct s_stmnt {
 	void			*oper1;
 	void			*oper2;
 	t_redir			*redir; //	common redir for subshell
-	long 			h_doc;
+    pid_t           pid;
 	struct s_stmnt 	*next_stmnt; // pipe
 }			t_stmnt;
 

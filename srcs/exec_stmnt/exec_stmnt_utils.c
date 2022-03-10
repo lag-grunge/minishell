@@ -45,17 +45,22 @@ static int get_status(int status)
 	return (code);
 }
 
-int	wait_child(int p)
+int wait_child(int p, pid_t pid_last)
 {
-	int	status;
+	int     status;
+    pid_t   pid;
+    int     ret;
 
 	p++;
+    ret = 0;
 	while (p)
 	{
-		waitpid(-1, &status, 0);
+		pid = waitpid(-1, &status, 0);
+        if (pid == pid_last)
+            ret = get_status(status);
 		p--;
 	}
-	return (get_status(status));
+	return (ret);
 }
 
 int exec_bin(t_cmd *cmd)
