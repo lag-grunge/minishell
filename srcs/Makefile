@@ -15,7 +15,7 @@ DEPS = ${OBJS:.o=.d}
 LIB_DIR = ../libft
 LIBFT = ${LIB_DIR}/libft.a
 
-INCLUDE = -I. -I${LIB_DIR} -I../includes
+INCLUDE = -I. -I${LIB_DIR} -I../includes -I./builtin
 LDFLAGS = -L${LIB_DIR}
 LIBRARIES = -lft -lreadline
 CC = gcc

@@ -54,7 +54,7 @@ int main(int argc, char *argv[], char *env[])
 	{
 		line = readline("minishell>");
 		if (!line)
-			ft_exit(NULL, &g_data);
+			ft_exit(NULL);
 		add_history(line);
 		exec_line(line);
 		free(line);
