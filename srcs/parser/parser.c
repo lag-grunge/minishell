@@ -91,6 +91,8 @@ int ft_preparser(char **tokens, char **lim_token)
 	char	**oper;
 	int		ret;
 
+    if (check_brackets(tokens, lim_token))
+        return (syntax_err);
 	ret = ft_oper(&oper, tokens, lim_token, op);
 	if (ret)
 		return (ret);
