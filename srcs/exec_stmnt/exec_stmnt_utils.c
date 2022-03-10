@@ -2,18 +2,21 @@
 
 void	save_restore_stdin_stdount(void)
 {
-	static int sav_in;
-	static int sav_out;
-	static int sav_err;
+	static int sav_in = STDIN_FILENO;
+	static int sav_out = STDOUT_FILENO;
+	static int sav_err = STDERR_FILENO;
 
-	if (!isatty(STDIN_FILENO))
+	if (STDOUT_FILENO != sav_out || STDIN_FILENO != sav_in || STDERR_FILENO != sav_err)
 	{
 		dup2(sav_in, STDIN_FILENO);
 		close(sav_in);
+        sav_in = STDIN_FILENO;
 		dup2(sav_out, STDOUT_FILENO);
 		close(sav_out);
+        sav_out = STDOUT_FILENO;
 		dup2(sav_err, STDERR_FILENO);
 		close(sav_err);
+        sav_err = STDERR_FILENO;
 	}
 	else
 	{

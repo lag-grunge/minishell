@@ -48,6 +48,7 @@ void exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2], int *res)
         ft_is_bilt(((t_cmd *)stmnt->oper1)->args))
 	{
 		exec_cmd(stmnt->oper1, res);
+        save_restore_stdin_stdount();
 		return ;
 	}
 	pid = fork();
@@ -67,7 +68,8 @@ void exec_stmnt(t_stmnt *stmnt, int *res, int p)
 
 	if (stmnt->next_stmnt && pipe(pdes) == -1)
 		exit (fork_err);
-	if (stmnt->next_stmnt && !p)
+	if ((stmnt->next_stmnt && !p) || (!p && !stmnt->next_stmnt && ((t_cmd *)stmnt->oper1)->args && \
+        ft_is_bilt(((t_cmd *)stmnt->oper1)->args)))
 		save_restore_stdin_stdount();
 	if (stmnt->type == op_smpl || stmnt->type == op_sbsh)
 		exec_smpl_sbsh(stmnt, p, pdes, res);
