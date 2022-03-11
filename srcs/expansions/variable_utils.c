@@ -92,13 +92,15 @@ static char *oper_dollar(char **tokens, char *dollar)
 	if (end_var == start_var)
 		return (dollar + 1);
 	if (*start_var == '?')
-		tmp = ft_strdup("last_status");
+		value = ft_itoa(get_last_status());
 	else
+	{
 		tmp = ft_substr(start_var, 0, end_var - start_var);
-	if (!tmp)
-		exit (malloc_err);
-	value = get_value(g_data.env, tmp);
-	free(tmp);
+		if (!tmp)
+			exit (malloc_err);
+		value = get_value(g_data.env, tmp);
+		free(tmp);
+	}
 	ret = make_substitution(tokens, dollar, end_var, value);
 	free(value);
 	return (ret);
