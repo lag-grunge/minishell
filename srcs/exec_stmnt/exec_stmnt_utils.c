@@ -1,50 +1,29 @@
 #include "exec_stmnt.h"
 
-void	save_restore_stdin_stdount(void)
+static void change_status(int code)
 {
-	static int sav_in = STDIN_FILENO;
-	static int sav_out = STDOUT_FILENO;
-	static int sav_err = STDERR_FILENO;
+    int     prev_code;
+    char	*new_value;
 
-	if (STDOUT_FILENO != sav_out || STDIN_FILENO != sav_in || STDERR_FILENO != sav_err)
-	{
-		dup2(sav_in, STDIN_FILENO);
-		close(sav_in);
-        sav_in = STDIN_FILENO;
-		dup2(sav_out, STDOUT_FILENO);
-		close(sav_out);
-        sav_out = STDOUT_FILENO;
-		dup2(sav_err, STDERR_FILENO);
-		close(sav_err);
-        sav_err = STDERR_FILENO;
-	}
-	else
-	{
-		sav_in = dup(STDIN_FILENO);
-		sav_out = dup(STDOUT_FILENO);
-		sav_err = dup(STDERR_FILENO);
-	}
+    prev_code = get_last_status();
+    if (prev_code != code)
+    {
+        new_value = ft_itoa(code);
+        if (!new_value)
+            exit(malloc_err);
+        set_value(&g_data.env, "last_status", new_value);
+    }
 }
 
 static int get_status(int status)
 {
-    int     prev_code;
 	int		code;
-	char	*new_value;
 
 	code = 0;
 	if (WIFEXITED(status))
 		code = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
 		code = 128 + WTERMSIG(status);
-    prev_code = get_last_status();
-	if (prev_code != code)
-	{
-		new_value = ft_itoa(code);
-		if (!new_value)
-			exit(malloc_err);
-		set_value(&g_data.env, "last_status", new_value);
-	}
 	return (code);
 }
 
@@ -60,7 +39,10 @@ int wait_child(int p, pid_t pid_last)
 	{
 		pid = waitpid(-1, &status, 0);
         if (pid == pid_last)
+        {
             ret = get_status(status);
+            change_status(ret);
+        }
 		p--;
 	}
 	return (ret);
@@ -83,13 +65,13 @@ int exec_bin(t_cmd *cmd)
 	else if (ret == not_perms_for_exec) {
 		exit_no_perms_error(perm_den_bin, cmd->args->content);
 	}
-	if (!ft_strncmp(cmd->args->content, "./minishell", 12)) /////////////////////  absolute_or_another_path
-		increment_shell_level();
+//	if (!ft_strncmp(cmd-q>args->content, "./minishell", 12)) /////////////////////  absolute_or_another_path
+    increment_shell_level();
 	env = get_env_array(g_data.env);
 	args = get_cmd_array(cmd->args);
 	execve(exec_path, args, env);
 	perror(exec_path);
-	return (child_exec_err);
+	return (not_found_bin);
 }
 
 void exec_cmd(t_cmd *cmd, int *res_if_single_builtin)
@@ -97,8 +79,14 @@ void exec_cmd(t_cmd *cmd, int *res_if_single_builtin)
 	int 	ret;
 
 	ret = make_all_red_exp(cmd->redir) || ft_openfiles(cmd->redir);
-	if (ret)
+	if (ret && !res_if_single_builtin)
 		exit(1);
+    else if (ret)
+    {
+        *res_if_single_builtin = 1;
+        change_status(1);
+        return;
+    }
 	if (!cmd->args)
 		exit (0);
 	make_expansions(&cmd->args);
@@ -110,6 +98,7 @@ void exec_cmd(t_cmd *cmd, int *res_if_single_builtin)
 		if (res_if_single_builtin)
 		{
 			*res_if_single_builtin = ret;
+            change_status(ret);
 			return;
 		}
 	}

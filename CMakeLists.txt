@@ -35,7 +35,7 @@ add_executable(minishell
         srcs/signal_dispose.c
         srcs/redirect/redirect.c srcs/redirect/redirect_utils.c srcs/builtin/biltins.c srcs/builtin/exec_builtin.c
         srcs/reserve/builtin.h srcs/expansions/exp_args.c
-        srcs/syntax/quoting.c srcs/redirect/try_openfiles.c srcs/error.c includes/error.h srcs/error.c includes/error.h srcs/reserve/export.c)
+        srcs/syntax/quoting.c srcs/error.c includes/error.h srcs/error.c includes/error.h )
 
 
 target_link_directories(minishell PUBLIC libft)
@@ -43,8 +43,8 @@ target_link_libraries(minishell libft.a)
 if (${CMAKE_SYSTEM_NAME} EQUAL "Linux" )
     include_directories(/usr/share)
     target_link_directories(minishell PUBLIC /usr/lib/x86_64-linux-gnu/)
+    target_link_libraries(minishell libtinfo.a)
 else()
     target_link_directories(minishell PUBLIC $ENV{HOME}/.brew/opt/readline/lib)
 endif()
 target_link_libraries(minishell libreadline.a)
-target_link_libraries(minishell libtinfo.a)
