@@ -25,8 +25,7 @@ static int ft_oper(char ***oper, char **tokens, char **lim_token, t_token top)
 		{
 		if (accept(lb, &cur_token))
 			cur_token = close_bracket(cur_token, lim_token);
-		if (cur_token)
-			cur_token++;
+        cur_token++;
 	}
 	if (cur_token && (cur_token == lim_token || cur_token == tokens))
 		return (syntax_error(syntax_err, *cur_token, "minishell"));
@@ -55,11 +54,15 @@ static int ft_stmnt(t_stmnt **stmnt, char **tokens, char **lim_token)
 		return (ft_cmd(stmnt, tokens, lim_token));
 	if (stmnt)
 	{
-		return (ft_cmd(stmnt, tokens, tpip - 1) || \
-            ft_stmnt(&(*stmnt)->next_stmnt, tpip + 1, lim_token));
+		ret = ft_cmd(stmnt, tokens, tpip - 1);
+        if (ret)
+            return (ret);
+        return (ft_stmnt(&(*stmnt)->next_stmnt, tpip + 1, lim_token));
 	}
-	return (ft_cmd(NULL, tokens, tpip - 1) || \
-            ft_stmnt(NULL, tpip + 1, lim_token));
+    ret = ft_cmd(NULL, tokens, tpip - 1);
+    if (ret)
+        return (ret);
+    return (ft_stmnt(NULL, tpip + 1, lim_token));
 }
 
 int ft_parser(t_stmnt **stmnt, char **tokens, char **lim_token)

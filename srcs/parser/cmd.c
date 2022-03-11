@@ -95,7 +95,8 @@ int ft_cmd(t_stmnt **stmnt, char **tokens, char **lim_token)
 		return (ft_write_cmd(NULL, NULL, tokens));
 	(*stmnt)->type = op_smpl;
 	cmd = (t_cmd **)&(*stmnt)->oper1;
-	ret = ft_init_cmd(cmd, tokens, lim_token) || \
-		ft_write_cmd(&(*cmd)->args, &(*cmd)->redir, tokens);
-	return  (ret);
+	ret = ft_init_cmd(cmd, tokens, lim_token);
+    if (ret)
+        return (ret);
+    return (ft_write_cmd(&(*cmd)->args, &(*cmd)->redir, tokens));
 }
