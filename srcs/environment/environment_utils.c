@@ -73,11 +73,12 @@ char *get_value_set_if_null(char *key, char *value)
 
 int get_last_status(void)
 {
-    char    *tmp;
+ //   char    *tmp;
     int     ret;
 
-    tmp = get_value_set_if_null("last_status", "0");
-    ret = ft_atoi(tmp);
-    free(tmp);
+ //   tmp = get_value_set_if_null("last_status", "0");
+ //   ret = ft_atoi(tmp);
+ //   free(tmp);
+	ret = g_data.last_stat;
     return (ret);
 }

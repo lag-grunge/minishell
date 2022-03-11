@@ -14,8 +14,8 @@ int get_env_hash(t_env **env_start, char **env)
 	if (!cur)
 		exit (malloc_err);
     *env_start = cur;
-	write_key_value_to_elem(cur, "last_status=0", 0);
-    cur->next = ft_env_new_elem();
+	write_key_value_to_elem(cur, *env, 1);
+	env++;
 	while (*env)
 	{
 		cur->next = ft_env_new_elem();
@@ -25,7 +25,7 @@ int get_env_hash(t_env **env_start, char **env)
 		write_key_value_to_elem(cur, *env, 1);
 		env++;
 	}
-    set_value(&g_data.env, "our_pwd", get_value(g_data.env, "PWD"));
+ //   set_value(&g_data.env, "our_pwd", get_value(g_data.env, "PWD"));
 	return (0);
 }
 
