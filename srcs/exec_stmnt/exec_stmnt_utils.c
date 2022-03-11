@@ -48,7 +48,7 @@ int wait_child(int p, pid_t pid_last)
 	return (ret);
 }
 
-int exec_bin(t_cmd *cmd)
+static int exec_bin(t_cmd *cmd)
 {
 	char	**env;
 	char 	**args;
@@ -87,8 +87,10 @@ void exec_cmd(t_cmd *cmd, int *res_if_single_builtin)
         change_status(1);
         return;
     }
-	if (!cmd->args)
-		exit (0);
+	if (!cmd->args || !ft_strncmp(cmd->args->content, "true", 5))
+        exit (0);
+    else if (!ft_strncmp(cmd->args->content, "false", 6))
+        exit (1);
 	make_expansions(&cmd->args);
 	if (cmd->args && !ft_is_bilt(cmd->args))
 		ret = exec_bin(cmd);
