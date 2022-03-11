@@ -19,17 +19,20 @@ static int ft_oper(char ***oper, char **tokens, char **lim_token, t_token top)
 {
 	char	**cur_token;
 
-	cur_token = tokens;
-	while (cur_token && cur_token <= lim_token && \
+//	cur_token = tokens;
+    cur_token = lim_token;
+	while (cur_token && cur_token >= tokens && \
 		type(*cur_token) != top)
 		{
-		if (accept(lb, &cur_token))
-			cur_token = close_bracket(cur_token, lim_token);
-        cur_token++;
+//		if (accept(lb, &cur_token))
+//			cur_token = close_bracket(cur_token, lim_token);
+		if (accept(rb, &cur_token))
+			cur_token = close_bracket(cur_token, tokens, -1);
+        cur_token--;
 	}
 	if (cur_token && (cur_token == lim_token || cur_token == tokens))
 		return (syntax_error(syntax_err, *cur_token, "minishell"));
-	else if (!cur_token || cur_token > lim_token)
+	else if (cur_token < tokens)
 		*oper = NULL;
 	else
 		*oper = cur_token;
