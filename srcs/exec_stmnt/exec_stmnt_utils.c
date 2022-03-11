@@ -4,6 +4,7 @@ static void change_status(int code)
 {
     int     prev_code;
     char	*new_value;
+	int		i;
 
     prev_code = get_last_status();
     if (prev_code != code)
@@ -11,7 +12,9 @@ static void change_status(int code)
         new_value = ft_itoa(code);
         if (!new_value)
             exit(malloc_err);
-        set_value(&g_data.env, "last_status", new_value);
+		i = ft_atoi(new_value);
+		g_data.last_stat = i;
+    //    set_value(&g_data.env, "last_status", new_value);
     }
 }
 
