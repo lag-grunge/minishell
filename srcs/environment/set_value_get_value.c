@@ -35,7 +35,7 @@ int set_value(t_env **env, char *key, char *value)
 	last = env;
 	while (tmp)
 	{
-		if (!ft_strncmp(tmp->key, key, ft_strlen(key)))
+		if (!ft_strncmp(tmp->key, key, ft_strlen(key) + 1))
 		{
 			if (tmp->value && value)
 				free(tmp->value);
@@ -61,7 +61,7 @@ int unset_value(t_env **env, char *key)
     cur = *env;
     while (cur)
     {
-        if (!ft_strncmp(cur->key, key, ft_strlen(key)))
+        if (!ft_strncmp(cur->key, key, ft_strlen(key) + 1))
         {
             *prev = cur->next;
             del_env_one(cur);
@@ -86,12 +86,17 @@ char *get_value(t_env *env, char *key)
 	while (env)
 	{
 		if (len_key == (int)ft_strlen(env->key) &&\
-			!ft_strncmp(env->key, key, len_key))
-            {
-            tmp = ft_strdup(env->value);
-            if (!tmp)
-                exit(malloc_err);
-            return (tmp);
+			!ft_strncmp(env->key, key, len_key + 1))
+		{
+			if (env->value != NULL)
+			{
+				tmp = ft_strdup(env->value);
+				if (!tmp)
+					exit(malloc_err);
+				return (tmp);
+			}
+			else
+				return (NULL);
         }
 		env = env->next;
 	}
