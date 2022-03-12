@@ -55,8 +55,7 @@ static void expan_list(t_list *args_list, char *token)
 			s = oper_word(args_list, &cur, token, s);
 			args_list = args_list->next;
 		}
-		else
-			cur++;
+        cur++;
 	}
 	if (cur - token - s > 0)
 		oper_word(args_list, &cur, token, s);
