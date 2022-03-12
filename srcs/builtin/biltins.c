@@ -183,8 +183,11 @@ int	ft_env(t_list *orgs, t_env *local_env) // нужно расширение д
 int	ft_unset(t_list *orgs, t_env *local_env)
 {
 	orgs = orgs->next;
-	if (orgs != NULL)
+	while (orgs != NULL)
+	{
 		unset_value(&local_env, orgs->content);
+		orgs = orgs->next;
+	}
 	return (0);
 }
 
@@ -351,21 +354,6 @@ int	ft_export(t_list *orgs, t_env *local_env) // с пайпом до или п�
 			orgs=orgs->next;
 		}
 	}
-	
-		/*
-	{
-		vs = (char *) orgs->content;
-		while ((vs[j] != '=') && (vs[j] != '\0'))
-			j++;
-		name = ft_substr(orgs->content, 0, j);
-		i = ft_strlen(orgs->content);
-		if (vs[j] != '\0')
-			value = ft_substr(orgs->content, j + 1, i);
-		else
-			value = NULL;
-		set_value(&local_env, name, value);
-	}
-		 */
 	return (ret);
 }
 
@@ -453,6 +441,11 @@ int	ft_cd(t_list *orgs, t_env *local_env)
 	else
 	{
 		str = get_value(local_env, "HOME");
+		if (str == NULL)
+		{
+			write (2, "minishell: cd: HOME not set\n", 28);
+			return (1);
+		}
 		ret = chdir(str);
 		str = get_value (local_env, "PWD");
 		set_value(&local_env, "OLDPWD", str);
