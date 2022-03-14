@@ -41,6 +41,8 @@ static void	clean_redir(void **ptr)
 
 void clean_cmd(t_cmd *cmd)
 {
+	if (!cmd)
+		return ;
 	if (cmd->args)
 		ft_lstclear(&cmd->args, free);
 	if (cmd->redir)
@@ -53,6 +55,8 @@ void clean_all(t_stmnt **st)
 	t_stmnt *stmnt;
 
 	stmnt = *st;
+	if (!stmnt)
+		return ;
 	if (stmnt->type == op_sbsh)
 	{
 		clean_all((t_stmnt **)&stmnt->oper1);
