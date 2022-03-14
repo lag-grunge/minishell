@@ -27,15 +27,11 @@ int exec_line(char *read_line)
 	if (!ret)
 		ret = ft_parser(&stmnt, tokens, lim_token);
 	clean_split(tokens, ft_spllen(tokens));
-	if (!ret  && try_openfiles(stmnt) == 0)
+	if (!ret)
 		exec_stmnt(stmnt, &ret,  0);
-	else if (!ret)
-	{
-		set_value(&g_data.env, "last_status", ft_strdup("1"));
-		ret = 1;
-	}
     else if (ret == syntax_err)
-        set_value(&g_data.env, "last_status", ft_strdup("2"));
+		g_data.last_stat = 2;
+      //  set_value(&g_data.env, "last_status", ft_strdup("2"));
 	if (stmnt)
 		clean_all(&stmnt);
 	return (ret);

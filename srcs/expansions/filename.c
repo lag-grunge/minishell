@@ -60,6 +60,8 @@ void filename_expansion(t_list *args_list)
 	char *pattern;
 
     getcwd(pwd, 2048);
+    if (access(pwd, F_OK))
+        return ;
 	pattern = ft_strdup(args_list->content);
 	fil_num = get_size(pwd, pattern);
 	dir = opendir(pwd);

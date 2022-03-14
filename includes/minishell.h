@@ -118,6 +118,7 @@ enum e_child_disp {
 
 typedef struct s_data {
 	t_env	*env;
+	int		last_stat;
 }				t_data;
 
 #ifdef __cplusplus  //for CPP googletests

@@ -21,9 +21,12 @@ LIBRARIES = -lft -lreadline
 CC = gcc
 
 OS = $(shell uname -s)
+HOME = $(shell cd ~; pwd)
 ifeq (${OS}, Darwin)
-LDFLAGS+=-L/Users/sdalton/.brew/opt/readline/lib -L/Users/sdalton/.brew/opt/readline/lib
-INCLUDE+=-I/Users/sdalton/.brew/opt/readline/include -I/Users/sdalton/.brew/opt/ncurses/include
+#LDFLAGS+=-L/Users/fphlox/.brew/opt/readline/lib -L/Users/fphlox/.brew/opt/readline/lib
+#INCLUDE+=-I/Users/fphlox/.brew/opt/readline/include -I/Users/fphlox/.brew/opt/ncurses/include
+LDFLAGS+=-L${HOME}/.brew/opt/readline/lib -L${HOME}/.brew/opt/readline/lib
+INCLUDE+=-I${HOME}/.brew/opt/readline/include -I${HOME}/.brew/opt/ncurses/include
 else
 ifeq (${OS}, Linux)
 INCLUDE+=-I/usr/share/
