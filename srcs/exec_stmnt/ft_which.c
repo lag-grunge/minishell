@@ -66,6 +66,5 @@ int ft_which(char **exec_path, char *cmd)
 	free(path_str);
 	if (!find_cmd)
 		return (0);
-	perror(cmd);
 	return (find_cmd);
 }
