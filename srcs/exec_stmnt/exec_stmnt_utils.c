@@ -84,16 +84,16 @@ void exec_cmd(t_cmd *cmd, int *res_if_single_builtin)
 	ret = make_all_red_exp(cmd->redir) || ft_openfiles(cmd->redir);
 	if (ret && !res_if_single_builtin)
 		exit(1);
-    else if (ret)
-    {
-        *res_if_single_builtin = 1;
-        change_status(1);
-        return;
-    }
+	else if (ret)
+	{
+		*res_if_single_builtin = 1;
+		change_status(1);
+		return;
+	}
 	if (!cmd->args || !ft_strncmp(cmd->args->content, "true", 5))
-        exit (0);
-    else if (!ft_strncmp(cmd->args->content, "false", 6))
-        exit (1);
+        	exit (0);
+    	else if (!ft_strncmp(cmd->args->content, "false", 6))
+        	exit (1);
 	make_expansions(&cmd->args);
 	if (cmd->args && !ft_is_bilt(cmd->args))
 		ret = exec_bin(cmd);

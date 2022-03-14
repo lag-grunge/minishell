@@ -133,16 +133,16 @@ int	ft_exit (t_list *orgs) // exit не работает при наличии �
 
 int	ft_env(t_list *orgs, t_env *local_env) // нужно расширение для попытки внести как аргумент путь!
 {
-	int	i;
+//	int	i;
 	char	*vs;
 
 	orgs = orgs->next;
-	i = 0;
+//	i = 0;
 	if (orgs == NULL)
 	{
 		while (local_env != NULL)
 		{
-			i = 0;
+//			i = 0;
 			ft_putstr_fd(local_env->key, 1);
 //			while (local_env->key[i] != '\0')
 //			{
@@ -254,14 +254,14 @@ int	ft_export(t_list *orgs, t_env *local_env) // с пайпом до или п�
 {
 //	int	have_pipe; При наличии пайпов экспорт не создает переменные env
 //	int	i;
-	int	j;
+//	int	j;
 	int	ret;
 //	char	*name;
 //	char	*value;
 //	char	*vs;
 
 	ret = 0;
-	j = 0;
+//	j = 0;
 	orgs = orgs->next;
 	if (orgs == NULL)
 	{
