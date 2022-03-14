@@ -6,7 +6,7 @@
 /*   By: fphlox <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 18:49:50 by fphlox            #+#    #+#             */
-/*   Updated: 2022/02/25 18:49:52 by fphlox           ###   ########.fr       */
+/*   Updated: 2022/03/15 00:30:16 by sdalton          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <unistd.h>
@@ -133,35 +133,22 @@ int	ft_exit (t_list *orgs) // exit не работает при наличии �
 
 int	ft_env(t_list *orgs, t_env *local_env) // нужно расширение для попытки внести как аргумент путь!
 {
-//	int	i;
 	char	*vs;
 
 	orgs = orgs->next;
-//	i = 0;
 	if (orgs == NULL)
 	{
 		while (local_env != NULL)
 		{
-//			i = 0;
-			ft_putstr_fd(local_env->key, 1);
-//			while (local_env->key[i] != '\0')
-//			{
-//				write (1, &local_env->key[i], 1);
-//				i++;
-//			}
 			if (local_env->value != NULL)
-				write (1, "=", 1);
-		//	i = 0;
-			if (local_env->value != NULL)
-				ft_putstr_fd(local_env->value, 1);
-//			{
-//				while (local_env->value[i] != '\0')
-//				{
-//					write (1, &local_env->value[i], 1);
-//					i++;
-//				}
-//			}
-			write (1, "\n", 1);
+			{
+				ft_putstr_fd(local_env->key, 1);
+				if (local_env->value != NULL)
+					write (1, "=", 1);
+				if (local_env->value != NULL)
+					ft_putstr_fd(local_env->value, 1);
+				write (1, "\n", 1);
+			}
 			local_env = local_env->next;
 		}
 	}
@@ -170,11 +157,6 @@ int	ft_env(t_list *orgs, t_env *local_env) // нужно расширение д
 		write (2, "env: ", 5);
 		vs = (char*) orgs->content;
 		ft_putstr_fd(vs, 2);
-//		while (vs[i] != '\0')
-//		{
-//			write (2, &vs[i], 1);
-//			i++;
-//		}
 		write (2, ": No such file or directory\n", 28);
 	}
 	return (0);
@@ -183,8 +165,11 @@ int	ft_env(t_list *orgs, t_env *local_env) // нужно расширение д
 int	ft_unset(t_list *orgs, t_env *local_env)
 {
 	orgs = orgs->next;
-	if (orgs != NULL)
+	while (orgs != NULL)
+	{
 		unset_value(&local_env, orgs->content);
+		orgs = orgs->next;
+	}
 	return (0);
 }
 
@@ -192,7 +177,6 @@ int	ft_export_args(t_list *orgs, t_env *local_env, int *ret)
 {
 	int	i;
 	int	j;
-//	int	ret;
 	char	*name;
 	char	*value;
 	char	*vs;
@@ -250,43 +234,22 @@ int	ft_export_args(t_list *orgs, t_env *local_env, int *ret)
 	return (0);
 }
 
-int	ft_export(t_list *orgs, t_env *local_env) // с пайпом до или после работает только без аргументов учти кейсы формата export A=B=12 ---> export $A ---> echo $B ---> 12
+int	ft_export(t_list *orgs, t_env *local_env)
 {
-//	int	have_pipe; При наличии пайпов экспорт не создает переменные env
-//	int	i;
-//	int	j;
 	int	ret;
-//	char	*name;
-//	char	*value;
-//	char	*vs;
 
 	ret = 0;
-//	j = 0;
 	orgs = orgs->next;
 	if (orgs == NULL)
 	{
 		while (local_env != NULL)
 		{
-		//	i = 0;
 			write (1, "declare -x ", 11);
 			ft_putstr_fd(local_env->key, 1);
-//			while (local_env->key[i] != '\0')
-//			{
-//				write (1, &local_env->key[i], 1);
-//				i++;
-//			}
 			if (local_env->value != NULL)
 			{
 				write (1, "=\"", 2);
-				//	i = 0;
 				ft_putstr_fd(local_env->value, 1);
-//				{
-//					while (local_env->value[i] != '\0')
-//					{
-//						write (1, &local_env->value[i], 1);
-//						i++;
-//					}
-//				}
 				write (1, "\"", 1);
 			}
 			write (1, "\n", 1);
@@ -294,107 +257,30 @@ int	ft_export(t_list *orgs, t_env *local_env) // с пайпом до или п�
 		}
 	}
 	else
-		
 	{
 		while (orgs != NULL)
 		{
 			ft_export_args(orgs, local_env, &ret);
-//			vs = (char *) orgs->content;
-//			if ((vs[0] < 'A') || (vs[0] > 'z') || ((vs[0] > 'Z') && (vs[0] < 'a')))
-//			{
-//				write (2, "minishell: export: `", 20);
-//				ft_putstr_fd(vs, 2);
-//				write (2, "': not a valid identifier\n", 26);
-//				ret = 1;
-//				return (1); //DELETE
-//			}
-//			while ((vs[j] != '=') && (vs[j] != '+') && (vs[j] != '\0'))
-//				j++;
-//			if (vs[j] == '+')
-//			{
-//				if (vs[j + 1] != '=')
-//				{
-//					write (2, "minishell: export: `", 20);
-//					ft_putstr_fd(vs, 2);
-//					write (2, "': not a valid identifier\n", 26);
-//					ret = 1;
-//					return (1); //DELETE
-//				}
-//				char	*old;
-//				char	*full;
-//				name = ft_substr(orgs->content, 0, j);
-//				i = ft_strlen(orgs->content);
-//				j++;
-//				if (vs[j] != '\0')
-//					value = ft_substr(orgs->content, j + 1, i);
-//				else
-//					value = NULL;
-//				old = get_value(local_env, name);
-//				if (old != NULL)
-//				{
-//					full = ft_strjoin(old, value);
-//					set_value(&local_env, name, full);
-//				}
-//				else
-//					set_value(&local_env, name, value);
-//			}
-//			else
-//			{
-//				name = ft_substr(orgs->content, 0, j);
-//				i = ft_strlen(orgs->content);
-//				if (vs[j] != '\0')
-//					value = ft_substr(orgs->content, j + 1, i);
-//				else
-//					value = NULL;
-//				set_value(&local_env, name, value);
-//			}
 			orgs=orgs->next;
 		}
 	}
-	
-		/*
-	{
-		vs = (char *) orgs->content;
-		while ((vs[j] != '=') && (vs[j] != '\0'))
-			j++;
-		name = ft_substr(orgs->content, 0, j);
-		i = ft_strlen(orgs->content);
-		if (vs[j] != '\0')
-			value = ft_substr(orgs->content, j + 1, i);
-		else
-			value = NULL;
-		set_value(&local_env, name, value);
-	}
-		 */
 	return (ret);
 }
 
 int	ft_pwd(t_list *orgs, t_env *local_env)
 {
-//	int		i;
 	char	pwd[4000];
 	char	*str;
 
 	orgs = orgs->next;
-//	i = 0;
 	if (getcwd(pwd, 4000) == NULL)
 	{
 		str = get_value (local_env, "PWD");
 		ft_putstr_fd(str, 1);
-//		while (str[i] != '\0')
-//		{
-//			write (1, &str[i], 1);
-//			i++;
-//		}
 		write (1, "\n", 1);
 		return (0);
 	}
 	ft_putstr_fd(pwd, 1);
-//	while (pwd[i] != '\0')
-//	{
-//		write (1, &pwd[i], 1);
-//		i++;
-//	}
 	write (1, "\n", 1);
 	return (0);
 }
@@ -402,7 +288,6 @@ int	ft_pwd(t_list *orgs, t_env *local_env)
 int	ft_cd(t_list *orgs, t_env *local_env)
 {
 	int		ret;
-//	int		i;
 	char	*str;
 	char	*vs;
 	char	pwd[4000];
@@ -432,17 +317,11 @@ int	ft_cd(t_list *orgs, t_env *local_env)
 			else
 			{
 				write (2, "minishell: cd: ", 15);
-				//	i = 0;
 				vs = (char*) orgs->content;
 				ft_putstr_fd(vs, 2);
-//				while (vs[i] !='\0')
-//				{
-//					write (2, &vs[i], 1);
-//					i++;
-//				}
 				write (2, ": No such file or directory\n", 28);
 			}
-			return (1); //Код ошибки как в Баш
+			return (1);
 		}
 		str = get_value (local_env, "PWD");
 		set_value(&local_env, "OLDPWD", str);
@@ -453,6 +332,11 @@ int	ft_cd(t_list *orgs, t_env *local_env)
 	else
 	{
 		str = get_value(local_env, "HOME");
+		if (str == NULL)
+		{
+			write (2, "minishell: cd: HOME not set\n", 28);
+			return (1);
+		}
 		ret = chdir(str);
 		str = get_value (local_env, "PWD");
 		set_value(&local_env, "OLDPWD", str);
@@ -466,7 +350,6 @@ int	ft_cd(t_list *orgs, t_env *local_env)
 int	ft_echo(t_list *orgs)
 {
 	int	n;
-//	int	i;
 	char *vs;
 
 	n = 0;
@@ -480,14 +363,8 @@ int	ft_echo(t_list *orgs)
 		}
 		while (orgs != NULL)
 		{
-		//	i = 0;
 			vs = (char*) orgs->content;
 			ft_putstr_fd(vs, 1);
-//			while (vs[i] != '\0')
-//			{
-//				write (1, &vs[i], 1);
-//				i++;
-//			}
 			orgs = orgs->next;
 			if (orgs != NULL)
 				write (1, " ", 1);
