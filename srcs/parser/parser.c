@@ -19,13 +19,18 @@ static int ft_oper(char ***oper, char **tokens, char **lim_token, t_token top)
 {
 	char	**cur_token;
 
-	cur_token = tokens;
-	while (cur_token && cur_token <= lim_token && \
-		type(*cur_token) != top)
+	cur_token = lim_token;
+	while (cur_token && cur_token >= tokens && type(*cur_token) != top)
+	{
+		if (cur_token == tokens)
 		{
-		if (accept(lb, &cur_token))
-			cur_token = close_bracket(cur_token, lim_token);
-        cur_token++;
+			cur_token = NULL;
+			break;
+		}
+		else if ((*cur_token)[0] == ')')
+			cur_token = close_bracket(cur_token - 1, tokens, -1);
+		else
+        	cur_token--;
 	}
 	if (cur_token && (cur_token == lim_token || cur_token == tokens))
 		return (syntax_error(syntax_err, *cur_token, "minishell"));
@@ -80,13 +85,13 @@ int ft_parser(t_stmnt **stmnt, char **tokens, char **lim_token)
 			return (malloc_err);
 		(*stmnt)->type = ((ft_isoperator(*oper)\
  == ct_and) + op_or);
-		return (ft_stmnt\
-				((t_stmnt **)&(*stmnt)->oper1, tokens, oper - 1) || \
-                ft_parser\
-				((t_stmnt **)&(*stmnt)->oper2, oper + 1, lim_token));
+
+		ret = ft_parser((t_stmnt **)&(*stmnt)->oper1, tokens, oper - 1);
+		if (ret)
+			return (ret);
+		return (ft_stmnt((t_stmnt **)&(*stmnt)->oper2, oper + 1, lim_token));
 	}
-	return (ft_stmnt\
-			(stmnt, tokens, lim_token));
+	return (ft_stmnt(stmnt, tokens, lim_token));
 }
 
 int ft_preparser(char **tokens, char **lim_token)
@@ -94,18 +99,17 @@ int ft_preparser(char **tokens, char **lim_token)
 	char	**oper;
 	int		ret;
 
-    if (check_brackets(tokens, lim_token))
-        return (syntax_err);
+	if (check_brackets(tokens, lim_token))
+        	return (syntax_err);
 	ret = ft_oper(&oper, tokens, lim_token, op);
 	if (ret)
 		return (ret);
 	if (oper)
 	{
-		return (ft_stmnt\
-				(NULL, tokens, oper - 1) || \
-                ft_preparser\
-				(oper + 1, lim_token));
+		ret = ft_preparser(tokens, oper - 1);
+		if (ret)
+			return (ret);
+		return (ft_stmnt(NULL, oper + 1, lim_token));
 	}
-	return (ft_stmnt\
-			(NULL, tokens, lim_token));
+	return (ft_stmnt(NULL, tokens, lim_token));
 }

@@ -22,32 +22,35 @@ int check_brackets(char **tokens, char **lim_token)
     return (syntax_error(syntax_err, "newline'", "bash: syntax: ("));
 }
 
-static int condition(char **tokens, char **lim_token, int br)
+static int condition(char **tokens, char **lim_token, int direction)
 {
-	if (lim_token && tokens <= lim_token && br)
+	if (lim_token && tokens && tokens <= lim_token && direction == 1)
 		return (1);
-	else if (!lim_token && *tokens && br)
+	if (lim_token && tokens && tokens >= lim_token && direction == -1)
+		return (1);
+	else if (!lim_token && *tokens)
 		return (1);
 	return (0);
 }
 
-char **close_bracket(char **tokens, char **lim_token)
+char **close_bracket(char **tokens, char **lim_token, int direction)
 {
 	int	brackets;
 
-	brackets = 1;
-	while (condition(tokens,lim_token, brackets))
+	brackets = direction;
+	while (condition(tokens, lim_token, direction))
 	{
-		if (accept(lb, &tokens))
+		if ((*tokens)[0] == '(')
 			brackets++;
-		else if (accept(rb, &tokens))
+		else if ((*tokens)[0] == ')')
 			brackets--;
-		else
-			tokens++;
+		if (!brackets)
+			break ;
+		tokens += direction;
 	}
 	if (brackets)
 		return (NULL);
-	return (tokens - 1);
+	return (tokens);
 }
 
 static int	empty_brackets(char **lim_token)
@@ -60,7 +63,7 @@ int ft_parenthesis(t_stmnt **stmnt, t_redir **red, char **tokens)
 	char	**lim_token;
 	int		ret;
 
-	lim_token = close_bracket(tokens, NULL) - 1;
+	lim_token = close_bracket(tokens, NULL, 1) - 1;
 	if (!stmnt && empty_brackets(lim_token))
 		return syntax_error(syntax_err, lim_token[1], "ft_parenthesis");
 	if (!stmnt)

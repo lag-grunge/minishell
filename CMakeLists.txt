@@ -33,8 +33,8 @@ add_executable(minishell
         srcs/exec_stmnt/ft_which.c includes/exec_stmnt.h
         srcs/environment/environment_utils.c srcs/exec_stmnt/get_args.c
         srcs/signal_dispose.c
+        srcs/expansions/exp_args.c
         srcs/redirect/redirect.c srcs/redirect/redirect_utils.c srcs/builtin/biltins.c srcs/builtin/exec_builtin.c
-        srcs/reserve/builtin.h srcs/expansions/exp_args.c
         srcs/syntax/quoting.c srcs/error.c includes/error.h srcs/error.c includes/error.h )
 
 

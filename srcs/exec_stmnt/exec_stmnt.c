@@ -40,12 +40,26 @@ static void ft_parent(t_stmnt *stmnt, int pdes[2], int p, int *res)
 
 }
 
+int ft_is_single_bilt(t_stmnt *stmnt, int p)
+{
+	if (stmnt->type == op_sbsh)
+		return (0);
+	if (p || stmnt->next_stmnt)
+		return (0);
+	if (!((t_cmd *)stmnt->oper1)->args)
+		return (0);
+	return (ft_is_bilt(((t_cmd *)stmnt->oper1)->args));
+}
+
 void exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2], int *res)
 {
 	pid_t pid;
 
-	if (!p && !stmnt->next_stmnt && ((t_cmd *)stmnt->oper1)->args && \
-        ft_is_bilt(((t_cmd *)stmnt->oper1)->args))
+	if (stmnt->next_stmnt && pipe(pdes) == -1)
+		exit (fork_err);
+	if ((stmnt->next_stmnt && !p) || ft_is_single_bilt(stmnt, p))
+		save_restore_stdin_stdount();
+	if (ft_is_single_bilt(stmnt, p))
 	{
 		exec_cmd(stmnt->oper1, res);
         save_restore_stdin_stdount();
@@ -56,7 +70,8 @@ void exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2], int *res)
 		exit(fork_err);
 	else if (pid == 0)
         ft_child(stmnt, pdes);
-	else {
+	else
+	{
         stmnt->pid = pid;
         ft_parent(stmnt, pdes, p, res);
     }
@@ -66,11 +81,6 @@ void exec_stmnt(t_stmnt *stmnt, int *res, int p)
 {
 	int pdes[2];
 
-	if (stmnt->next_stmnt && pipe(pdes) == -1)
-		exit (fork_err);
-	if ((stmnt->next_stmnt && !p) || (!p && !stmnt->next_stmnt && ((t_cmd *)stmnt->oper1)->args && \
-        ft_is_bilt(((t_cmd *)stmnt->oper1)->args)))
-		save_restore_stdin_stdount();
 	if (stmnt->type == op_smpl || stmnt->type == op_sbsh)
 		exec_smpl_sbsh(stmnt, p, pdes, res);
 	else if (stmnt->type == op_or || stmnt->type == op_and)

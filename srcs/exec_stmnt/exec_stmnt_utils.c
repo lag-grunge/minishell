@@ -1,23 +1,5 @@
 #include "exec_stmnt.h"
 
-static void change_status(int code)
-{
-    int     prev_code;
-    char	*new_value;
-	int		i;
-
-    prev_code = get_last_status();
-    if (prev_code != code)
-    {
-        new_value = ft_itoa(code);
-        if (!new_value)
-            exit(malloc_err);
-		i = ft_atoi(new_value);
-		g_data.last_stat = i;
-    //    set_value(&g_data.env, "last_status", new_value);
-    }
-}
-
 static int get_status(int status)
 {
 	int		code;
@@ -44,7 +26,7 @@ int wait_child(int p, pid_t pid_last)
         if (pid == pid_last)
         {
             ret = get_status(status);
-            change_status(ret);
+			g_data.last_stat = ret;
         }
 		p--;
 	}
@@ -69,7 +51,7 @@ static int exec_bin(t_cmd *cmd)
 		exit_no_perms_error(perm_den_bin, cmd->args->content);
 	}
 //	if (!ft_strncmp(cmd-q>args->content, "./minishell", 12)) /////////////////////  absolute_or_another_path
-    increment_shell_level();
+    	increment_shell_level();
 	env = get_env_array(g_data.env);
 	args = get_cmd_array(cmd->args);
 	execve(exec_path, args, env);
@@ -84,16 +66,16 @@ void exec_cmd(t_cmd *cmd, int *res_if_single_builtin)
 	ret = make_all_red_exp(cmd->redir) || ft_openfiles(cmd->redir);
 	if (ret && !res_if_single_builtin)
 		exit(1);
-    else if (ret)
-    {
-        *res_if_single_builtin = 1;
-        change_status(1);
-        return;
-    }
+	else if (ret)
+	{
+		*res_if_single_builtin = 1;
+		g_data.last_stat = 1;
+		return;
+	}
 	if (!cmd->args || !ft_strncmp(cmd->args->content, "true", 5))
-        exit (0);
-    else if (!ft_strncmp(cmd->args->content, "false", 6))
-        exit (1);
+        	exit (0);
+    	else if (!ft_strncmp(cmd->args->content, "false", 6))
+        	exit (1);
 	make_expansions(&cmd->args);
 	if (cmd->args && !ft_is_bilt(cmd->args))
 		ret = exec_bin(cmd);
@@ -103,7 +85,7 @@ void exec_cmd(t_cmd *cmd, int *res_if_single_builtin)
 		if (res_if_single_builtin)
 		{
 			*res_if_single_builtin = ret;
-            change_status(ret);
+			g_data.last_stat = ret;
 			return;
 		}
 	}
