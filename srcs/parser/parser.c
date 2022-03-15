@@ -48,14 +48,20 @@ static int ft_oper(char ***oper, char **tokens, char **lim_token, t_token top)
     return (0);
 }
 
-static int last_stmnt(t_stmnt **stmnt, char **tpip, char **lim_token)
+static int last_stmnt(t_stmnt **stmnt, char **tokens, char **lim_token)
 {
     t_stmnt **last;
 
     last = stmnt;
-    while (*last)
-        last = &(*last)->next_stmnt;
-    return (ft_stmnt(last, tpip, lim_token));
+    if (last)
+    {
+        while (*last)
+            last = &(*last)->next_stmnt;
+        *last = ft_stmnt_new();
+        if (!*last)
+            exit(malloc_err);
+    }
+    return (ft_cmd(last, tokens, lim_token));
 }
 
 int ft_stmnt(t_stmnt **stmnt, char **tokens, char **lim_token)
@@ -66,14 +72,8 @@ int ft_stmnt(t_stmnt **stmnt, char **tokens, char **lim_token)
 	ret = ft_oper(&tpip, tokens, lim_token, pp);
 	if (ret)
 		return (ret);
-	if (stmnt)
-	{
-        *stmnt = ft_stmnt_new();
-		if (!*stmnt)
-			return (malloc_err);
-	}
-	if (!tpip)
-		return (ft_cmd(stmnt, tokens, lim_token));
+    if (!tpip)
+        return (last_stmnt(stmnt, tokens, lim_token));
 	if (stmnt)
 	{
 		ret = ft_stmnt(stmnt, tokens, tpip - 1);
@@ -84,7 +84,7 @@ int ft_stmnt(t_stmnt **stmnt, char **tokens, char **lim_token)
     ret = ft_stmnt(NULL, tokens, tpip - 1);
     if (ret)
         return (ret);
-    return (ft_stmnt(NULL, tpip + 1, lim_token));
+    return (last_stmnt(NULL, tpip + 1, lim_token));
 }
 
 int ft_parser(t_stmnt **stmnt, char **tokens, char **lim_token)
