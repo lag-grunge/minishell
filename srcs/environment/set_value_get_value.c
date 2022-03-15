@@ -64,6 +64,7 @@ int unset_value(t_env **env, char *key)
         if (!ft_strncmp(cur->key, key, ft_strlen(key) + 1))
         {
             *prev = cur->next;
+            g_data.env = *env;
             del_env_one(cur);
             return (1);
         }
