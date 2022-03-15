@@ -18,9 +18,9 @@ int exec_line(char *read_line)
 	tokens = NULL;
 	ret = 0;
 	tokens = get_tokens(read_line, &ret);
-	if (!tokens && !ret)
-		return (malloc_err);
-	else if (!tokens)
+	if (!tokens && ret == syntax_err)
+        g_data.last_stat = 2;
+    if (!tokens)
 		return (0);
 	lim_token = tokens + ft_spllen(tokens) - 1;
 	ret = ft_preparser(tokens, lim_token);
@@ -31,7 +31,6 @@ int exec_line(char *read_line)
 		exec_stmnt(stmnt, &ret,  0);
     else if (ret == syntax_err)
 		g_data.last_stat = 2;
-      //  set_value(&g_data.env, "last_status", ft_strdup("2"));
 	if (stmnt)
 		clean_all(&stmnt);
 	return (ret);
