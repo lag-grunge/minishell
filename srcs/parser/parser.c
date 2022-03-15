@@ -1,7 +1,7 @@
 #include "../../includes/parser.h"
 #include "../../includes/clean.h"
 
-static t_stmnt *ft_stmnt_new(void)
+static t_stmnt *ft_stmnt_new()
 {
 	t_stmnt *stmnt;
 
@@ -12,36 +12,53 @@ static t_stmnt *ft_stmnt_new(void)
 	stmnt->redir = NULL;
 	stmnt->pid = 0;
 	stmnt->next_stmnt = NULL;
-	return (stmnt);
+    return (stmnt);
+}
+
+static int condition(char ***cur_token, char **tokens, t_token top)
+{
+    if (!*cur_token)
+        return (0);
+    else if (type(**cur_token) == top)
+        return (0);
+    else if (*cur_token == tokens)
+    {
+        *cur_token = NULL;
+        return (0);
+    }
+    return (1);
+
 }
 
 static int ft_oper(char ***oper, char **tokens, char **lim_token, t_token top)
 {
 	char	**cur_token;
 
-	cur_token = lim_token;
-	while (cur_token && cur_token >= tokens && type(*cur_token) != top)
+    cur_token = lim_token;
+    while (condition(&cur_token, tokens, top))
 	{
-		if (cur_token == tokens)
-		{
-			cur_token = NULL;
-			break;
-		}
-		else if ((*cur_token)[0] == ')')
+		if ((*cur_token)[0] == ')')
 			cur_token = close_bracket(cur_token - 1, tokens, -1);
 		else
         	cur_token--;
 	}
 	if (cur_token && (cur_token == lim_token || cur_token == tokens))
 		return (syntax_error(syntax_err, *cur_token, "minishell"));
-	else if (!cur_token || cur_token > lim_token)
-		*oper = NULL;
-	else
-		*oper = cur_token;
-	return (0);
+	*oper = cur_token;
+    return (0);
 }
 
-static int ft_stmnt(t_stmnt **stmnt, char **tokens, char **lim_token)
+static int last_stmnt(t_stmnt **stmnt, char **tpip, char **lim_token)
+{
+    t_stmnt **last;
+
+    last = stmnt;
+    while (*last)
+        last = &(*last)->next_stmnt;
+    return (ft_stmnt(last, tpip, lim_token));
+}
+
+int ft_stmnt(t_stmnt **stmnt, char **tokens, char **lim_token)
 {
 	char	**tpip;
 	int		ret;
@@ -51,7 +68,7 @@ static int ft_stmnt(t_stmnt **stmnt, char **tokens, char **lim_token)
 		return (ret);
 	if (stmnt)
 	{
-		*stmnt = ft_stmnt_new();
+        *stmnt = ft_stmnt_new();
 		if (!*stmnt)
 			return (malloc_err);
 	}
@@ -59,12 +76,12 @@ static int ft_stmnt(t_stmnt **stmnt, char **tokens, char **lim_token)
 		return (ft_cmd(stmnt, tokens, lim_token));
 	if (stmnt)
 	{
-		ret = ft_cmd(stmnt, tokens, tpip - 1);
+		ret = ft_stmnt(stmnt, tokens, tpip - 1);
         if (ret)
             return (ret);
-        return (ft_stmnt(&(*stmnt)->next_stmnt, tpip + 1, lim_token));
+        return (last_stmnt(stmnt, tpip + 1, lim_token));
 	}
-    ret = ft_cmd(NULL, tokens, tpip - 1);
+    ret = ft_stmnt(NULL, tokens, tpip - 1);
     if (ret)
         return (ret);
     return (ft_stmnt(NULL, tpip + 1, lim_token));
