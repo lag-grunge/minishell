@@ -220,6 +220,7 @@ int	ft_export_args(t_list *orgs, t_env *local_env, int *ret)
 		}
 		else
 			set_value(&local_env, name, value);
+        free(name);
 	}
 	else
 	{
@@ -230,6 +231,7 @@ int	ft_export_args(t_list *orgs, t_env *local_env, int *ret)
 		else
 			value = NULL;
 		set_value(&local_env, name, value);
+        free(name);
 	}
 	return (0);
 }
