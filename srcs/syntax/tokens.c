@@ -15,12 +15,6 @@ static char	*oper_token(char *read_line, int *len)
 	char *ret;
 	char *tmp;
 
-//	if ()
-//	{
-//		if (len)
-//			*len = 2;
-//		return (read_line + 2);
-//	}
 	if (ft_ismeta(*read_line) || !ft_strncmp(read_line, "2>", 2))
 	{
 		tmp = NULL;
@@ -46,7 +40,7 @@ static size_t get_number(char *read_line)
 			break ;
 		read_line = oper_token(read_line, NULL);
 		if (!read_line)
-			return (0);
+			return (-syntax_err);
 		num++;
 	}
 	return (num);
@@ -54,28 +48,31 @@ static size_t get_number(char *read_line)
 
 char **get_tokens(char *read_line, int *empty)
 {
-	size_t	num;
+	int 	num;
 	char 	**tokens;
 	int		i;
 	int		len;
 
 	num = get_number(read_line);
 	if (!num)
-	{
-		*empty = 1;
-		return (NULL);
-	}
+	    *empty = 1;
+    else if (num == -syntax_err)
+        *empty = syntax_err;
+    if (num <= 0)
+        return (NULL);
 	tokens = malloc(sizeof(char *) * (num + 1));
 	if (!tokens)
-		return (NULL);
+		exit (malloc_err);
 	tokens[num] = NULL;
 	i = 0;
 	while (*read_line)
 	{
 		if (trim_space(&read_line))
 			break ;
-		read_line = oper_token(read_line, &len);
+        read_line = oper_token(read_line, &len);
 		tokens[i] = ft_substr(read_line - len, 0, len);
+        if (!tokens[i])
+            exit (malloc_err);
 		i++;
 	}
 	return (tokens);

@@ -76,8 +76,17 @@ char	*word(char *read_line, int *nt)
 			!ft_isspace(read_line[next_token]))
 	{
 		if (read_line[next_token] == '\'' || \
-			read_line[next_token] == '\"')
-			next_token += quoting(read_line + next_token);
+			read_line[next_token] == '\"') {
+            int res = quoting(read_line + next_token);
+            if (res == 1)
+            {
+                char tmp[2];
+                tmp[0] = read_line[next_token];
+                syntax_error(syntax_err, tmp, "minishell: get_tokens: ");
+                return (NULL);
+            }
+            next_token += res;
+        }
 		else
 			next_token++;
 	}
