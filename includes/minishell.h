@@ -19,9 +19,8 @@
 typedef enum e_errors {
 	syntax_err = 2,
 	malloc_err = 3,
-	file_err = 4,
-	fork_err = 5,
-	child_exec_err = 6
+	file_err = 1,
+	fork_err = 1
 }				t_returns;
 
 typedef enum e_codes {
