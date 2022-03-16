@@ -51,7 +51,6 @@ static int exec_bin(t_cmd *cmd)
 		exit_no_perms_error(perm_den_bin, cmd->args->content);
 	}
 //	if (!ft_strncmp(cmd-q>args->content, "./minishell", 12)) /////////////////////  absolute_or_another_path
-    	increment_shell_level();
 	env = get_env_array(g_data.env);
 	args = get_cmd_array(cmd->args);
 	execve(exec_path, args, env);

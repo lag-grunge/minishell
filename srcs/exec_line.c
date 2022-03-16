@@ -19,8 +19,8 @@ int exec_line(char *read_line)
 	ret = 0;
 	tokens = get_tokens(read_line, &ret);
 	if (!tokens && ret == syntax_err)
-        g_data.last_stat = 2;
-    if (!tokens)
+        	g_data.last_stat = 2;
+    	if (!tokens)
 		return (0);
 	lim_token = tokens + ft_spllen(tokens) - 1;
 	ret = ft_preparser(tokens, lim_token);
@@ -29,7 +29,7 @@ int exec_line(char *read_line)
 	clean_split(tokens, ft_spllen(tokens));
 	if (!ret)
 		exec_stmnt(stmnt, &ret,  0);
-    else if (ret == syntax_err)
+    	else if (ret == syntax_err)
 		g_data.last_stat = 2;
 	if (stmnt)
 		clean_all(&stmnt);
@@ -42,6 +42,7 @@ int main(int argc, char *argv[], char *env[])
 
 	signal_dispose(main_shell);
 	get_env_hash(&g_data.env, env);
+	increment_shell_level();
 	rl_outstream = stderr; // for tests
 	if (argc > 2)
 		return (1);
