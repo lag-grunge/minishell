@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_value_get_value.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/16 21:44:45 by sdalton           #+#    #+#             */
+/*   Updated: 2022/03/16 21:50:39 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "environment.h"
 #include "clean.h"
 
-static void add_new_value(t_env **last, char *key, char *value)
+static void	add_new_value(t_env **last, char *key, char *value)
 {
-	t_env *tmp;
+	t_env	*tmp;
 
 	tmp = ft_env_new_elem();
 	tmp->key = ft_strdup(key);
@@ -25,8 +37,7 @@ static void add_new_value(t_env **last, char *key, char *value)
 /* not protected from NULL */
 /* key not free */
 
-
-int set_value(t_env **env, char *key, char *value)
+int	set_value(t_env **env, char *key, char *value)
 {
 	t_env	*tmp;
 	t_env	**last;
@@ -52,41 +63,41 @@ int set_value(t_env **env, char *key, char *value)
 	return (1);
 }
 
-int unset_value(t_env **env, char *key)
+int	unset_value(t_env **env, char *key)
 {
-    t_env   **prev;
-    t_env	*cur;
+	t_env	**prev;
+	t_env	*cur;
 
-    prev = env;
-    cur = *env;
-    while (cur)
-    {
-        if (!ft_strncmp(cur->key, key, ft_strlen(key) + 1))
-        {
-            *prev = cur->next;
-            g_data.env = *env;
-            del_env_one(cur);
-            return (1);
-        }
-        prev = &cur->next;
-        cur = cur->next;
-    }
-    return (0);
+	prev = env;
+	cur = *env;
+	while (cur)
+	{
+		if (!ft_strncmp(cur->key, key, ft_strlen(key) + 1))
+		{
+			*prev = cur->next;
+			g_data.env = *env;
+			del_env_one(cur);
+			return (1);
+		}
+		prev = &cur->next;
+		cur = cur->next;
+	}
+	return (0);
 }
 
 /*
  * get_value returns value (char *) corresponds key or empty if key not in env
  * get_value allocates memory
  */
-char *get_value(t_env *env, char *key)
+char	*get_value(t_env *env, char *key)
 {
-	int     len_key;
-    char    *tmp;
+	int		len_key;
+	char	*tmp;
 
 	len_key = (int)ft_strlen(key);
 	while (env)
 	{
-		if (len_key == (int)ft_strlen(env->key) &&\
+		if (len_key == (int)ft_strlen(env->key) && \
 			!ft_strncmp(env->key, key, len_key + 1))
 		{
 			if (env->value != NULL)
@@ -98,7 +109,7 @@ char *get_value(t_env *env, char *key)
 			}
 			else
 				return (NULL);
-        }
+		}
 		env = env->next;
 	}
 	return (NULL);

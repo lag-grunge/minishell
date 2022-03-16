@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_hash_get_array.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/16 21:33:28 by sdalton           #+#    #+#             */
+/*   Updated: 2022/03/16 21:35:03 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "environment.h"
 
-int get_env_hash(t_env **env_start, char **env)
+int	get_env_hash(t_env **env_start, char **env)
 {
 	t_env	*cur;
 
@@ -13,7 +25,7 @@ int get_env_hash(t_env **env_start, char **env)
 	cur = ft_env_new_elem();
 	if (!cur)
 		exit (malloc_err);
-    *env_start = cur;
+	*env_start = cur;
 	write_key_value_to_elem(cur, *env, 1);
 	env++;
 	while (*env)
@@ -25,11 +37,10 @@ int get_env_hash(t_env **env_start, char **env)
 		write_key_value_to_elem(cur, *env, 1);
 		env++;
 	}
- //   set_value(&g_data.env, "our_pwd", get_value(g_data.env, "PWD"));
 	return (0);
 }
 
-static	int get_size(t_env *env_hash)
+static int	get_size(t_env *env_hash)
 {
 	int	i;
 
@@ -44,7 +55,7 @@ static	int get_size(t_env *env_hash)
 	return (i);
 }
 
-static char *cat_env_str(t_env *env_hash)
+static char	*cat_env_str(t_env *env_hash)
 {
 	char	*new_str;
 	int		len;
@@ -97,17 +108,12 @@ void	print_env(t_env *env_hash)
 {
 	while (env_hash)
 	{
-//		printf("declare -x ");
 		ft_putstr_fd("declare -x ", STDERR_FILENO);
 		ft_putstr_fd(env_hash->key, STDERR_FILENO);
-//		printf("%s", );
 		if (env_hash->sep == '=')
-//			printf("=");
 			ft_putchar_fd('=', STDERR_FILENO);
 		if (env_hash->value)
-//			printf("\"%s\"", env_hash->value);
 			ft_putstr_fd(env_hash->value, STDERR_FILENO);
-//		printf("\n");
 		ft_putchar_fd('\n', STDERR_FILENO);
 		env_hash = env_hash->next;
 	}

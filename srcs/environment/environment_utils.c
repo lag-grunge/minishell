@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   environment_utils.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/16 21:35:26 by sdalton           #+#    #+#             */
+/*   Updated: 2022/03/16 21:43:51 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 #include "environment.h"
 
-t_env *ft_env_new_elem(void)
+t_env	*ft_env_new_elem(void)
 {
 	t_env	*new_elem;
 
@@ -15,10 +27,10 @@ t_env *ft_env_new_elem(void)
 	return (new_elem);
 }
 
-int write_key_value_to_elem(t_env *cur, char *cur_env, int start)
+int	write_key_value_to_elem(t_env *cur, char *cur_env, int start)
 {
-	char *tmp;
-	char *sep;
+	char	*tmp;
+	char	*sep;
 
 	sep = ft_strchr(cur_env, '=');
 	if (sep)
@@ -44,10 +56,10 @@ int	increment_shell_level(void)
 {
 	char	*s1;
 	char	*s2;
-	int 	num = 0;
+	int		num;
 
 	s1 = get_value_set_if_null("SHLVL", "1");
-    num = ft_atoi(s1);
+	num = ft_atoi(s1);
 	s2 = ft_itoa(num + 1);
 	free(s1);
 	if (!s2)
@@ -56,29 +68,25 @@ int	increment_shell_level(void)
 	return (0);
 }
 
-char *get_value_set_if_null(char *key, char *value)
+char	*get_value_set_if_null(char *key, char *value)
 {
-    char    *tmp;
+	char	*tmp;
 
-    tmp = get_value(g_data.env, key);
-    if (!tmp)
-    {
-        tmp = ft_strdup(value);
-        if (!tmp)
-            exit(malloc_err);
-        set_value(&g_data.env, key, tmp);
-    }
-    return (tmp);
+	tmp = get_value(g_data.env, key);
+	if (!tmp)
+	{
+		tmp = ft_strdup(value);
+		if (!tmp)
+			exit(malloc_err);
+		set_value(&g_data.env, key, tmp);
+	}
+	return (tmp);
 }
 
-int get_last_status(void)
+int	get_last_status(void)
 {
- //   char    *tmp;
-    int     ret;
+	int	ret;
 
- //   tmp = get_value_set_if_null("last_status", "0");
- //   ret = ft_atoi(tmp);
- //   free(tmp);
 	ret = g_data.last_stat;
-    return (ret);
+	return (ret);
 }
