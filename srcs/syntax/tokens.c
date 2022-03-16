@@ -56,10 +56,10 @@ char **get_tokens(char *read_line, int *empty)
 	num = get_number(read_line);
 	if (!num)
 	    *empty = 1;
-    else if (num == -syntax_err)
+	else if (num == -syntax_err)
         *empty = syntax_err;
-    if (num <= 0)
-        return (NULL);
+	if (num <= 0)
+		return (NULL);
 	tokens = malloc(sizeof(char *) * (num + 1));
 	if (!tokens)
 		exit (malloc_err);

@@ -72,8 +72,8 @@ int ft_stmnt(t_stmnt **stmnt, char **tokens, char **lim_token)
 	ret = ft_oper(&tpip, tokens, lim_token, pp);
 	if (ret)
 		return (ret);
-    if (!tpip)
-        return (last_stmnt(stmnt, tokens, lim_token));
+	if (!tpip)
+		return (last_stmnt(stmnt, tokens, lim_token));
 	if (stmnt)
 	{
 		ret = ft_stmnt(stmnt, tokens, tpip - 1);
