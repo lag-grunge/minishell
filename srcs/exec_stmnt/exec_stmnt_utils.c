@@ -6,7 +6,7 @@
 /*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 00:14:04 by sdalton           #+#    #+#             */
-/*   Updated: 2022/03/18 00:29:02 by sdalton          ###   ########.fr       */
+/*   Updated: 2022/03/18 01:19:06 by sdalton          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,7 @@ static int	exec_bin(t_cmd *cmd)
 	return (not_found_bin);
 }
 
-
-void exec_cmd(t_cmd *cmd, int sng_blt)
+void	exec_cmd(t_cmd *cmd, int sng_blt)
 {
 	int	ret;
 
@@ -93,6 +92,6 @@ void exec_cmd(t_cmd *cmd, int sng_blt)
 	if (sng_blt)
 		g_data.last_stat = ret;
 	if (sng_blt)
-		return;
+		return ;
 	exit(ret);
 }

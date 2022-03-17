@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_which.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/18 00:13:29 by sdalton           #+#    #+#             */
+/*   Updated: 2022/03/18 00:13:40 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 #include "exec_stmnt.h"
 #include "environment.h"
@@ -47,7 +59,7 @@ static int	find_cmd_in_var(char **exec_path, char *cmd, char *var)
 	return (not_fnd_bin_in_path);
 }
 
-int ft_which(char **exec_path, char *cmd)
+int	ft_which(char **exec_path, char *cmd)
 {
 	char	*path_str;
 	int		find_cmd;

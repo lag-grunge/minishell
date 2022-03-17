@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_stmnt.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/18 01:19:52 by sdalton           #+#    #+#             */
+/*   Updated: 2022/03/18 01:24:31 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 #include "exec_stmnt.h"
 #include "signal_dispose.h"
 #include "redirect.h"
 
-static void ft_child(t_stmnt *stmnt, int pdes[2])
+static void	ft_child(t_stmnt *stmnt, int pdes[2])
 {
 	int	ret;
 
@@ -14,7 +26,9 @@ static void ft_child(t_stmnt *stmnt, int pdes[2])
 		exec_cmd(stmnt->oper1, 0);
 	else if (stmnt->type == op_sbsh)
 	{
-		ret = make_all_red_exp(stmnt->redir) || ft_openfiles(stmnt->redir);
+		ret = make_all_red_exp(stmnt->redir);
+		if (!ret)
+			ret = ft_openfiles(stmnt->redir);
 		if (ret)
 			exit(1);
 		exec_stmnt(stmnt->oper1, 0);
@@ -22,7 +36,7 @@ static void ft_child(t_stmnt *stmnt, int pdes[2])
 	}
 }
 
-static void ft_parent(t_stmnt *stmnt, int pdes[2], int p)
+static void	ft_parent(t_stmnt *stmnt, int pdes[2], int p)
 {
 	signal_dispose(parent_fork);
 	if (stmnt->next_stmnt)
@@ -39,7 +53,7 @@ static void ft_parent(t_stmnt *stmnt, int pdes[2], int p)
 	}
 }
 
-int ft_is_single_bilt(t_stmnt *stmnt, int p)
+int	ft_is_single_bilt(t_stmnt *stmnt, int p)
 {
 	if (stmnt->type == op_sbsh)
 		return (0);
@@ -50,9 +64,9 @@ int ft_is_single_bilt(t_stmnt *stmnt, int p)
 	return (ft_is_bilt(((t_cmd *)stmnt->oper1)->args));
 }
 
-void exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2])
+void	exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2])
 {
-	pid_t pid;
+	pid_t	pid;
 
 	if (stmnt->next_stmnt && pipe(pdes) == -1)
 		exit (fork_err);
@@ -61,24 +75,24 @@ void exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2])
 	if (ft_is_single_bilt(stmnt, p))
 	{
 		exec_cmd(stmnt->oper1, 1);
-        save_restore_stdin_stdount();
+		save_restore_stdin_stdount();
 		return ;
 	}
 	pid = fork();
 	if (pid < 0)
 		exit(fork_err);
 	else if (pid == 0)
-        ft_child(stmnt, pdes);
+		ft_child(stmnt, pdes);
 	else
 	{
-        stmnt->pid = pid;
+		stmnt->pid = pid;
 		ft_parent(stmnt, pdes, p);
-    }
+	}
 }
 
-void exec_stmnt(t_stmnt *stmnt, int p)
+void	exec_stmnt(t_stmnt *stmnt, int p)
 {
-	int pdes[2];
+	int	pdes[2];
 
 	if (stmnt->type == op_smpl || stmnt->type == op_sbsh)
 		exec_smpl_sbsh(stmnt, p, pdes);
