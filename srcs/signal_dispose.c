@@ -12,7 +12,6 @@ static void signal_handler(int signum, siginfo_t *info, void *args)
 		ft_putchar_fd('\n', STDERR_FILENO);
 		rl_on_new_line();
 		rl_redisplay();
-	//	set_value(&g_data.env, "last_status", ft_strdup("1"));
 		g_data.last_stat = 1;
 	}
 }
@@ -59,6 +58,8 @@ void signal_dispose(int child)
 	}
 	else if (child == child_fork)
 	{
+		rl_catch_signals = 1;
+		switch_echoctl(1);
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
 		signal(SIGHUP, SIG_DFL);

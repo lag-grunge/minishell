@@ -5,8 +5,6 @@
 #include "signal_dispose.h"
 #include "biltins.h"
 
-void print_stmnt(t_stmnt *stmnt, char *pos);
-
 int exec_line(char *read_line)
 {
 	char		**tokens;
@@ -50,6 +48,8 @@ int main(int argc, char *argv[], char *env[])
 		return (exec_line(argv[1]));
 	while (1)
 	{
+		if (g_data.last_stat == 128 + SIGINT || g_data.last_stat == 128 + SIGQUIT)
+			ft_putchar_fd('\n', STDERR_FILENO);
 		line = readline("minishell>");
 		if (!line)
 			ft_exit(NULL);
