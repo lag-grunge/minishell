@@ -26,7 +26,7 @@ int exec_line(char *read_line)
 		ret = ft_parser(&stmnt, tokens, lim_token);
 	clean_split(tokens, ft_spllen(tokens));
 	if (!ret)
-		exec_stmnt(stmnt, &ret,  0);
+		exec_stmnt(stmnt, 0);
     	else if (ret == syntax_err)
 		g_data.last_stat = 2;
 	if (stmnt)
