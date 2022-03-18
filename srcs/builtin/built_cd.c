@@ -70,6 +70,7 @@ static int	ft_cd_home(t_env *local_env)
 		return (1);
 	}
 	ret = chdir(str);
+	free (str);
 	str = get_value (local_env, "PWD");
 	set_value(&local_env, "OLDPWD", str);
 	getcwd(pwd, 4000);

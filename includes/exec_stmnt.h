@@ -1,11 +1,11 @@
-#ifndef MINISHELL_EXEC_STMNT_H
-#define MINISHELL_EXEC_STMNT_H
-#include "minishell.h"
-#include "redirect.h"
-#include "environment.h"
-#include "expansions.h"
-#include "error.h"
-#include "biltins.h"
+#ifndef EXEC_STMNT_H
+# define EXEC_STMNT_H
+# include "minishell.h"
+# include "redirect.h"
+# include "environment.h"
+# include "expansions.h"
+# include "error.h"
+# include "biltins.h"
 
 enum e_err	{
 	nopath_in_env = 2,

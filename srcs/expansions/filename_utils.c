@@ -2,19 +2,19 @@
 #include "syntax.h"
 #include "expansions.h"
 
-static int test_pattern(char **next, char **token)
+static int	test_pattern(char **next, char **token)
 {
 	char	lim;
 
 	lim = '*';
-	if ((**token == '\"' ||  **token == '\'') && quoting(*token) > 1)
+	if ((**token == '\"' || **token == '\'') && quoting(*token) > 1)
 	{
 		lim = **token;
 		(*token)++;
 	}
 	while (**token != lim)
 	{
-		if (lim == '*' && ((**token == '\"' ||  **token == '\'') && \
+		if (lim == '*' && ((**token == '\"' || **token == '\'') && \
 			quoting(*token) > 1) && !test_pattern(next, token))
 			return (0);
 		if (**token != **next)
@@ -31,9 +31,9 @@ static int test_pattern(char **next, char **token)
 	return (1);
 }
 
-static int match_next(char *d_name, char *token, int quote)
+static int	match_next(char *d_name, char *token, int quote)
 {
-	int ret;
+	int	ret;
 
 	ret = 0;
 	if (quote)
@@ -51,7 +51,6 @@ static int match_next(char *d_name, char *token, int quote)
 	}
 	return (ret);
 }
-
 
 int	match(char *d_name, char *token)
 {

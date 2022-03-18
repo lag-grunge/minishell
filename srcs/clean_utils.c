@@ -1,13 +1,13 @@
 #include "clean.h"
 
-void del_env_one(t_env *tmp)
+void	del_env_one(t_env *tmp)
 {
-    free(tmp->key);
-    free(tmp->value);
-    free(tmp);
+	free(tmp->key);
+	free(tmp->value);
+	free(tmp);
 }
 
-void clean_env_hash(t_env *env_start)
+void	clean_env_hash(t_env *env_start)
 {
 	t_env	*cur;
 	t_env	*tmp;
@@ -15,18 +15,18 @@ void clean_env_hash(t_env *env_start)
 	cur = env_start;
 	while (cur)
 	{
-        tmp = cur;
-        cur = cur->next;
+		tmp = cur;
+		cur = cur->next;
 		free(tmp->key);
 		free(tmp->value);
-        free(tmp);
+		free(tmp);
 	}
 }
 
 static void	clean_redir(void **ptr)
 {
-	t_redir *red;
-	t_redir *tmp;
+	t_redir	*red;
+	t_redir	*tmp;
 
 	red = *ptr;
 	while (red)
@@ -39,7 +39,7 @@ static void	clean_redir(void **ptr)
 	*ptr = NULL;
 }
 
-void clean_cmd(t_cmd *cmd)
+void	clean_cmd(t_cmd *cmd)
 {
 	if (!cmd)
 		return ;
@@ -50,9 +50,9 @@ void clean_cmd(t_cmd *cmd)
 	free(cmd);
 }
 
-void clean_all(t_stmnt **st)
+void	clean_all(t_stmnt **st)
 {
-	t_stmnt *stmnt;
+	t_stmnt	*stmnt;
 
 	stmnt = *st;
 	if (!stmnt)

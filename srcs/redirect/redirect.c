@@ -2,7 +2,7 @@
 #include "redirect.h"
 #include "signal_dispose.h"
 
-static int read_in_child(const char *lim, int *h_doc)
+static int	read_in_child(const char *lim, int *h_doc)
 {
 	char	*line;
 
@@ -12,9 +12,9 @@ static int read_in_child(const char *lim, int *h_doc)
 	{
 		line = readline(">");
 		if (!line)
-			break;
+			break ;
 		if (!ft_strncmp(line, lim, ft_strlen(lim) + 1))
-			break;
+			break ;
 		ft_putendl_fd(line, h_doc[1]);
 		free(line);
 		line = NULL;
@@ -23,7 +23,7 @@ static int read_in_child(const char *lim, int *h_doc)
 	exit (0);
 }
 
-int read_here_doc(const char *lim, int fd_in, int *h_doc)
+int	read_here_doc(const char *lim, int fd_in, int *h_doc)
 {
 	pid_t	pid;
 
@@ -41,7 +41,7 @@ int read_here_doc(const char *lim, int fd_in, int *h_doc)
 	return (h_doc[0]);
 }
 
-static void std_redirect(int *std, int *h_doc)
+static void	std_redirect(int *std, int *h_doc)
 {
 	if (std[STDIN_FILENO] != STDIN_FILENO && std[STDIN_FILENO] == h_doc[0])
 		ft_redirect(h_doc, STDIN_FILENO);
@@ -62,10 +62,10 @@ static void std_redirect(int *std, int *h_doc)
 	}
 }
 
-int ft_openfiles(t_redir *red)
+int	ft_openfiles(t_redir *red)
 {
-	int std[3];
-	int h_doc[2];
+	int	std[3];
+	int	h_doc[2];
 
 	std[STDIN_FILENO] = STDIN_FILENO;
 	std[STDOUT_FILENO] = STDOUT_FILENO;

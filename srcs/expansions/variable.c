@@ -1,9 +1,9 @@
 #include "expansions.h"
 
-static int get_size(char *token)
+static int	get_size(char *token)
 {
-	char *cur;
-	int	exp_num;
+	char	*cur;
+	int		exp_num;
 
 	exp_num = 1;
 	cur = token;
@@ -22,13 +22,14 @@ static int get_size(char *token)
 	return (exp_num);
 }
 
-static int oper_word(t_list *args_list, char **cur_ptr, char *token, int s)
+static int	oper_word(t_list *args_list, char **cur_ptr, char *token, int s)
 {
-	char *cur;
-	char *tmp;
+	char	*cur;
+	char	*tmp;
 
 	cur = *cur_ptr;
-	if (cur != token) {
+	if (cur != token)
+	{
 		tmp = ft_substr(token, s, cur - token - s);
 		if (!tmp)
 			exit(malloc_err);
@@ -39,10 +40,10 @@ static int oper_word(t_list *args_list, char **cur_ptr, char *token, int s)
 	return ((int)(cur - token));
 }
 
-static void expan_list(t_list *args_list, char *token)
+static void	expan_list(t_list *args_list, char *token)
 {
-	char *cur;
-	int	s;
+	char	*cur;
+	int		s;
 
 	cur = token;
 	s = 0;
@@ -55,21 +56,22 @@ static void expan_list(t_list *args_list, char *token)
 			s = oper_word(args_list, &cur, token, s);
 			args_list = args_list->next;
 		}
-        cur++;
+		cur++;
 	}
 	if (cur - token - s > 0)
 		oper_word(args_list, &cur, token, s);
 }
 
-void variable_expansion(t_list *args_list)
+void	variable_expansion(t_list *args_list)
 {
-	int	exp_num;
-	char *token;
+	int		exp_num;
+	char	*token;
 
 	token = ft_strdup(args_list->content);
 	exec_expansion(&token);
 	exp_num = get_size(token);
-	if (exp_num == 1) {
+	if (exp_num == 1)
+	{
 		if (args_list->content)
 			free(args_list->content);
 		args_list->content = ft_strdup(token);

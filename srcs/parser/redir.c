@@ -3,7 +3,7 @@
 #include "expansions.h"
 #include "environment.h"
 
-static t_redir *ft_redir_new(void)
+static	t_redir	*ft_redir_new(void)
 {
 	t_redir	*red;
 
@@ -34,7 +34,7 @@ static t_redir	*add_redir_item(t_redir **red)
 
 void	rewrite_redir(char **red_word, char *tokens)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = ft_strdup(tokens);
 	if (!tmp)
@@ -44,10 +44,10 @@ void	rewrite_redir(char **red_word, char *tokens)
 	*red_word = tmp;
 }
 
-static int write_redir(t_redir **redirect, char **tokens)
+static int	write_redir(t_redir **redirect, char **tokens)
 {
 	char		*red_token;
-	char 		*wrd_token;
+	char		*wrd_token;
 	t_ctrls		red_type;
 	t_redir		*red;
 
@@ -75,9 +75,9 @@ static int write_redir(t_redir **redirect, char **tokens)
 	return (0);
 }
 
-int ft_redir(t_redir **red, char ***tokens)
+int	ft_redir(t_redir **red, char ***tokens)
 {
-	int 	ret;
+	int	ret;
 
 	ret = 0;
 	if (!**tokens)

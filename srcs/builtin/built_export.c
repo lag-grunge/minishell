@@ -18,6 +18,8 @@ static void	ft_export_els(t_list *orgs, t_env *local_env, char *vs, int j)
 	int		i;
 
 	name = ft_substr(orgs->content, 0, j);
+	if (name == NULL)
+		exit (malloc_err);
 	i = ft_strlen(orgs->content);
 	if (vs[j] != '\0')
 	{
@@ -28,35 +30,34 @@ static void	ft_export_els(t_list *orgs, t_env *local_env, char *vs, int j)
 	else
 		value = NULL;
 	set_value(&local_env, name, value);
+	free (name);
 }
 
 static void	ft_export_pls(t_list *orgs, t_env *local_env, char *vs, int j)
 {
-	char	*name;
-	char	*value;
-	char	*old;
-	char	*full;
+	t_exp	e;
 
-	name = ft_substr(orgs->content, 0, j);
+	e.name = ft_substr(orgs->content, 0, j);
+	if (e.name == NULL)
+		exit (malloc_err);
 	j++;
 	if (vs[j] != '\0')
+		e.value = ft_substr(orgs->content, j + 1, ft_strlen(orgs->content));
+	else
+		e.value = NULL;
+	e.old = get_value(local_env, e.name);
+	if (e.old != NULL)
 	{
-		value = ft_substr(orgs->content, j + 1, ft_strlen(orgs->content));
-		if (value == NULL)
+		e.full = ft_strjoin(e.old, e.value);
+		if (e.full == NULL)
 			exit (malloc_err);
+		free (e.old);
+		free (e.value);
+		set_value(&local_env, e.name, e.full);
 	}
 	else
-		value = NULL;
-	old = get_value(local_env, name);
-	if (old != NULL)
-	{
-		full = ft_strjoin(old, value);
-		if (full == NULL)
-			exit (malloc_err);
-		set_value(&local_env, name, full);
-	}
-	else
-		set_value(&local_env, name, value);
+		set_value(&local_env, e.name, e.value);
+	free (e.name);
 }
 
 static int	ft_export_args(t_list *orgs, t_env *local_env, int *ret, int j)
