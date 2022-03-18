@@ -109,13 +109,20 @@ static char	*oper_dollar(char **tokens, char *dollar)
 void	exec_expansion(char **token)
 {
 	char	*cur;
+	int		db;
 
+	db = 0;
 	cur = *token;
 	while (*cur)
 	{
 		if (*cur == '$')
 			cur = oper_dollar(token, cur);
-		else if (*cur == '\'')
+		else if (*cur == '\"')
+		{
+			db = !db;
+			cur++;
+		}
+		else if (*cur == '\'' && !db)
 			cur += quoting(cur);
 		else
 			cur++;
