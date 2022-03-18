@@ -32,7 +32,7 @@ static void	ft_child(t_stmnt *stmnt, int pdes[2])
 		if (ret)
 			exit(1);
 		exec_stmnt(stmnt->oper1, 0);
-		exit(ret);
+        exit(g_data.last_stat);
 	}
 }
 

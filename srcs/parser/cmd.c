@@ -16,16 +16,12 @@ static int	check_args(char **tokens, char **lim_token)
 	return (0);
 }
 
-int	write_word(t_list **cur, char *tokens)
-{
-	char	*tmp;
 
-	tmp = ft_strdup(tokens);
-	if (!tmp)
-		exit (malloc_err);
+int		write_word(t_list **cur, char *token)
+{
 	if (!*cur)
 	{
-		*cur = ft_lstnew(tmp);
+		*cur = ft_lstnew(token);
 		if (!*cur)
 			exit(malloc_err);
 	}
@@ -33,7 +29,7 @@ int	write_word(t_list **cur, char *tokens)
 	{
 		if ((*cur)->content)
 			free((*cur)->content);
-		(*cur)->content = tmp;
+		(*cur)->content = token;
 	}
 	return (0);
 }
@@ -57,6 +53,7 @@ static int	ft_write_cmd(t_list **cmd_args, t_redir **cmd_red, char **tokens)
 {
 	int		ret;
 	t_list	**cur;
+    char    *tmp;
 
 	ret = 0;
 	cur = cmd_args;
@@ -66,7 +63,10 @@ static int	ft_write_cmd(t_list **cmd_args, t_redir **cmd_red, char **tokens)
 			ret = ft_redir(cmd_red, &tokens);
 		else if (cmd_args && accept(wrd, &tokens))
 		{
-			ret = write_word(cur, tokens[-1]);
+            tmp = ft_strdup(tokens[-1]);
+            if (!tmp)
+                exit(malloc_err);
+			ret = write_word(cur, tmp);
 			cur = &(*cur)->next;
 		}
 		else if (accept(wrd, &tokens))

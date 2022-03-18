@@ -39,7 +39,10 @@ static void	write_filenames(t_list *args_list, DIR *dir, int fil_num, char *patt
 			continue ;
 		if (match(cont->d_name, pattern))
 		{
-			write_word(&args_list, cont->d_name);
+            tmp = ft_strdup(cont->d_name);
+            if (!tmp)
+                exit(malloc_err);
+			write_word(&args_list, tmp);
 			args_list = args_list->next;
 			i++;
 		}
@@ -48,7 +51,6 @@ static void	write_filenames(t_list *args_list, DIR *dir, int fil_num, char *patt
 	{
 		tmp = quote_removal(args_list->content);
 		write_word(&args_list, tmp);
-		free(tmp);
 	}
 }
 
