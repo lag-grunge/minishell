@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_stmnt_utils.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/18 00:14:04 by sdalton           #+#    #+#             */
+/*   Updated: 2022/03/18 01:19:06 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "exec_stmnt.h"
 
-static int get_status(int status)
+static int	get_status(int status)
 {
 	int		code;
 
@@ -12,31 +24,31 @@ static int get_status(int status)
 	return (code);
 }
 
-int wait_child(int p, pid_t pid_last)
+int	wait_child(int p, pid_t pid_last)
 {
-	int     status;
-    pid_t   pid;
-    int     ret;
+	int		status;
+	pid_t	pid;
+	int		ret;
 
 	p++;
-    ret = 0;
+	ret = 0;
 	while (p)
 	{
 		pid = waitpid(-1, &status, 0);
-        if (pid == pid_last)
-        {
-            ret = get_status(status);
+		if (pid == pid_last)
+		{
+			ret = get_status(status);
 			g_data.last_stat = ret;
-        }
+		}
 		p--;
 	}
 	return (ret);
 }
 
-static int exec_bin(t_cmd *cmd)
+static int	exec_bin(t_cmd *cmd)
 {
 	char	**env;
-	char 	**args;
+	char	**args;
 	char	*exec_path;
 	int		ret;
 
@@ -47,10 +59,8 @@ static int exec_bin(t_cmd *cmd)
 			exit_no_file_error(not_found_bin, "");
 		exit_no_file_error(not_found_bin, cmd->args->content);
 	}
-	else if (ret == not_perms_for_exec) {
+	else if (ret == not_perms_for_exec)
 		exit_no_perms_error(perm_den_bin, cmd->args->content);
-	}
-//	if (!ft_strncmp(cmd-q>args->content, "./minishell", 12)) /////////////////////  absolute_or_another_path
 	env = get_env_array(g_data.env);
 	args = get_cmd_array(cmd->args);
 	execve(exec_path, args, env);
@@ -58,35 +68,30 @@ static int exec_bin(t_cmd *cmd)
 	return (not_found_bin);
 }
 
-void exec_cmd(t_cmd *cmd, int *res_if_single_builtin)
+void	exec_cmd(t_cmd *cmd, int sng_blt)
 {
-	int 	ret;
+	int	ret;
 
-	ret = make_all_red_exp(cmd->redir) || ft_openfiles(cmd->redir);
-	if (ret && !res_if_single_builtin)
+	ret = make_all_red_exp(cmd->redir);
+	if (!ret)
+		ret = ft_openfiles(cmd->redir);
+	if (!sng_blt && ret)
 		exit(1);
-	else if (ret)
-	{
-		*res_if_single_builtin = 1;
+	if ((!sng_blt && !cmd->args) || !ft_strncmp(cmd->args->content, "true", 5))
+		exit (0);
+	else if (!sng_blt && !ft_strncmp(cmd->args->content, "false", 6))
+		exit (1);
+	else if (sng_blt && ret)
 		g_data.last_stat = 1;
-		return;
-	}
-	if (!cmd->args || !ft_strncmp(cmd->args->content, "true", 5))
-        	exit (0);
-    	else if (!ft_strncmp(cmd->args->content, "false", 6))
-        	exit (1);
-	make_expansions(&cmd->args);
-	if (cmd->args && !ft_is_bilt(cmd->args))
+	if (!ret)
+		make_expansions(&cmd->args);
+	if (!ret && cmd->args && !ft_is_bilt(cmd->args))
 		ret = exec_bin(cmd);
-	else if (cmd->args)
-	{
+	else if (!ret && cmd->args)
 		ret = ft_bilt_start(cmd->args);
-		if (res_if_single_builtin)
-		{
-			*res_if_single_builtin = ret;
-			g_data.last_stat = ret;
-			return;
-		}
-	}
+	if (sng_blt)
+		g_data.last_stat = ret;
+	if (sng_blt)
+		return ;
 	exit(ret);
 }

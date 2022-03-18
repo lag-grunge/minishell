@@ -57,6 +57,8 @@ void	signal_dispose(int child)
 	}
 	else if (child == child_fork)
 	{
+		rl_catch_signals = 1;
+		switch_echoctl(1);
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
 		signal(SIGHUP, SIG_DFL);
