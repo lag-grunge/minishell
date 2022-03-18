@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirect.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/18 21:03:54 by sdalton           #+#    #+#             */
+/*   Updated: 2022/03/18 21:42:35 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "redirect.h"
 #include "signal_dispose.h"
@@ -67,22 +79,23 @@ int	ft_openfiles(t_redir *red)
 	int	std[3];
 	int	h_doc[2];
 
-	std[STDIN_FILENO] = STDIN_FILENO;
-	std[STDOUT_FILENO] = STDOUT_FILENO;
-	std[STDERR_FILENO] = STDERR_FILENO;
-	h_doc[STDIN_FILENO] = -1;
-	h_doc[STDOUT_FILENO] = -1;
+	std[0] = 0;
+	std[1] = 1;
+	std[2] = 2;
+	ft_memset(h_doc, 255, 2 * sizeof(int));
 	while (red)
 	{
 		if (red->type == red_rifile)
-			std[STDIN_FILENO] = open_for_read(red->word, std[STDIN_FILENO]);
+			std[0] = open_for_read(red->word, std[0]);
 		else if (red->type == red_rh_doc)
-			std[STDIN_FILENO] = read_here_doc(red->word, std[STDIN_FILENO], h_doc);
+			std[0] = read_here_doc(red->word, std[0], h_doc);
 		else if (red->type == red_wofile || red->type == red_aofile)
-			std[STDOUT_FILENO] = open_for_write(red->word, std[STDOUT_FILENO], red->type == red_aofile, 0);
+			std[1] = open_for_write(red->word, std[1], \
+				red->type == red_aofile, 0);
 		else if (red->type == red_eofile || red->type == red_aefile)
-			std[STDERR_FILENO] = open_for_write(red->word, std[STDERR_FILENO], red->type == red_aefile, 1);
-		if (std[STDIN_FILENO] < 0 || std[STDOUT_FILENO] < 0 || std[STDERR_FILENO] < 0)
+			std[2] = open_for_write(red->word, std[2], \
+				red->type == red_aefile, 1);
+		if (std[0] < 0 || std[1] < 0 || std[2] < 0)
 			return (file_err);
 		red = red->next;
 	}

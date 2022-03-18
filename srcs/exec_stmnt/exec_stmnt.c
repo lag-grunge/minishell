@@ -6,7 +6,7 @@
 /*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 01:19:52 by sdalton           #+#    #+#             */
-/*   Updated: 2022/03/18 01:24:31 by sdalton          ###   ########.fr       */
+/*   Updated: 2022/03/18 21:49:33 by sdalton          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	ft_child(t_stmnt *stmnt, int pdes[2])
 		if (ret)
 			exit(1);
 		exec_stmnt(stmnt->oper1, 0);
-        exit(g_data.last_stat);
+		exit(g_data.last_stat);
 	}
 }
 

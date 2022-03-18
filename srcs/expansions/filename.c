@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   filename.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/18 22:04:27 by sdalton           #+#    #+#             */
+/*   Updated: 2022/03/18 23:28:15 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "expansions.h"
 
 static int	get_size(char *pwd, char *token)
@@ -23,7 +35,19 @@ static int	get_size(char *pwd, char *token)
 	return (i);
 }
 
-static void	write_filenames(t_list *args_list, DIR *dir, int fil_num, char *pattern)
+static t_list	*oper_filename(char *filename, t_list *args_list)
+{
+	char			*tmp;
+
+	tmp = ft_strdup(filename);
+	if (!tmp)
+		exit(malloc_err);
+	write_word(&args_list, tmp);
+	return (args_list->next);
+}
+
+static void	write_filenames(t_list *args_list, DIR *dir, \
+		int fil_num, char *pattern)
 {
 	struct dirent	*cont;
 	int				i;
@@ -39,19 +63,14 @@ static void	write_filenames(t_list *args_list, DIR *dir, int fil_num, char *patt
 			continue ;
 		if (match(cont->d_name, pattern))
 		{
-            tmp = ft_strdup(cont->d_name);
-            if (!tmp)
-                exit(malloc_err);
-			write_word(&args_list, tmp);
-			args_list = args_list->next;
+			args_list = oper_filename(cont->d_name, args_list);
 			i++;
 		}
 	}
-	if (!i)
-	{
-		tmp = quote_removal(args_list->content);
-		write_word(&args_list, tmp);
-	}
+	if (i)
+		return ;
+	tmp = quote_removal(args_list->content);
+	write_word(&args_list, tmp);
 }
 
 void	filename_expansion(t_list *args_list)

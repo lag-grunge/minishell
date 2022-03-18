@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exp_args.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/18 21:49:59 by sdalton           #+#    #+#             */
+/*   Updated: 2022/03/18 21:52:48 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "expansions.h"
 
 void	make_expansions(t_list **args)
@@ -34,7 +46,8 @@ static int	make_red_subs(char **red_word)
 	variable_expansion(new_list);
 	ft_lstdel_empty(&new_list);
 	if (ft_lstsize(new_list) == 0)
-		return (syntax_error(syntax_err, NULL, "./minishell: ambigious_redirect"));
+		return (syntax_error(syntax_err, NULL, \
+					"./minishell: ambigious_redirect"));
 	else
 	{
 		filename_expansion(new_list);
@@ -42,7 +55,8 @@ static int	make_red_subs(char **red_word)
 		if (ft_lstsize(new_list) == 1)
 			rewrite_redir(red_word, new_list->content);
 		else
-			ret = syntax_error(syntax_err, NULL, "./minishell: ambigious_redirect");
+			ret = syntax_error(syntax_err, NULL, \
+					"./minishell: ambigious_redirect");
 		ft_lstclear(&new_list, free);
 		return (ret);
 	}
