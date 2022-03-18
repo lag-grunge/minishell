@@ -1,7 +1,7 @@
 #include "../../includes/syntax.h"
 #include "../../includes/parser.h"
 
-int check_brackets(char **tokens, char **lim_token)
+int	check_brackets(char **tokens, char **lim_token)
 {
 	int	brackets;
 
@@ -14,15 +14,15 @@ int check_brackets(char **tokens, char **lim_token)
 			brackets--;
 		else
 			tokens++;
-        if (brackets < 0)
-            return (syntax_error(syntax_err, ")", "bash: syntax:"));
+		if (brackets < 0)
+			return (syntax_error(syntax_err, ")", "bash: syntax:"));
 	}
 	if (!brackets)
 		return (0);
-    return (syntax_error(syntax_err, "newline'", "bash: syntax: ("));
+	return (syntax_error(syntax_err, "newline'", "bash: syntax: ("));
 }
 
-static int condition(char **tokens, char **lim_token, int direction)
+static int	condition(char **tokens, char **lim_token, int direction)
 {
 	if (lim_token && tokens && tokens <= lim_token && direction == 1)
 		return (1);
@@ -33,7 +33,7 @@ static int condition(char **tokens, char **lim_token, int direction)
 	return (0);
 }
 
-char **close_bracket(char **tokens, char **lim_token, int direction)
+char	**close_bracket(char **tokens, char **lim_token, int direction)
 {
 	int	brackets;
 
@@ -58,14 +58,14 @@ static int	empty_brackets(char **lim_token)
 	return (type(*lim_token) == lb);
 }
 
-int ft_parenthesis(t_stmnt **stmnt, t_redir **red, char **tokens)
+int	ft_parenthesis(t_stmnt **stmnt, t_redir **red, char **tokens)
 {
 	char	**lim_token;
 	int		ret;
 
 	lim_token = close_bracket(tokens, NULL, 1) - 1;
 	if (!stmnt && empty_brackets(lim_token))
-		return syntax_error(syntax_err, lim_token[1], "ft_parenthesis");
+		return (syntax_error(syntax_err, lim_token[1], "ft_parenthesis"));
 	if (!stmnt)
 		ret = ft_preparser(tokens, lim_token);
 	else

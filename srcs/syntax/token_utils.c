@@ -1,7 +1,7 @@
 #include "../../includes/minishell.h"
 #include "syntax.h"
 
-int		ft_ismeta(int c)
+int	ft_ismeta(int c)
 {
 	if (c == '<' || c == '>')
 		return (1);
@@ -12,7 +12,7 @@ int		ft_ismeta(int c)
 	return (0);
 }
 
-int ft_isoperator(char *s)
+int	ft_isoperator(char *s)
 {
 	if (!ft_strncmp(s, LTLT, MAX_CTRLS_LEN + 1))
 		return (ct_ltlt);
@@ -39,9 +39,9 @@ int ft_isoperator(char *s)
 	return (-1);
 }
 
-char *ft_meta(char *read_line, int *nt, char **unexp)
+char	*ft_meta(char *read_line, int *nt, char **unexp)
 {
-	int 	next_token;
+	int		next_token;
 	char	*tmp;
 	char	*ret;
 
@@ -69,6 +69,8 @@ char *ft_meta(char *read_line, int *nt, char **unexp)
 char	*word(char *read_line, int *nt)
 {
 	int		next_token;
+	int		res;
+	char	tmp[2];
 
 	next_token = 0;
 	while (read_line[next_token] && \
@@ -76,17 +78,17 @@ char	*word(char *read_line, int *nt)
 			!ft_isspace(read_line[next_token]))
 	{
 		if (read_line[next_token] == '\'' || \
-			read_line[next_token] == '\"') {
-            int res = quoting(read_line + next_token);
-            if (res == 1)
-            {
-                char tmp[2];
-                tmp[0] = read_line[next_token];
-                syntax_error(syntax_err, tmp, "minishell: get_tokens: ");
-                return (NULL);
-            }
-            next_token += res;
-        }
+			read_line[next_token] == '\"')
+		{
+			res = quoting(read_line + next_token);
+			if (res == 1)
+			{
+				tmp[0] = read_line[next_token];
+				syntax_error(syntax_err, tmp, "minishell: get_tokens: ");
+				return (NULL);
+			}
+			next_token += res;
+		}
 		else
 			next_token++;
 	}
@@ -101,4 +103,3 @@ char	*ft_number(char *start)
 		start++;
 	return (start);
 }
-

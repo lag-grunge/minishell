@@ -2,7 +2,7 @@
 
 t_token	type(char *cur)
 {
-	int ret;
+	int	ret;
 
 	ret = ft_isoperator(cur);
 	if (ret >= ct_ltlt && ret <= ct_egtgt)
@@ -19,14 +19,14 @@ t_token	type(char *cur)
 		return (wrd);
 }
 
-int expect(t_token t, char ***cur, char *module)
+int	expect(t_token t, char ***cur, char *module)
 {
 	if (accept(t, cur))
 		return (0);
 	return (syntax_error(syntax_err, **cur, module));
 }
 
-char *ft_name(char *start)
+char	*ft_name(char *start)
 {
 	if (!ft_isalpha(*start) && *start != '_')
 		return (start);
@@ -35,7 +35,7 @@ char *ft_name(char *start)
 	return (start);
 }
 
-int accept(t_token t, char ***cur)
+int	accept(t_token t, char ***cur)
 {
 	if (**cur && t == type(**cur))
 	{

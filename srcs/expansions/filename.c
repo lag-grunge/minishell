@@ -1,10 +1,10 @@
 #include "expansions.h"
 
-static int get_size(char *pwd, char *token)
+static int	get_size(char *pwd, char *token)
 {
-	DIR *dir;
-	struct dirent *cont;
-	int i;
+	DIR				*dir;
+	struct dirent	*cont;
+	int				i;
 
 	dir = opendir(pwd);
 	i = 0;
@@ -12,22 +12,22 @@ static int get_size(char *pwd, char *token)
 	{
 		cont = readdir(dir);
 		if (!cont)
-			break;
+			break ;
 		if (cont->d_name[0] == '.')
 			continue ;
 		if (!match(cont->d_name, token))
-			continue;
+			continue ;
 		i++;
 	}
 	closedir(dir);
 	return (i);
 }
 
-static void write_filenames(t_list *args_list, DIR *dir, int fil_num, char *pattern)
+static void	write_filenames(t_list *args_list, DIR *dir, int fil_num, char *pattern)
 {
-	struct dirent *cont;
-	int 	i;
-	char 	*tmp;
+	struct dirent	*cont;
+	int				i;
+	char			*tmp;
 
 	i = 0;
 	while (i < fil_num)
@@ -52,12 +52,12 @@ static void write_filenames(t_list *args_list, DIR *dir, int fil_num, char *patt
 	}
 }
 
-void filename_expansion(t_list *args_list)
+void	filename_expansion(t_list *args_list)
 {
-	DIR *dir;
-	int fil_num;
-	char pwd[2048];
-	char *pattern;
+	DIR		*dir;
+	int		fil_num;
+	char	pwd[2048];
+	char	*pattern;
 
 	getcwd(pwd, 2048);
 	if (access(pwd, F_OK))

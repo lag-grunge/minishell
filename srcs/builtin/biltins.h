@@ -15,6 +15,14 @@
 # include "minishell.h"
 # include "environment.h"
 
+typedef struct s_exp
+{
+	char	*name;
+	char	*value;
+	char	*old;
+	char	*full;
+}	t_exp;
+
 int		ft_exit(t_list *orgs);
 int		ft_env(t_list *orgs, t_env *local_env);
 int		ft_unset(t_list *orgs, t_env *local_env);

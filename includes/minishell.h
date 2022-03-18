@@ -1,10 +1,10 @@
 #ifndef MINISHELL_H
-#define MINISHELL_H
-#ifndef TEST_G
-# include "libft.h"
-#else
-# include "../../../libft/libft.h"
-#endif
+# define MINISHELL_H
+# ifndef TEST_G
+#  include "libft.h"
+# else
+#  include "../../../libft/libft.h"
+# endif
 # include <dirent.h>
 # include <stdio.h>
 # include <errno.h>
@@ -27,7 +27,7 @@ typedef enum e_codes {
 	no_file_exists = 1,
 	perm_den_bin = 126,
 	not_found_bin = 127
-} t_codes;
+}	t_codes;
 
 # define LTLT "<<"
 # define GTGT ">>"
@@ -54,7 +54,7 @@ typedef enum e_ctrls {
 	ct_and,
 	ct_lbr,
 	ct_rbr
-} t_ctrls;
+}	t_ctrls;
 
 typedef enum e_token {
 	lg,
@@ -63,14 +63,14 @@ typedef enum e_token {
 	pp,
 	lb,
 	rb
-} t_token;
+}	t_token;
 
 typedef enum e_tstmnt {
 	op_smpl,
 	op_or,
 	op_and,
 	op_sbsh
-} t_tstmnt;
+}	t_tstmnt;
 
 typedef enum e_tred {
 	red_rifile,
@@ -79,34 +79,34 @@ typedef enum e_tred {
 	red_aofile,
 	red_eofile,
 	red_aefile
-} t_tred;
+}	t_tred;
 
 typedef struct s_redir {
-	t_tred	type;
-	char	*word;
-	struct	s_redir *next;
+	t_tred			type;
+	char			*word;
+	struct s_redir	*next;
 }			t_redir;
 
 typedef struct s_cmd {
 	t_list			*args;
-	t_redir 		*redir;
+	t_redir			*redir;
 }			t_cmd;
 
 typedef struct s_stmnt {
-	int 			type;
+	int				type;
 	void			*oper1;
 	void			*oper2;
 	t_redir			*redir; //	common redir for subshell
-    pid_t           pid;
-	struct s_stmnt 	*next_stmnt; // pipe
+	pid_t			pid;
+	struct s_stmnt	*next_stmnt; // pipe
 }			t_stmnt;
 
 typedef struct s_env {
-	char *key;
-	char sep;
-	char *value;
-	struct s_env *next;
-} 				t_env;
+	char			*key;
+	char			sep;
+	char			*value;
+	struct s_env	*next;
+}				t_env;
 
 enum e_child_disp {
 	main_shell,
@@ -120,10 +120,12 @@ typedef struct s_data {
 	int		last_stat;
 }				t_data;
 
-#ifdef __cplusplus  //for CPP googletests
-	extern t_data g_data;
-#else
-	t_data g_data;
-#endif
+# ifdef __cplusplus  //for CPP googletests
+extern t_data	g_data;
+# else
+
+t_data			g_data;
+
+# endif
 
 #endif

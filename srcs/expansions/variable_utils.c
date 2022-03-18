@@ -1,6 +1,6 @@
 #include "expansions.h"
 
-static int quote_num(char *value)
+static int	quote_num(char *value)
 {
 	int		q;
 	char	*str;
@@ -16,7 +16,7 @@ static int quote_num(char *value)
 	return (q);
 }
 
-static void ft_strlcat_q(char *new_str, char *value, int prefix)
+static void	ft_strlcat_q(char *new_str, char *value, int prefix)
 {
 	int	i;
 
@@ -42,24 +42,24 @@ static void ft_strlcat_q(char *new_str, char *value, int prefix)
 	new_str[i] = 0;
 }
 
-static char *make_substitution(char **tokens, char *dollar, char *end_var, char *value)
+static char	*make_substitution(char **tokens, char *dollar, char *end_var, char *value)
 {
-	int	count;
-	char *new_str;
-	int val;
-	char *ret;
-	int q_count;
+	int		count;
+	char	*new_str;
+	int		val;
+	char	*ret;
+	int		q_count;
 
-    count = (int)ft_strlen(*tokens);
-    count -= (int)(end_var - dollar);
-    q_count = 0;
-    if (value)
-    {
-        q_count = quote_num(value);
-        val = (int)ft_strlen(value) +  2 * q_count;
-        count += val;
-    }
-    new_str = (char *) ft_calloc((count + 1), sizeof(char));
+	count = (int)ft_strlen(*tokens);
+	count -= (int)(end_var - dollar);
+	q_count = 0;
+	if (value)
+	{
+		q_count = quote_num(value);
+		val = (int)ft_strlen(value) + 2 * q_count;
+		count += val;
+	}
+	new_str = (char *) ft_calloc((count + 1), sizeof(char));
 	if (!new_str)
 		exit (malloc_err);
 	ft_strlcpy(new_str, *tokens, dollar - *tokens + 1);
@@ -74,13 +74,13 @@ static char *make_substitution(char **tokens, char *dollar, char *end_var, char 
 	return (ret);
 }
 
-static char *oper_dollar(char **tokens, char *dollar)
+static char	*oper_dollar(char **tokens, char *dollar)
 {
-	char *start_var;
-	char *end_var;
-	char *tmp;
-	char *ret;
-	char *value;
+	char	*start_var;
+	char	*end_var;
+	char	*tmp;
+	char	*ret;
+	char	*value;
 
 	start_var = dollar + 1;
 	if (*start_var == '?')
@@ -106,9 +106,9 @@ static char *oper_dollar(char **tokens, char *dollar)
 	return (ret);
 }
 
-void exec_expansion(char **token)
+void	exec_expansion(char **token)
 {
-	char *cur;
+	char	*cur;
 
 	cur = *token;
 	while (*cur)

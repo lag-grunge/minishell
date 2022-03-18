@@ -1,10 +1,10 @@
 #include "expansions.h"
 #include "syntax.h"
 
-static int get_size(char *token)
+static int	get_size(char *token)
 {
 	int	size;
-	int qlen;
+	int	qlen;
 
 	size = 0;
 	while (*token)
@@ -25,9 +25,9 @@ static int get_size(char *token)
 	return (size);
 }
 
-static char *quote_copy(char *new_token, char *token, int *i_ptr)
+static char	*quote_copy(char *new_token, char *token, int *i_ptr)
 {
-	int qlen;
+	int	qlen;
 
 	qlen = quoting(token);
 	if (qlen == 2)
@@ -37,10 +37,10 @@ static char *quote_copy(char *new_token, char *token, int *i_ptr)
 	return (token + qlen);
 }
 
-char  *quote_removal(char *token)
+char	*quote_removal(char *token)
 {
-	int new_len;
-	int	i;
+	int		new_len;
+	int		i;
 	char	*new_token;
 
 	new_len = get_size(token);
@@ -60,10 +60,10 @@ char  *quote_removal(char *token)
 	return (new_token);
 }
 
-int		quoting(char *read_line)
+int	quoting(char *read_line)
 {
-	char quote;
-	char *res;
+	char	quote;
+	char	*res;
 
 	quote = *read_line;
 	res = ft_strchr(read_line + 1, quote);

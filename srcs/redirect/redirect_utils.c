@@ -3,8 +3,8 @@
 static char	*str_err(const char *filename, const char *cmd_name)
 {
 	char	*tmp_err;
-	int 	err_len;
-	int 	cmd_len;
+	int		err_len;
+	int		cmd_len;
 
 	cmd_len = (int)ft_strlen(cmd_name);
 	err_len = (int)ft_strlen(filename);
@@ -19,9 +19,9 @@ static char	*str_err(const char *filename, const char *cmd_name)
 	return (tmp_err);
 }
 
-int		print_err(char *filename, char *cmd_name)
+int	print_err(char *filename, char *cmd_name)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = str_err(filename, cmd_name);
 	if (!tmp)
@@ -31,7 +31,7 @@ int		print_err(char *filename, char *cmd_name)
 	return (-file_err);
 }
 
-int open_for_read(char *filename, int fd_in)
+int	open_for_read(char *filename, int fd_in)
 {
 	if (fd_in != STDIN_FILENO)
 		close(fd_in);
@@ -41,7 +41,7 @@ int open_for_read(char *filename, int fd_in)
 	return (fd_in);
 }
 
-int open_for_write(char *filename, int fd_out, int append, int err)
+int	open_for_write(char *filename, int fd_out, int append, int err)
 {
 	if ((!err && fd_out != STDOUT_FILENO) || (err && fd_out != STDERR_FILENO))
 		close(fd_out);
@@ -62,27 +62,27 @@ int open_for_write(char *filename, int fd_out, int append, int err)
 
 void	save_restore_stdin_stdount(void)
 {
-    static int sav_in = STDIN_FILENO;
-    static int sav_out = STDOUT_FILENO;
-    static int sav_err = STDERR_FILENO;
+	static int	sav_in = STDIN_FILENO;
+	static int	sav_out = STDOUT_FILENO;
+	static int	sav_err = STDERR_FILENO;
 
-    if (STDOUT_FILENO != sav_out || STDIN_FILENO != sav_in || STDERR_FILENO != sav_err)
-    {
-        dup2(sav_in, STDIN_FILENO);
-        close(sav_in);
-        sav_in = STDIN_FILENO;
-        dup2(sav_out, STDOUT_FILENO);
-        close(sav_out);
-        sav_out = STDOUT_FILENO;
-        dup2(sav_err, STDERR_FILENO);
-        close(sav_err);
-        sav_err = STDERR_FILENO;
-    }
-    else
-    {
-        sav_in = dup(STDIN_FILENO);
-        sav_out = dup(STDOUT_FILENO);
-        sav_err = dup(STDERR_FILENO);
-    }
+	if (STDOUT_FILENO != sav_out || STDIN_FILENO != sav_in
+		|| STDERR_FILENO != sav_err)
+	{
+		dup2(sav_in, STDIN_FILENO);
+		close(sav_in);
+		sav_in = STDIN_FILENO;
+		dup2(sav_out, STDOUT_FILENO);
+		close(sav_out);
+		sav_out = STDOUT_FILENO;
+		dup2(sav_err, STDERR_FILENO);
+		close(sav_err);
+		sav_err = STDERR_FILENO;
+	}
+	else
+	{
+		sav_in = dup(STDIN_FILENO);
+		sav_out = dup(STDOUT_FILENO);
+		sav_err = dup(STDERR_FILENO);
+	}
 }
-

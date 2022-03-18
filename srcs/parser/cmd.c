@@ -1,13 +1,13 @@
 #include "parser.h"
 
-static int check_args(char **tokens, char **lim_token)
+static int	check_args(char **tokens, char **lim_token)
 {
 	while (*tokens)
 	{
 		if (accept(lg, &tokens))
 			ft_redir(NULL, &tokens);
 		else if (accept(wrd, &tokens))
-			continue;
+			continue ;
 		else
 			break ;
 	}
@@ -16,11 +16,11 @@ static int check_args(char **tokens, char **lim_token)
 	return (0);
 }
 
-int		write_word(t_list **cur, char *tokens)
+int	write_word(t_list **cur, char *tokens)
 {
-	char *tmp;
+	char	*tmp;
 
-	tmp =  ft_strdup(tokens);
+	tmp = ft_strdup(tokens);
 	if (!tmp)
 		exit (malloc_err);
 	if (!*cur)
@@ -29,7 +29,8 @@ int		write_word(t_list **cur, char *tokens)
 		if (!*cur)
 			exit(malloc_err);
 	}
-	else {
+	else
+	{
 		if ((*cur)->content)
 			free((*cur)->content);
 		(*cur)->content = tmp;
@@ -37,7 +38,7 @@ int		write_word(t_list **cur, char *tokens)
 	return (0);
 }
 
-static int ft_init_cmd(t_cmd **cmd, char **tokens, char **lim_token)
+static int	ft_init_cmd(t_cmd **cmd, char **tokens, char **lim_token)
 {
 	int		ret;
 
@@ -52,7 +53,7 @@ static int ft_init_cmd(t_cmd **cmd, char **tokens, char **lim_token)
 	return (0);
 }
 
-static int ft_write_cmd(t_list **cmd_args, t_redir **cmd_red, char **tokens)
+static int	ft_write_cmd(t_list **cmd_args, t_redir **cmd_red, char **tokens)
 {
 	int		ret;
 	t_list	**cur;
@@ -76,7 +77,7 @@ static int ft_write_cmd(t_list **cmd_args, t_redir **cmd_red, char **tokens)
 	return (ret);
 }
 
-int ft_cmd(t_stmnt **stmnt, char **tokens, char **lim_token)
+int	ft_cmd(t_stmnt **stmnt, char **tokens, char **lim_token)
 {
 	t_cmd	**cmd;
 	int		ret;
@@ -96,7 +97,7 @@ int ft_cmd(t_stmnt **stmnt, char **tokens, char **lim_token)
 	(*stmnt)->type = op_smpl;
 	cmd = (t_cmd **)&(*stmnt)->oper1;
 	ret = ft_init_cmd(cmd, tokens, lim_token);
-    if (ret)
-        return (ret);
-    return (ft_write_cmd(&(*cmd)->args, &(*cmd)->redir, tokens));
+	if (ret)
+		return (ret);
+	return (ft_write_cmd(&(*cmd)->args, &(*cmd)->redir, tokens));
 }

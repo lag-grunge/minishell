@@ -12,8 +12,8 @@ static int	trim_space(char **read_line)
 
 static char	*oper_token(char *read_line, int *len)
 {
-	char *ret;
-	char *tmp;
+	char	*ret;
+	char	*tmp;
 
 	if (ft_ismeta(*read_line) || !ft_strncmp(read_line, "2>", 2))
 	{
@@ -29,7 +29,7 @@ static char	*oper_token(char *read_line, int *len)
 	return (word(read_line, len));
 }
 
-static size_t get_number(char *read_line)
+static	size_t	get_number(char *read_line)
 {
 	int	num;
 
@@ -46,18 +46,18 @@ static size_t get_number(char *read_line)
 	return (num);
 }
 
-char **get_tokens(char *read_line, int *empty)
+char	**get_tokens(char *read_line, int *empty)
 {
-	int 	num;
-	char 	**tokens;
+	int		num;
+	char	**tokens;
 	int		i;
 	int		len;
 
 	num = get_number(read_line);
 	if (!num)
-	    *empty = 1;
+		*empty = 1;
 	else if (num == -syntax_err)
-        *empty = syntax_err;
+		*empty = syntax_err;
 	if (num <= 0)
 		return (NULL);
 	tokens = malloc(sizeof(char *) * (num + 1));
@@ -69,10 +69,10 @@ char **get_tokens(char *read_line, int *empty)
 	{
 		if (trim_space(&read_line))
 			break ;
-        read_line = oper_token(read_line, &len);
+		read_line = oper_token(read_line, &len);
 		tokens[i] = ft_substr(read_line - len, 0, len);
-        if (!tokens[i])
-            exit (malloc_err);
+		if (!tokens[i])
+			exit (malloc_err);
 		i++;
 	}
 	return (tokens);

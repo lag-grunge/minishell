@@ -5,13 +5,13 @@
 #include "signal_dispose.h"
 #include "biltins.h"
 
-void print_stmnt(t_stmnt *stmnt, char *pos);
+void	print_stmnt(t_stmnt *stmnt, char *pos);
 
-int exec_line(char *read_line)
+int	exec_line(char *read_line)
 {
 	char		**tokens;
 	char		**lim_token;
-	t_stmnt 	*stmnt;
+	t_stmnt		*stmnt;
 	int			ret;
 
 	stmnt = NULL;
@@ -19,8 +19,8 @@ int exec_line(char *read_line)
 	ret = 0;
 	tokens = get_tokens(read_line, &ret);
 	if (!tokens && ret == syntax_err)
-        	g_data.last_stat = 2;
-    	if (!tokens)
+		g_data.last_stat = 2;
+	if (!tokens)
 		return (0);
 	lim_token = tokens + ft_spllen(tokens) - 1;
 	ret = ft_preparser(tokens, lim_token);
@@ -28,17 +28,17 @@ int exec_line(char *read_line)
 		ret = ft_parser(&stmnt, tokens, lim_token);
 	clean_split(tokens, ft_spllen(tokens));
 	if (!ret)
-		exec_stmnt(stmnt, &ret,  0);
-    	else if (ret == syntax_err)
+		exec_stmnt(stmnt, &ret, 0);
+	else if (ret == syntax_err)
 		g_data.last_stat = 2;
 	if (stmnt)
 		clean_all(&stmnt);
 	return (ret);
 }
 
-int main(int argc, char *argv[], char *env[])
+int	main(int argc, char *argv[], char *env[])
 {
-	char 			*line;
+	char	*line;
 
 	signal_dispose(main_shell);
 	get_env_hash(&g_data.env, env);

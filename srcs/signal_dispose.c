@@ -1,8 +1,7 @@
 #include "minishell.h"
 #include "environment.h"
 
-
-static void signal_handler(int signum, siginfo_t *info, void *args)
+static void	signal_handler(int signum, siginfo_t *info, void *args)
 {
 	(void) info;
 	(void) args;
@@ -12,14 +11,13 @@ static void signal_handler(int signum, siginfo_t *info, void *args)
 		ft_putchar_fd('\n', STDERR_FILENO);
 		rl_on_new_line();
 		rl_redisplay();
-	//	set_value(&g_data.env, "last_status", ft_strdup("1"));
 		g_data.last_stat = 1;
 	}
 }
 
-void switch_echoctl(char on)
+void	switch_echoctl(char on)
 {
-	struct termios ts;
+	struct termios	ts;
 
 	tcgetattr(STDIN_FILENO, &ts);
 	if (on)
@@ -29,12 +27,12 @@ void switch_echoctl(char on)
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &ts);
 }
 
-static void main_shell_dispose(void)
+static void	main_shell_dispose(void)
 {
-	struct sigaction act;
+	struct sigaction	act;
 
 	rl_catch_signals = 0;
-    switch_echoctl(0);
+	switch_echoctl(0);
 	signal(SIGQUIT, SIG_IGN);
 	ft_memset(&act, 0, sizeof(struct sigaction));
 	act.sa_sigaction = signal_handler;
@@ -42,14 +40,14 @@ static void main_shell_dispose(void)
 	signal(SIGHUP, SIG_DFL);
 }
 
-void signal_dispose(int child)
+void	signal_dispose(int child)
 {
 	if (child == main_shell)
 		main_shell_dispose();
 	else if (child == readln)
 	{
-        rl_catch_signals = 1;
-        signal(SIGHUP, SIG_DFL);
+		rl_catch_signals = 1;
+		signal(SIGHUP, SIG_DFL);
 	}
 	else if (child == parent_fork)
 	{
