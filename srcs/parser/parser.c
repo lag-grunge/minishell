@@ -1,20 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/19 13:44:54 by sdalton           #+#    #+#             */
+/*   Updated: 2022/03/19 13:44:55 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/parser.h"
 #include "../../includes/clean.h"
-
-static	t_stmnt	*ft_stmnt_new(int i)
-{
-	t_stmnt	*stmnt;
-
-	i = 0;
-	stmnt = malloc(sizeof(t_stmnt) * 1);
-	stmnt->type = 0;
-	stmnt->oper1 = NULL;
-	stmnt->oper2 = NULL;
-	stmnt->redir = NULL;
-	stmnt->pid = 0;
-	stmnt->next_stmnt = NULL;
-	return (stmnt);
-}
 
 static int	condition(char ***cur_token, char **tokens, t_token top)
 {
@@ -46,22 +43,6 @@ static int	ft_oper(char ***oper, char **tokens, char **lim_token, t_token top)
 		return (syntax_error(syntax_err, *cur_token, "minishell"));
 	*oper = cur_token;
 	return (0);
-}
-
-static int	last_stmnt(t_stmnt **stmnt, char **tokens, char **lim_token)
-{
-	t_stmnt	**last;
-
-	last = stmnt;
-	if (last)
-	{
-		while (*last)
-			last = &(*last)->next_stmnt;
-		*last = ft_stmnt_new(0);
-		if (!*last)
-			exit(malloc_err);
-	}
-	return (ft_cmd(last, tokens, lim_token));
 }
 
 int	ft_stmnt(t_stmnt **stmnt, char **tokens, char **lim_token)
@@ -97,11 +78,10 @@ int	ft_parser(t_stmnt **stmnt, char **tokens, char **lim_token)
 		return (ret);
 	if (oper)
 	{
-		*stmnt = ft_stmnt_new(0);
+		*stmnt = ft_stmnt_new();
 		if (!*stmnt)
 			return (malloc_err);
-		(*stmnt)->type = ((ft_isoperator(*oper)\
- == ct_and) + op_or);
+		(*stmnt)->type = ((ft_isoperator(*oper) == ct_and) + op_or);
 		ret = ft_parser((t_stmnt **)&(*stmnt)->oper1, tokens, oper - 1);
 		if (ret)
 			return (ret);

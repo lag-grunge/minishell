@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/19 18:37:18 by sdalton           #+#    #+#             */
+/*   Updated: 2022/03/19 18:44:55 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # ifndef TEST_G
@@ -96,9 +108,9 @@ typedef struct s_stmnt {
 	int				type;
 	void			*oper1;
 	void			*oper2;
-	t_redir			*redir; //	common redir for subshell
+	t_redir			*redir;	
 	pid_t			pid;
-	struct s_stmnt	*next_stmnt; // pipe
+	struct s_stmnt	*next_stmnt;
 }			t_stmnt;
 
 typedef struct s_env {

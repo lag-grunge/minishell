@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redir.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/19 13:41:35 by sdalton           #+#    #+#             */
+/*   Updated: 2022/03/19 13:41:37 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/syntax.h"
 #include "../../includes/parser.h"
 #include "expansions.h"
@@ -44,19 +56,15 @@ void	rewrite_redir(char **red_word, char *tokens)
 	*red_word = tmp;
 }
 
-static int	write_redir(t_redir **redirect, char **tokens)
+static void	write_redir(t_redir **redirect, char **tokens)
 {
-	char		*red_token;
-	char		*wrd_token;
 	t_ctrls		red_type;
 	t_redir		*red;
 
 	red = add_redir_item(redirect);
 	if (!red)
 		exit (malloc_err);
-	red_token = tokens[-1];
-	wrd_token = tokens[0];
-	red_type = ft_isoperator(red_token);
+	red_type = ft_isoperator(tokens[-1]);
 	if (red_type == ct_ltlt)
 		red->type = red_rh_doc;
 	else if (red_type == ct_lt)
@@ -69,10 +77,9 @@ static int	write_redir(t_redir **redirect, char **tokens)
 		red->type = red_eofile;
 	else if (red_type == ct_egtgt)
 		red->type = red_aefile;
-	red->word = ft_strdup(wrd_token);
+	red->word = ft_strdup(tokens[0]);
 	if (!red->word)
 		exit(malloc_err);
-	return (0);
 }
 
 int	ft_redir(t_redir **red, char ***tokens)
@@ -86,6 +93,6 @@ int	ft_redir(t_redir **red, char ***tokens)
 	if (expect(wrd, tokens, "redir"))
 		return (syntax_err);
 	if (red)
-		ret = write_redir(red, *tokens - 1);
-	return (ret);
+		write_redir(red, *tokens - 1);
+	return (0);
 }

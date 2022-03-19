@@ -26,9 +26,9 @@ add_executable(minishell
         srcs/parser/redir.c
         includes/syntax.h srcs/syntax/syntax_utils.c srcs/syntax/tokens.c srcs/syntax/token_utils.c
         srcs/parser/parenthesis.c
-        srcs/debug.c srcs/expansions/filename.c srcs/environment/get_hash_get_array.c srcs/environment/set_value_get_value.c
+        srcs/expansions/filename.c srcs/environment/get_hash_get_array.c srcs/environment/set_value_get_value.c
         includes/environment.h srcs/expansions/variable.c includes/expansions.h
-        srcs/expansions/filename_utils.c srcs/expansions/variable_utils.c
+        srcs/expansions/filename_utils.c srcs/expansions/exec_variable_expansion.c
         srcs/exec_stmnt/exec_stmnt.c srcs/exec_stmnt/exec_stmnt_utils.c
         srcs/exec_stmnt/ft_which.c includes/exec_stmnt.h
         srcs/environment/environment_utils.c srcs/exec_stmnt/get_args.c
@@ -36,7 +36,7 @@ add_executable(minishell
         srcs/expansions/exp_args.c
         srcs/redirect/redirect.c srcs/redirect/redirect_utils.c srcs/builtin/biltins.c srcs/builtin/exec_builtin.c
         srcs/syntax/quoting.c srcs/error.c includes/error.h srcs/error.c includes/error.h
-        srcs/builtin/built_cd.c srcs/builtin/built_export.c srcs/builtin/built_exit.c)
+        srcs/builtin/built_cd.c srcs/builtin/built_export.c srcs/builtin/built_exit.c srcs/parser/parser_utils.c srcs/expansions/make_substitution.c)
 
 
 

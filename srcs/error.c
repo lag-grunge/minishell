@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/19 13:01:42 by sdalton           #+#    #+#             */
+/*   Updated: 2022/03/19 13:01:44 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "error.h"
 
@@ -7,7 +19,7 @@ int	syntax_error(int ret, char *token, char *module)
 		ft_putstr_fd(module, STDERR_FILENO);
 	if (token)
 	{
-		ft_putstr_fd(" :unexpected token ", STDERR_FILENO);
+		ft_putstr_fd(": unexpected token ", STDERR_FILENO);
 		if (token)
 		{
 			ft_putchar_fd('\'', STDERR_FILENO);

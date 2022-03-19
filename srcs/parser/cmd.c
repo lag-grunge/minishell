@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   cmd.c											  :+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: sdalton <marvin@42.fr>					 +#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2022/03/19 13:37:58 by sdalton		   #+#	#+#			 */
+/*   Updated: 2022/03/19 13:37:59 by sdalton		  ###   ########.fr	   */
+/*																			*/
+/* ************************************************************************** */
+
 #include "parser.h"
 
 static int	check_args(char **tokens, char **lim_token)
@@ -16,8 +28,7 @@ static int	check_args(char **tokens, char **lim_token)
 	return (0);
 }
 
-
-int		write_word(t_list **cur, char *token)
+int	write_word(t_list **cur, char *token)
 {
 	if (!*cur)
 	{
@@ -53,7 +64,7 @@ static int	ft_write_cmd(t_list **cmd_args, t_redir **cmd_red, char **tokens)
 {
 	int		ret;
 	t_list	**cur;
-    char    *tmp;
+	char	*tmp;
 
 	ret = 0;
 	cur = cmd_args;
@@ -63,9 +74,9 @@ static int	ft_write_cmd(t_list **cmd_args, t_redir **cmd_red, char **tokens)
 			ret = ft_redir(cmd_red, &tokens);
 		else if (cmd_args && accept(wrd, &tokens))
 		{
-            tmp = ft_strdup(tokens[-1]);
-            if (!tmp)
-                exit(malloc_err);
+			tmp = ft_strdup(tokens[-1]);
+			if (!tmp)
+				exit(malloc_err);
 			ret = write_word(cur, tmp);
 			cur = &(*cur)->next;
 		}
@@ -88,7 +99,7 @@ int	ft_cmd(t_stmnt **stmnt, char **tokens, char **lim_token)
 		{
 			(*stmnt)->type = op_sbsh;
 			return (ft_parenthesis((t_stmnt **) &(*stmnt)->oper1, \
-                &(*stmnt)->redir, tokens));
+				&(*stmnt)->redir, tokens));
 		}
 		return (ft_parenthesis(NULL, NULL, tokens));
 	}

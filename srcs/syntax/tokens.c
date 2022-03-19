@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokens.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/19 13:02:05 by sdalton           #+#    #+#             */
+/*   Updated: 2022/03/19 13:10:13 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 #include "../../includes/syntax.h"
 
@@ -65,15 +77,12 @@ char	**get_tokens(char *read_line, int *empty)
 		exit (malloc_err);
 	tokens[num] = NULL;
 	i = 0;
-	while (*read_line)
+	while (*read_line && !trim_space(&read_line))
 	{
-		if (trim_space(&read_line))
-			break ;
 		read_line = oper_token(read_line, &len);
 		tokens[i] = ft_substr(read_line - len, 0, len);
-		if (!tokens[i])
+		if (!tokens[i++])
 			exit (malloc_err);
-		i++;
 	}
 	return (tokens);
 }

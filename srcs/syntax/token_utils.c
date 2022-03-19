@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/19 13:15:19 by sdalton           #+#    #+#             */
+/*   Updated: 2022/03/19 13:25:59 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 #include "syntax.h"
 
@@ -73,18 +85,16 @@ char	*word(char *read_line, int *nt)
 	char	tmp[2];
 
 	next_token = 0;
-	while (read_line[next_token] && \
-			!ft_ismeta(read_line[next_token]) && \
+	while (read_line[next_token] && !ft_ismeta(read_line[next_token]) && \
 			!ft_isspace(read_line[next_token]))
 	{
-		if (read_line[next_token] == '\'' || \
-			read_line[next_token] == '\"')
+		if (read_line[next_token] == '\'' || read_line[next_token] == '\"')
 		{
 			res = quoting(read_line + next_token);
 			if (res == 1)
 			{
 				tmp[0] = read_line[next_token];
-				syntax_error(syntax_err, tmp, "minishell: get_tokens: ");
+				syntax_error(syntax_err, tmp, "minishell: syntax error");
 				return (NULL);
 			}
 			next_token += res;

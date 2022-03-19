@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   variable.c										 :+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: sdalton <marvin@42.fr>					 +#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2022/03/19 13:57:50 by sdalton		   #+#	#+#			 */
+/*   Updated: 2022/03/19 13:57:51 by sdalton		  ###   ########.fr	   */
+/*																			*/
+/* ************************************************************************** */
+
 #include "expansions.h"
 
 static int	get_size(char *token)
@@ -26,25 +38,25 @@ static int	get_size(char *token)
 	return (1);
 }
 
-static void oper_word(t_list *args_list, char *cur, char *token, int s)
+static void	oper_word(t_list *args_list, char *cur, char *token, int s)
 {
 	char	*tmp;
 
-    tmp = ft_substr(token, s, cur - token - s);
-    if (!tmp)
-        exit(malloc_err);
-    write_word(&args_list, tmp);
+	tmp = ft_substr(token, s, cur - token - s);
+	if (!tmp)
+		exit(malloc_err);
+	write_word(&args_list, tmp);
 }
 
-static int  trim_spaces(char **cur_ptr, char *token)
+static int	trim_spaces(char **cur_ptr, char *token)
 {
-    char *cur;
+	char	*cur;
 
-    cur = *cur_ptr;
-    while (*cur == ' ')
-        cur++;
-    *cur_ptr = cur;
-    return (cur - token);
+	cur = *cur_ptr;
+	while (*cur == ' ')
+		cur++;
+	*cur_ptr = cur;
+	return (cur - token);
 }
 
 static void	expan_list(t_list *args_list, char *token)
@@ -53,9 +65,9 @@ static void	expan_list(t_list *args_list, char *token)
 	int		s;
 
 	cur = token;
-    s = trim_spaces(&cur, token);
-    if (!*cur)
-        oper_word(args_list, cur, token, s);
+	s = trim_spaces(&cur, token);
+	if (!*cur)
+		oper_word(args_list, cur, token, s);
 	while (*cur)
 	{
 		while (*cur && *cur != ' ')
@@ -69,11 +81,11 @@ static void	expan_list(t_list *args_list, char *token)
 		{
 			oper_word(args_list, cur, token, s);
 			args_list = args_list->next;
-            s = trim_spaces(&cur, token);
+			s = trim_spaces(&cur, token);
 		}
 	}
-    if (cur - token - s > 0)
-        oper_word(args_list, cur, token, s);
+	if (cur - token - s > 0)
+		oper_word(args_list, cur, token, s);
 }
 
 void	variable_expansion(t_list *args_list)
@@ -85,8 +97,8 @@ void	variable_expansion(t_list *args_list)
 	exec_expansion(&token);
 	exp_num = get_size(token);
 	if (exp_num > 1)
-        args_list = ft_lstins_few_empty(args_list, exp_num - 1);
-    if (ft_strncmp(token, args_list->content, ft_strlen(token) + 1))
-        expan_list(args_list, token);
-    free(token);
+		args_list = ft_lstins_few_empty(args_list, exp_num - 1);
+	if (ft_strncmp(token, args_list->content, ft_strlen(token) + 1))
+		expan_list(args_list, token);
+	free(token);
 }

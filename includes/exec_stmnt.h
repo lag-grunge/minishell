@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_stmnt.h                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/19 18:37:04 by sdalton           #+#    #+#             */
+/*   Updated: 2022/03/19 18:42:38 by sdalton          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef EXEC_STMNT_H
 # define EXEC_STMNT_H
 # include "minishell.h"
@@ -13,11 +25,11 @@ enum e_err	{
 	not_fnd_bin_in_path = 4,
 };
 
-void exec_stmnt(t_stmnt *stmnt, int p);
-int	ft_which(char **exec_path, char *cmd);
-void exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2]);
-int wait_child(int p, pid_t pid);
-void exec_cmd(t_cmd *cmd, int sng_blt);
+void	exec_stmnt(t_stmnt *stmnt, int p);
+int		ft_which(char **exec_path, char *cmd);
+void	exec_smpl_sbsh(t_stmnt *stmnt, int p, int pdes[2]);
+int		wait_child(int p, pid_t pid);
+void	exec_cmd(t_cmd *cmd, int sng_blt);
 char	**get_cmd_array(t_list *args_list);
 
 #endif
