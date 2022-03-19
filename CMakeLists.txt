@@ -35,7 +35,9 @@ add_executable(minishell
         srcs/signal_dispose.c
         srcs/expansions/exp_args.c
         srcs/redirect/redirect.c srcs/redirect/redirect_utils.c srcs/builtin/biltins.c srcs/builtin/exec_builtin.c
-        srcs/syntax/quoting.c srcs/error.c includes/error.h srcs/error.c includes/error.h )
+        srcs/syntax/quoting.c srcs/error.c includes/error.h srcs/error.c includes/error.h
+        srcs/builtin/built_cd.c srcs/builtin/built_export.c srcs/builtin/built_exit.c)
+
 
 
 target_link_directories(minishell PUBLIC libft)
