@@ -6,7 +6,7 @@
 /*   By: sdalton <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 10:44:47 by sdalton           #+#    #+#             */
-/*   Updated: 2021/05/14 10:31:48 by sdalton          ###   ########.fr       */
+/*   Updated: 2022/03/19 19:42:10 by sdalton          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*ft_strrchr(const char *str, int c)
 	cu = (unsigned char)c;
 	if (!cu)
 		return ((char *)str + str_len);
-	end = (char *)str + str_len; 
+	end = (char *)str + str_len;
 	while (end > str)
 	{
 		end--;
@@ -34,5 +34,4 @@ char	*ft_strrchr(const char *str, int c)
 			return (end);
 	}	
 	return (NULL);
-
 }
