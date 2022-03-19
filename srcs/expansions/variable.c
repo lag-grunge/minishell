@@ -32,12 +32,16 @@ static int	oper_word(t_list *args_list, char **cur_ptr, char *token, int s)
 	char	*tmp;
 
 	cur = *cur_ptr;
-	tmp = ft_substr(token, s, cur - token - s);
-	if (!tmp)
-		exit(malloc_err);
-	write_word(&args_list, tmp);
-	while (*cur == ' ')
-		cur++;
+	if (cur != token)
+	{
+		tmp = ft_substr(token, s, cur - token - s);
+		if (!tmp)
+			exit(malloc_err);
+		write_word(&args_list, tmp);
+		while (*cur == ' ')
+			cur++;
+		*cur_ptr = cur;
+	}
 	return ((int)(cur - token));
 }
 
@@ -47,17 +51,24 @@ static void	expan_list(t_list *args_list, char *token)
 	int		s;
 
 	cur = token;
-	s = 0;
+    while (*cur == ' ')
+        cur++;
+    s = cur - token;
 	while (*cur)
 	{
-		if (*cur == '\'' || *cur == '\"')
-			cur += quoting(cur);
-		else if (*cur == ' ')
+		while (*cur && *cur != ' ')
+		{
+			if (*cur == '\'' || *cur == '\"')
+				cur += quoting(cur);
+			else
+				cur++;
+		}
+		if (*cur == ' ')
 		{
 			s = oper_word(args_list, &cur, token, s);
 			args_list = args_list->next;
 		}
-		cur++;
+		
 	}
 	if (cur - token - s > 0)
 		oper_word(args_list, &cur, token, s);
